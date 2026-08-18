@@ -47,6 +47,9 @@ export interface Testimonial {
   avatar: string;
   impactMetric: string;
   metricLabel: string;
+  image?: string;
+  projectTag?: string;
+  location?: string;
 }
 
 export interface BehindTheScenesItem {
