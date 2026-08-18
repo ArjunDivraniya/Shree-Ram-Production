@@ -171,19 +171,6 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
     return () => ctx.revert();
   }, [isReducedMotion]);
 
-  // Click navigation to jump directly to a pillar's scroll location
-  const scrollToPillar = (index: number) => {
-    if (!containerRef.current) return;
-    const containerTop = containerRef.current.offsetTop;
-    const containerHeight = containerRef.current.offsetHeight - window.innerHeight;
-    const targetScroll = containerTop + (containerHeight * (index / (PILLARS_DATA.length - 1)));
-
-    window.scrollTo({
-      top: targetScroll,
-      behavior: 'smooth',
-    });
-  };
-
   // Reduced motion fallback view
   if (isReducedMotion) {
     return (
@@ -387,77 +374,6 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
           }}
         >
           TECHNOLOGY • DIGITAL • AUTOMATION • WEB APPS • DASHBOARDS • E-COMMERCE
-        </div>
-
-        {/* Top Header & Progress Bar Overlay */}
-        <div
-          className="four-pillars-top-header"
-          style={{
-            position: 'absolute',
-            top: '28px',
-            left: '0',
-            right: '0',
-            zIndex: 10,
-            padding: '0 40px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '16px',
-          }}
-        >
-          {/* Section Tagline */}
-          <div className="badge-pill">
-            <span className="badge-pill-dot" />
-            <span>FOUR PILLARS OF EXCELLENCE</span>
-          </div>
-
-          {/* Pillars Switcher / Nav Indicators */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ display: 'flex', gap: '6px' }} className="four-pillars-nav-pills">
-              {PILLARS_DATA.map((p, idx) => (
-                <button
-                  key={p.id}
-                  onClick={() => scrollToPillar(idx)}
-                  aria-label={`Go to ${p.title}`}
-                  style={{
-                    padding: '6px 12px',
-                    borderRadius: 'var(--radius-pill)',
-                    background: activeIndex === idx ? 'var(--accent-orange)' : 'rgba(255, 255, 255, 0.05)',
-                    color: activeIndex === idx ? '#FFFFFF' : 'var(--text-muted)',
-                    fontSize: '0.78rem',
-                    fontWeight: 700,
-                    fontFamily: 'var(--font-heading)',
-                    transition: 'all 0.3s ease',
-                    border: activeIndex === idx ? '1px solid var(--accent-orange)' : '1px solid rgba(255, 255, 255, 0.08)',
-                  }}
-                >
-                  {p.number}
-                </button>
-              ))}
-            </div>
-
-            {/* Active Counter Indicator */}
-            <div
-              style={{
-                fontFamily: 'var(--font-heading)',
-                fontSize: '0.85rem',
-                fontWeight: 700,
-                color: 'var(--text-muted)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
-                background: 'rgba(20, 21, 24, 0.7)',
-                padding: '6px 12px',
-                borderRadius: 'var(--radius-pill)',
-                border: '1px solid var(--glass-border)',
-                backdropFilter: 'var(--glass-blur)',
-              }}
-            >
-              <span style={{ color: 'var(--accent-orange)' }}>0{activeIndex + 1}</span>
-              <span>/</span>
-              <span>04</span>
-            </div>
-          </div>
         </div>
 
         {/* Main Stage Grid Container */}
@@ -808,10 +724,6 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
 
         /* Tablet & Mobile (<= 991px) */
         @media (max-width: 991px) {
-          .four-pillars-top-header {
-            padding: 0 20px !important;
-            top: 20px !important;
-          }
           .four-pillars-bottom-cta {
             padding: 0 20px !important;
             bottom: 16px !important;
@@ -837,16 +749,6 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
 
         /* Small Mobile (<= 576px) */
         @media (max-width: 576px) {
-          .four-pillars-top-header {
-            flex-direction: column !important;
-            align-items: flex-start !important;
-            gap: 10px !important;
-            top: 16px !important;
-          }
-          .four-pillars-nav-pills button {
-            padding: 4px 10px !important;
-            font-size: 0.72rem !important;
-          }
           .pillar-mobile-services > div {
             grid-template-columns: 1fr !important;
             gap: 8px !important;
