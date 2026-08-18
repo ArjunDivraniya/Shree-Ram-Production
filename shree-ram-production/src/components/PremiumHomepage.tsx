@@ -26,7 +26,7 @@ export const PremiumHomepage: React.FC<PremiumHomepageProps> = ({ onNavigate }) 
       <ProcessFlywheel />
       <BehindTheScenes />
       <ProjectCalculator onSelectServices={setPreselectedServices} />
-      <Testimonials />
+      <Testimonials onNavigate={onNavigate} />
       <ContactCTA preselectedServices={preselectedServices} />
       <Footer onNavigate={onNavigate} />
     </>

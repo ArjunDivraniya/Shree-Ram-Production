@@ -285,32 +285,55 @@ export const CALCULATOR_OPTIONS: CalculatorOption[] = [
 export const TESTIMONIALS: Testimonial[] = [
   {
     id: 'test-1',
-    quote: 'Shree Ram Production doesn’t just deliver videos or websites—they took our brand from an average competitor to the undisputed category leader in under 6 months.',
-    author: 'Vikramaditya Shah',
-    role: 'Chief Marketing Officer',
-    company: 'Apex Motors Global',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+    quote: 'WHEN WE TALK ABOUT SHREE RAM PRODUCTION WE DO NOT MEAN A TYPICAL BUSINESS PARTNER, BUT RATHER A TEAM THAT COLLABORATES WITH US DAILY, ALWAYS THERE FOR US WHEN WE ENCOUNTER DIFFICULTIES AND CELEBRATE ACHIEVEMENTS. WE SEE IN SHAPE OUR BEST ALLY FOR SUCCESS!',
+    author: 'Charlie Heaton',
+    role: 'Managing Director & Strategic Partner',
+    company: 'Agtex Global',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1200&q=80',
     impactMetric: '14.2M+',
-    metricLabel: 'Campaign Views'
+    metricLabel: 'Campaign Views',
+    projectTag: 'Global Rebrand',
+    location: 'London, UK'
   },
   {
     id: 'test-2',
-    quote: 'The level of cinematic quality combined with rigorous performance marketing metrics is unlike any agency we have partnered with before. Truly a complete growth engine.',
-    author: 'Elena Rostova',
-    role: 'Founder & Managing Director',
-    company: 'Aura Lifestyle Group',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
+    quote: 'SHREE RAM PRODUCTION DOESN’T JUST DELIVER VIDEOS OR WEBSITES—THEY TOOK OUR BRAND FROM AN AVERAGE COMPETITOR TO THE UNDISPUTED CATEGORY LEADER IN UNDER 6 MONTHS. THE ROI ON OUR CAMPAIGNS EXCEEDED ALL PROJECTED TARGETS!',
+    author: 'Vikramaditya Shah',
+    role: 'Chief Marketing Officer',
+    company: 'Apex Motors Global',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=80',
     impactMetric: '210%',
-    metricLabel: 'Equity Growth'
+    metricLabel: 'Equity Growth',
+    projectTag: 'Cinematic Production',
+    location: 'Mumbai, India'
   },
   {
     id: 'test-3',
-    quote: 'Their technical execution on our web platform was flawless, while the brand visual assets made us look like a Fortune 500 company on day one of our product launch.',
+    quote: 'THE LEVEL OF CINEMATIC QUALITY COMBINED WITH RIGOROUS PERFORMANCE MARKETING METRICS IS UNLIKE ANY AGENCY WE HAVE PARTNERED WITH BEFORE. TRULY A COMPLETE GROWTH ENGINE THAT ELEVATED OUR GLOBAL BRAND.',
+    author: 'Elena Rostova',
+    role: 'Founder & Creative Director',
+    company: 'Aura Lifestyle Group',
+    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1200&q=80',
+    impactMetric: '4.8x',
+    metricLabel: 'Customer ROI',
+    projectTag: 'Omnichannel Growth',
+    location: 'Milan, Italy'
+  },
+  {
+    id: 'test-4',
+    quote: 'THEIR TECHNICAL EXECUTION ON OUR WEB PLATFORM WAS FLAWLESS, WHILE THE BRAND VISUAL ASSETS MADE US LOOK LIKE A FORTUNE 500 COMPANY ON DAY ONE OF OUR PRODUCT LAUNCH. EXTRAORDINARY CRAFTSMANSHIP!',
     author: 'Devendra Kothari',
     role: 'Head of Product Technology',
     company: 'Nexus Financials',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80',
-    impactMetric: '4.8x',
-    metricLabel: 'Customer ROI'
+    avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=1200&q=80',
+    impactMetric: '340%',
+    metricLabel: 'Sales Lift',
+    projectTag: 'Digital Platform',
+    location: 'Dubai, UAE'
   }
 ];
+
