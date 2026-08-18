@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ArrowUpRight, Menu, X } from 'lucide-react';
+import mainLogo from '../assets/logo/Main Logo.jpeg';
 
 interface PremiumNavbarProps {
   onNavigate: (sectionId: string) => void;
@@ -104,7 +105,7 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
             alignItems: 'center',
             justifyContent: 'space-between',
             height: '60px',
-            padding: '0 12px 0 18px',
+            padding: '0 12px 0 16px',
             borderRadius: '20px',
             background: scrolled
               ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.02) 40%, rgba(10, 11, 14, 0.88) 100%)'
@@ -152,24 +153,31 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
               minWidth: 0,
             }}
           >
+            {/* Main Logo Image Display */}
             <span
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: '32px',
-                height: '32px',
+                width: '34px',
+                height: '34px',
                 borderRadius: '10px',
-                background: 'linear-gradient(135deg, #FF6A2A 0%, #E04E10 100%)',
-                color: '#08090A',
-                fontSize: '0.82rem',
-                fontWeight: 900,
-                letterSpacing: '-0.02em',
-                boxShadow: '0 0 16px rgba(255, 106, 42, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.4)',
+                overflow: 'hidden',
+                border: '1.5px solid rgba(255, 106, 42, 0.4)',
+                boxShadow: '0 0 16px rgba(255, 106, 42, 0.35)',
                 flexShrink: 0,
+                backgroundColor: '#08090A',
               }}
             >
-              SRP
+              <img
+                src={mainLogo}
+                alt="Shree Ram Production Logo"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                }}
+              />
             </span>
             <span
               className="apple-logo-text"

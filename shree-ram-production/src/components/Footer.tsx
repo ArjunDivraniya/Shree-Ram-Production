@@ -1,5 +1,6 @@
 import React from 'react';
 import { MapPin, Globe } from 'lucide-react';
+import mainLogo from '../assets/logo/Main Logo.jpeg';
 
 interface FooterProps {
   onNavigate: (sectionId: string) => void;
@@ -53,7 +54,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '10px',
+                gap: '12px',
                 marginBottom: '20px',
               }}
             >
@@ -62,22 +63,30 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  width: '36px',
-                  height: '36px',
-                  borderRadius: '8px',
-                  background: 'linear-gradient(135deg, var(--accent-orange), #D44E14)',
-                  color: '#FFFFFF',
-                  fontSize: '0.9rem',
-                  fontWeight: 800,
-                  boxShadow: '0 0 16px var(--accent-orange-glow)',
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '11px',
+                  overflow: 'hidden',
+                  border: '1.5px solid rgba(255, 106, 42, 0.4)',
+                  boxShadow: '0 0 20px rgba(255, 106, 42, 0.35)',
+                  flexShrink: 0,
+                  backgroundColor: '#08090A',
                 }}
               >
-                SRP
+                <img
+                  src={mainLogo}
+                  alt="Shree Ram Production Logo"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                  }}
+                />
               </span>
               <span
                 style={{
                   fontFamily: 'var(--font-heading)',
-                  fontSize: '1.2rem',
+                  fontSize: '1.25rem',
                   fontWeight: 700,
                   letterSpacing: '0.04em',
                 }}
