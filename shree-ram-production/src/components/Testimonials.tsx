@@ -21,7 +21,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
   const arrowBtnRef = useRef<HTMLDivElement>(null);
   const previewAuthorRef = useRef<HTMLDivElement>(null);
 
-  // Direct Testimonials Stage (Clean layout: no top bar, no image overlay box)
+  // Direct Testimonials Stage (Fully responsive layout across all screens)
   const stageRef = useRef<HTMLDivElement>(null);
   const quoteRef = useRef<HTMLQuoteElement>(null);
   const authorSubRef = useRef<HTMLDivElement>(null);
@@ -104,11 +104,13 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
     };
   }, [isReducedMotion, handleNext]);
 
-  // Optimized GSAP Scroll-driven Pinning (Fast, Responsive, Smooth Transition to Next Section)
+  // Optimized GSAP Scroll-driven Pinning (Responsive across mobile & desktop)
   useEffect(() => {
     if (isReducedMotion || !containerRef.current || !stickyRef.current) return;
 
     const ctx = gsap.context(() => {
+      const isMobile = window.innerWidth <= 768;
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
@@ -116,7 +118,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
           end: 'bottom bottom',
           pin: stickyRef.current,
           pinSpacing: true,
-          scrub: 0.6, // Fast, responsive scroll scrubbing without lag
+          scrub: 0.6,
         },
       });
 
@@ -128,15 +130,13 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
       gsap.set(previewAuthorRef.current, { opacity: 1, x: 0 });
       gsap.set(stageRef.current, { opacity: 0, scale: 0.95, y: 40 });
 
-      // Phase 1 (0 -> 1.0 duration):
-      // Word 1 "CLIENT'S" moves to TOP-LEFT CORNER
-      // Word 2 "TESTIMONIAL" moves to BOTTOM-RIGHT CORNER
+      // Phase 1: Title words split apart on scroll
       tl.to(
         word1Ref.current,
         {
-          xPercent: -46,
-          yPercent: -40,
-          scale: 0.5,
+          xPercent: isMobile ? -30 : -46,
+          yPercent: isMobile ? -30 : -40,
+          scale: isMobile ? 0.65 : 0.5,
           opacity: 0.08,
           duration: 1.0,
           ease: 'power2.inOut',
@@ -147,9 +147,9 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
       tl.to(
         word2Ref.current,
         {
-          xPercent: 48,
-          yPercent: 44,
-          scale: 0.5,
+          xPercent: isMobile ? 30 : 48,
+          yPercent: isMobile ? 32 : 44,
+          scale: isMobile ? 0.65 : 0.5,
           opacity: 0.08,
           duration: 1.0,
           ease: 'power2.inOut',
@@ -176,10 +176,10 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
         0.3
       );
 
-      // Comfortable, natural reading hold duration
+      // Natural reading hold duration
       tl.to({}, { duration: 1.2 });
 
-      // Phase 3: Smooth exit transition directly into the next section (ContactCTA)
+      // Phase 3: Smooth exit transition directly into the next section
       tl.to(
         stageRef.current,
         {
@@ -213,7 +213,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
             </h2>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '28px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '28px' }}>
             {TESTIMONIALS.map((item) => (
               <div key={item.id} style={{ padding: '28px', backgroundColor: 'rgba(255, 255, 255, 0.02)', borderRadius: '16px' }}>
                 <p style={{ fontFamily: "'Oswald', sans-serif", fontSize: '1.15rem', color: '#FFFFFF', marginBottom: '20px', lineHeight: 1.35, textTransform: 'uppercase' }}>
@@ -327,9 +327,10 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
           {/* Word 1: "CLIENT'S" (Animates to TOP-LEFT corner on scroll) */}
           <h1
             ref={word1Ref}
+            className="testimonial-split-word1"
             style={{
               fontFamily: "'Bebas Neue', 'Space Grotesk', sans-serif",
-              fontSize: 'clamp(5rem, 11vw, 13.5rem)',
+              fontSize: 'clamp(3.8rem, 11vw, 13.5rem)',
               fontWeight: 900,
               color: '#FFFFFF',
               lineHeight: 0.82,
@@ -362,9 +363,10 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
           {/* Word 2: "TESTIMONIAL" (Animates to BOTTOM-RIGHT corner on scroll) */}
           <h1
             ref={word2Ref}
+            className="testimonial-split-word2"
             style={{
               fontFamily: "'Bebas Neue', 'Space Grotesk', sans-serif",
-              fontSize: 'clamp(5rem, 11vw, 13.5rem)',
+              fontSize: 'clamp(3.8rem, 11vw, 13.5rem)',
               fontWeight: 900,
               color: '#FF6A2A',
               lineHeight: 0.82,
@@ -382,6 +384,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
         {/* Initial Hero Preview Author Name */}
         <div
           ref={previewAuthorRef}
+          className="testimonial-preview-author"
           style={{
             position: 'absolute',
             top: '80px',
@@ -403,7 +406,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
           ref={arrowBtnRef}
           style={{
             position: 'absolute',
-            bottom: '50px',
+            bottom: '40px',
             right: '5vw',
             zIndex: 6,
             display: 'flex',
@@ -413,8 +416,8 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
         >
           <div
             style={{
-              width: '48px',
-              height: '48px',
+              width: '46px',
+              height: '46px',
               borderRadius: '50%',
               backgroundColor: '#FFFFFF',
               color: '#08090A',
@@ -430,37 +433,40 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
         </div>
 
         {/* ====================================================================
-            MAIN TESTIMONIALS DISPLAY STAGE
+            MAIN TESTIMONIALS DISPLAY STAGE (RESPONSIVE WRAPPER)
             ==================================================================== */}
         <div
           ref={stageRef}
+          className="testimonial-stage-container"
           style={{
             position: 'relative',
             zIndex: 20,
             width: '100%',
             maxWidth: '1360px',
-            padding: '0 40px',
+            padding: '0 32px',
             display: 'flex',
             flexDirection: 'column',
-            gap: '20px',
+            gap: '16px',
             willChange: 'transform, opacity',
           }}
         >
           {/* MAIN TESTIMONIAL LAYOUT GRID */}
           <div
+            className="testimonial-main-grid"
             style={{
               position: 'relative',
               width: '100%',
-              minHeight: '380px',
+              minHeight: '360px',
               display: 'grid',
               gridTemplateColumns: 'auto minmax(0, 1fr) auto',
-              gap: '40px',
+              gap: '36px',
               alignItems: 'center',
               padding: '10px 0',
             }}
           >
             {/* LEFT SIDE: Circular Rotating Orange "TESTIMONIALS" Badge & Checkmark Badge */}
             <div
+              className="testimonial-left-badges"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -470,10 +476,11 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
             >
               {/* Rotating Badge */}
               <div
+                className="testimonial-badge-orange"
                 style={{
                   position: 'relative',
-                  width: '84px',
-                  height: '84px',
+                  width: '80px',
+                  height: '80px',
                   borderRadius: '50%',
                   backgroundColor: '#FF6A2A',
                   display: 'flex',
@@ -505,14 +512,15 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
                   </text>
                 </svg>
 
-                <Quote size={22} color="#FFFFFF" style={{ fill: '#FFFFFF' }} />
+                <Quote size={20} color="#FFFFFF" style={{ fill: '#FFFFFF' }} />
               </div>
 
               {/* White Circle Checkmark Icon */}
               <div
+                className="testimonial-badge-check"
                 style={{
-                  width: '48px',
-                  height: '48px',
+                  width: '46px',
+                  height: '46px',
                   borderRadius: '50%',
                   border: '1.5px solid rgba(255, 255, 255, 0.45)',
                   backgroundColor: 'rgba(255, 255, 255, 0.02)',
@@ -522,12 +530,13 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
                   flexShrink: 0,
                 }}
               >
-                <Check size={20} color="#FFFFFF" strokeWidth={2.8} />
+                <Check size={18} color="#FFFFFF" strokeWidth={2.8} />
               </div>
             </div>
 
             {/* CENTER BLOCK: Uppercase Quote & Author Meta */}
             <div
+              className="testimonial-center-block"
               style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -539,7 +548,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
                 ref={quoteRef}
                 style={{
                   fontFamily: "'Bebas Neue', 'Oswald', 'Space Grotesk', sans-serif",
-                  fontSize: 'clamp(1.35rem, 2.3vw, 2.1rem)',
+                  fontSize: 'clamp(1.25rem, 2.2vw, 2.0rem)',
                   fontWeight: 600,
                   lineHeight: 1.25,
                   color: '#FFFFFF',
@@ -552,11 +561,11 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
                 "{activeItem.quote}"
               </blockquote>
 
-              <div ref={authorSubRef} style={{ marginTop: '22px' }}>
+              <div ref={authorSubRef} style={{ marginTop: '20px' }}>
                 <h3
                   style={{
                     fontFamily: "'Oswald', sans-serif",
-                    fontSize: '1.3rem',
+                    fontSize: '1.25rem',
                     fontWeight: 600,
                     color: '#FFFFFF',
                     marginBottom: '2px',
@@ -565,7 +574,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
                 >
                   {activeItem.author}
                 </h3>
-                <p style={{ fontSize: '0.88rem', color: '#FF6A2A', fontWeight: 600 }}>
+                <p style={{ fontSize: '0.85rem', color: '#FF6A2A', fontWeight: 600 }}>
                   {activeItem.role} <span style={{ color: 'var(--text-dim)' }}>•</span> {activeItem.company}
                 </p>
               </div>
@@ -573,6 +582,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
 
             {/* RIGHT BLOCK: Author Header & Pure Client Portrait Photo Card */}
             <div
+              className="testimonial-right-photo"
               style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -583,6 +593,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
             >
               <span
                 ref={authorHeaderRef}
+                className="testimonial-photo-author-label"
                 style={{
                   fontFamily: "'Oswald', sans-serif",
                   fontSize: '0.95rem',
@@ -596,10 +607,11 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
 
               <div
                 ref={imageCardRef}
+                className="testimonial-portrait-card"
                 style={{
                   position: 'relative',
-                  width: '260px',
-                  height: '300px',
+                  width: '240px',
+                  height: '280px',
                   borderRadius: '14px',
                   overflow: 'hidden',
                   boxShadow: '0 20px 45px rgba(0, 0, 0, 0.85)',
@@ -650,7 +662,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
         </div>
       </div>
 
-      {/* Embedded Animation Styles */}
+      {/* Embedded Responsive Media Queries */}
       <style>{`
         @keyframes spin-badge {
           from { transform: rotate(0deg); }
@@ -662,20 +674,76 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
           50% { transform: translateY(8px); }
         }
 
+        /* Responsive Breakpoints */
         @media (max-width: 1024px) {
-          #testimonials h1 {
-            font-size: 6rem !important;
+          .testimonial-stage-container {
+            padding: 0 24px !important;
           }
-          #testimonials blockquote {
-            font-size: 1.2rem !important;
+          .testimonial-main-grid {
+            gap: 24px !important;
+          }
+          .testimonial-portrait-card {
+            width: 200px !important;
+            height: 240px !important;
+          }
+          .testimonial-badge-orange {
+            width: 70px !important;
+            height: 70px !important;
+          }
+          .testimonial-badge-check {
+            width: 40px !important;
+            height: 40px !important;
           }
         }
 
-        @media (max-width: 900px) {
-          #testimonials > div > div:nth-child(5) > div {
-            grid-template-columns: 1fr !important;
-            padding: 20px 0 !important;
-            gap: 24px !important;
+        @media (max-width: 768px) {
+          .testimonial-stage-container {
+            padding: 0 20px !important;
+          }
+          .testimonial-main-grid {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            text-align: center !important;
+            gap: 20px !important;
+            min-height: auto !important;
+          }
+          .testimonial-left-badges {
+            justify-content: center !important;
+          }
+          .testimonial-center-block {
+            padding-right: 0 !important;
+          }
+          .testimonial-right-photo {
+            align-items: center !important;
+          }
+          .testimonial-photo-author-label {
+            display: none !important;
+          }
+          .testimonial-portrait-card {
+            width: 100% !important;
+            max-width: 260px !important;
+            height: 240px !important;
+          }
+          .testimonial-preview-author {
+            right: 8% !important;
+            top: 40px !important;
+            font-size: 0.9rem !important;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .testimonial-badge-orange {
+            width: 60px !important;
+            height: 60px !important;
+          }
+          .testimonial-badge-check {
+            width: 36px !important;
+            height: 36px !important;
+          }
+          blockquote {
+            font-size: 1.15rem !important;
+            line-height: 1.3 !important;
           }
         }
       `}</style>
