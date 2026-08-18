@@ -179,11 +179,11 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
       id="about"
       className="philosophy-section"
       style={{
-        padding: '120px 0',
-        backgroundColor: '#08090A',
+        padding: '88px 0 104px',
+        background: 'linear-gradient(180deg, rgba(6, 7, 9, 0.9) 0%, rgba(8, 9, 12, 0.96) 48%, rgba(6, 7, 9, 0.92) 100%)',
         color: '#FFFFFF',
         position: 'relative',
-        overflow: 'hidden',
+        overflow: 'visible',
       }}
     >
       <div aria-hidden="true" className="philosophy-bg-shell" />
@@ -210,7 +210,10 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
         }}
       />
 
-      <div className="container" style={{ position: 'relative', zIndex: 10 }}>
+      <div
+        className="container philosophy-shell"
+        style={{ position: 'relative', zIndex: 10, maxWidth: 'min(100%, 1440px)' }}
+      >
         
         {/* SECTION HEADER */}
         <div
@@ -889,6 +892,17 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
             linear-gradient(180deg, #060709 0%, #090b10 46%, #060709 100%);
         }
 
+        .philosophy-shell {
+          width: 100%;
+          padding: 0;
+          border-radius: 0;
+          background: transparent;
+          box-shadow: none;
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
+          overflow: visible;
+        }
+
         .philosophy-bg-shell,
         .philosophy-bg-spotlight,
         .philosophy-bg-ambient,
@@ -902,23 +916,23 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
 
         .philosophy-bg-shell {
           background:
-            radial-gradient(1100px 560px at 50% -8%, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.01) 40%, rgba(255, 255, 255, 0) 70%),
-            radial-gradient(960px 500px at 50% 112%, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 74%);
+            radial-gradient(1200px 620px at 50% -10%, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.015) 38%, rgba(255, 255, 255, 0) 72%),
+            radial-gradient(980px 540px at 50% 112%, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 76%);
           z-index: 1;
         }
 
         .philosophy-bg-spotlight {
           background:
-            radial-gradient(620px 320px at 50% 24%, rgba(255, 106, 42, 0.14) 0%, rgba(255, 106, 42, 0.05) 36%, rgba(255, 106, 42, 0) 72%),
-            radial-gradient(840px 460px at 50% 22%, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0) 76%);
+            radial-gradient(700px 360px at 50% 24%, rgba(255, 106, 42, 0.16) 0%, rgba(255, 106, 42, 0.06) 34%, rgba(255, 106, 42, 0) 74%),
+            radial-gradient(980px 520px at 50% 20%, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 78%);
           z-index: 2;
           opacity: 0.92;
         }
 
         .philosophy-bg-ambient {
-          filter: blur(84px);
+          filter: blur(96px);
           z-index: 1;
-          opacity: 0.38;
+          opacity: 0.42;
         }
 
         .philosophy-bg-ambient-left {
@@ -945,24 +959,27 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
 
         .philosophy-bg-grid {
           z-index: 3;
-          opacity: 0.22;
+          opacity: 0.18;
           background-image:
-            linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(255, 255, 255, 0.038) 1px, transparent 1px);
-          background-size: 72px 72px;
+            linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+          background-size: 88px 88px;
           mask-image: radial-gradient(120% 90% at 50% 45%, rgba(0, 0, 0, 0.75) 24%, rgba(0, 0, 0, 0.22) 62%, transparent 100%);
           -webkit-mask-image: radial-gradient(120% 90% at 50% 45%, rgba(0, 0, 0, 0.75) 24%, rgba(0, 0, 0, 0.22) 62%, transparent 100%);
         }
 
         .philosophy-bg-vignette {
           background:
-            radial-gradient(120% 100% at 50% 46%, rgba(6, 7, 9, 0) 34%, rgba(6, 7, 9, 0.78) 100%),
-            linear-gradient(180deg, rgba(6, 7, 9, 0) 0%, rgba(6, 7, 9, 0.18) 100%);
+            radial-gradient(120% 100% at 50% 46%, rgba(6, 7, 9, 0) 34%, rgba(6, 7, 9, 0.62) 100%),
+            linear-gradient(180deg, rgba(6, 7, 9, 0) 0%, rgba(6, 7, 9, 0.1) 100%);
           z-index: 4;
         }
 
         .philosophy-section .container {
           z-index: 10;
+          max-width: min(100%, 1440px);
+          padding-left: 0;
+          padding-right: 0;
         }
 
         .philosophy-card {
@@ -1028,6 +1045,11 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
 
         /* Tablet Breakpoint */
         @media (max-width: 1200px) {
+          .philosophy-shell {
+            padding: 0;
+            border-radius: 0;
+          }
+
           .philosophy-cards-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             gap: 20px !important;
@@ -1063,6 +1085,11 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
             height: 320px;
             right: -135px;
             top: 58%;
+          }
+
+          .philosophy-shell {
+            padding: 0;
+            border-radius: 0;
           }
 
           .philosophy-card {
