@@ -1,0 +1,1104 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ArrowUpRight, Target, Layers, Zap, CheckCircle2 } from 'lucide-react';
+
+gsap.registerPlugin(ScrollTrigger);
+
+interface AgencyPhilosophyProps {
+  onNavigate: (sectionId: string) => void;
+}
+
+export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }) => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const cardsWrapperRef = useRef<HTMLDivElement>(null);
+  
+  const card1Ref = useRef<HTMLDivElement>(null);
+  const card2Ref = useRef<HTMLDivElement>(null);
+  const card3Ref = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
+
+  const [isReducedMotion, setIsReducedMotion] = useState<boolean>(false);
+  // Reduced Motion Check
+  useEffect(() => {
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setIsReducedMotion(motionQuery.matches);
+    const handleMotionChange = (e: MediaQueryListEvent) => setIsReducedMotion(e.matches);
+    motionQuery.addEventListener('change', handleMotionChange);
+    return () => motionQuery.removeEventListener('change', handleMotionChange);
+  }, []);
+
+  // GSAP stacked-to-separate animation with full reverse behavior
+  useEffect(() => {
+    if (isReducedMotion || !sectionRef.current || !cardsWrapperRef.current) return;
+
+    const ctx = gsap.context(() => {
+      const isMobile = window.matchMedia('(max-width: 900px)').matches;
+      const cards = [card1Ref.current, card2Ref.current, card3Ref.current].filter(Boolean) as HTMLDivElement[];
+
+      gsap.set('.philosophy-heading-reveal', { opacity: 0, y: 18 });
+      gsap.set('.philosophy-card-accent', { scaleX: 0, opacity: 0.6, transformOrigin: '0% 50%' });
+      gsap.set('.philosophy-reveal', { opacity: 0, y: 12 });
+
+      if (isMobile) {
+        cards.forEach((card, index) => {
+          gsap.set(card, {
+            x: 0,
+            y: 20 + index * 6,
+            rotation: index === 1 ? 0.6 : index === 2 ? 1 : -0.6,
+            scale: 0.985,
+            opacity: 0,
+            zIndex: 4 - index,
+          });
+        });
+      } else {
+        gsap.set(card1Ref.current, {
+          x: 92,
+          y: 20,
+          rotation: -2.2,
+          scale: 0.98,
+          opacity: 0.9,
+          zIndex: 3,
+        });
+
+        gsap.set(card2Ref.current, {
+          x: 0,
+          y: 8,
+          rotation: 0.7,
+          scale: 0.965,
+          opacity: 0.86,
+          zIndex: 2,
+        });
+
+        gsap.set(card3Ref.current, {
+          x: -96,
+          y: 22,
+          rotation: 2.1,
+          scale: 0.95,
+          opacity: 0.82,
+          zIndex: 1,
+        });
+      }
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: cardsWrapperRef.current,
+          start: 'top 80%',
+          end: 'bottom 28%',
+          toggleActions: 'play reverse play reverse',
+          invalidateOnRefresh: true,
+        },
+      });
+
+      tl.to('.philosophy-heading-reveal', {
+        opacity: 1,
+        y: 0,
+        duration: 0.62,
+        stagger: 0.08,
+        ease: 'power3.out',
+      });
+
+      tl.to(
+        cards,
+        {
+          x: 0,
+          y: 0,
+          rotation: 0,
+          scale: 1,
+          opacity: 1,
+          duration: isMobile ? 0.78 : 0.95,
+          stagger: isMobile ? 0.1 : 0.12,
+          ease: 'cubic-bezier(0.22, 1, 0.36, 1)',
+        },
+        '-=0.26'
+      );
+
+      tl.to(
+        '.philosophy-card-accent',
+        {
+          scaleX: 1,
+          opacity: 1,
+          duration: 0.5,
+          stagger: 0.1,
+          ease: 'cubic-bezier(0.22, 1, 0.36, 1)',
+        },
+        '-=0.7'
+      );
+
+      cards.forEach((card, index) => {
+        const revealItems = card.querySelectorAll('.philosophy-reveal');
+        tl.to(
+          revealItems,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.44,
+            stagger: 0.07,
+            ease: 'power2.out',
+          },
+          `-=${0.6 - index * 0.06}`
+        );
+      });
+
+      tl.fromTo(
+        ctaRef.current,
+        { opacity: 0, y: 18 },
+        { opacity: 1, y: 0, duration: 0.48, ease: 'power2.out' },
+        '-=0.24'
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [isReducedMotion]);
+
+  const singleCapabilities = [
+    'Photography',
+    'Video Production',
+    'SEO',
+    'Website',
+    'Branding',
+  ];
+
+  const synergyPairs = [
+    { title: 'Content + Marketing', desc: 'Cinematic campaigns paired with paid reach' },
+    { title: 'Branding + Website', desc: 'Identity translated into high-converting web UX' },
+    { title: 'SEO + Lead Generation', desc: 'Search visibility connected to qualified pipeline' },
+  ];
+
+  const growthPillars = [
+    { title: 'Content' },
+    { title: 'Brand' },
+    { title: 'Growth' },
+    { title: 'Technology' },
+  ];
+
+  return (
+    <section
+      ref={sectionRef}
+      id="about"
+      className="philosophy-section"
+      style={{
+        padding: '120px 0',
+        backgroundColor: '#08090A',
+        color: '#FFFFFF',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      <div aria-hidden="true" className="philosophy-bg-shell" />
+      <div aria-hidden="true" className="philosophy-bg-spotlight" />
+      <div aria-hidden="true" className="philosophy-bg-ambient philosophy-bg-ambient-left" />
+      <div aria-hidden="true" className="philosophy-bg-ambient philosophy-bg-ambient-right" />
+      <div aria-hidden="true" className="philosophy-bg-grid" />
+      <div aria-hidden="true" className="philosophy-bg-vignette" />
+
+      {/* Subtle Ambient Radial Glow in Background */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          top: '30%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '800px',
+          height: '500px',
+          borderRadius: '50%',
+          background: 'radial-gradient(ellipse, rgba(255, 106, 42, 0.07) 0%, transparent 70%)',
+          filter: 'blur(130px)',
+          pointerEvents: 'none',
+        }}
+      />
+
+      <div className="container" style={{ position: 'relative', zIndex: 10 }}>
+        
+        {/* SECTION HEADER */}
+        <div
+          ref={headerRef}
+          style={{
+            maxWidth: '800px',
+            margin: '0 auto 64px auto',
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '16px',
+          }}
+        >
+          {/* Badge Pill */}
+          <div
+            className="philosophy-heading-reveal"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '6px 16px',
+              borderRadius: '20px',
+              background: 'rgba(255, 106, 42, 0.08)',
+              border: '1px solid rgba(255, 106, 42, 0.25)',
+              color: '#FF6A2A',
+              fontSize: '0.8rem',
+              fontWeight: 700,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+            }}
+          >
+            <span
+              style={{
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                backgroundColor: '#FF6A2A',
+                boxShadow: '0 0 8px #FF6A2A',
+              }}
+            />
+            <span>OUR AGENCY PHILOSOPHY</span>
+          </div>
+
+          {/* Main Heading */}
+          <h2
+            className="philosophy-heading-reveal"
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: 'clamp(2.4rem, 4.5vw, 3.8rem)',
+              fontWeight: 700,
+              lineHeight: 1.08,
+              letterSpacing: '-0.03em',
+              color: '#FFFFFF',
+              margin: 0,
+            }}
+          >
+            Start where you need us.{' '}
+            <span
+              style={{
+                color: 'transparent',
+                backgroundImage: 'linear-gradient(135deg, #FFFFFF 20%, #FF6A2A 100%)',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+              }}
+            >
+              Grow when you're ready.
+            </span>
+          </h2>
+
+          <p
+            className="philosophy-heading-reveal"
+            style={{
+              fontSize: 'clamp(1.05rem, 1.8vw, 1.25rem)',
+              color: '#A5A5A8',
+              lineHeight: 1.5,
+              maxWidth: '660px',
+              margin: 0,
+            }}
+          >
+            From a single dedicated service to a complete business-growth partnership, we adapt our capabilities around what your business needs.
+          </p>
+        </div>
+
+        {/* =========================================================================
+            DECK OF CARDS CONTAINER: Smoothly unfolds from overlapping stack to 3 columns
+            ========================================================================= */}
+        <div
+          ref={cardsWrapperRef}
+          className="philosophy-cards-grid"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'minmax(0, 0.86fr) minmax(0, 1fr) minmax(0, 1.12fr)',
+            gap: '24px',
+            alignItems: 'start',
+            marginBottom: '64px',
+            position: 'relative',
+          }}
+        >
+          {/* =========================================================================
+              CARD 01 — SINGLE SERVICE FOCUS
+              ========================================================================= */}
+          <div
+            ref={card1Ref}
+            className="philosophy-card philosophy-card-step-1"
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'flex-start',
+              padding: '28px 24px',
+              borderRadius: '18px',
+              background: 'linear-gradient(160deg, rgba(19, 20, 24, 0.95) 0%, rgba(13, 14, 18, 1) 100%)',
+              border: '1px solid rgba(255, 255, 255, 0.09)',
+              boxShadow: '0 14px 28px rgba(0, 0, 0, 0.45)',
+              transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+              position: 'relative',
+              overflow: 'hidden',
+              willChange: 'transform, opacity',
+            }}
+          >
+            {/* Top Accent Glow Line */}
+            <div
+              className="philosophy-card-accent"
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '2px',
+                background: 'linear-gradient(90deg, rgba(255, 106, 42, 0.2) 0%, #FF6A2A 48%, rgba(255, 106, 42, 0.15) 100%)',
+              }}
+            />
+
+            <div className="philosophy-card-main">
+              {/* Stage Badge Header */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginBottom: '24px',
+                }}
+              >
+                <span
+                  className="philosophy-reveal"
+                  style={{
+                    fontFamily: "'Space Grotesk', sans-serif",
+                    fontSize: '2rem',
+                    fontWeight: 800,
+                    color: '#FF6A2A',
+                    lineHeight: 1,
+                  }}
+                >
+                  01
+                </span>
+                <div
+                  className="philosophy-reveal philosophy-icon-wrap"
+                  style={{
+                    width: '34px',
+                    height: '34px',
+                    borderRadius: '9px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#FF6A2A',
+                  }}
+                >
+                  <Target size={18} />
+                </div>
+              </div>
+
+              {/* Title & Tagline */}
+              <h3
+                className="philosophy-reveal"
+                style={{
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontSize: '1.42rem',
+                  fontWeight: 700,
+                  color: '#FFFFFF',
+                  marginBottom: '8px',
+                  lineHeight: 1.2,
+                }}
+              >
+                Single Service Focus
+              </h3>
+              <p
+                className="philosophy-reveal"
+                style={{
+                  fontSize: '0.9rem',
+                  fontWeight: 600,
+                  color: '#FF6A2A',
+                  marginBottom: '14px',
+                }}
+              >
+                Precision execution for specific needs.
+              </p>
+
+              <p
+                className="philosophy-reveal"
+                style={{
+                  fontSize: '0.88rem',
+                  color: '#A5A5A8',
+                  lineHeight: 1.55,
+                  marginBottom: '16px',
+                }}
+              >
+                A focused squad for one mission, with rapid execution and zero overhead.
+              </p>
+
+              {/* Capability Chips */}
+              <div
+                style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: '8px',
+                }}
+              >
+                {singleCapabilities.map((cap) => (
+                  <span
+                    key={cap}
+                    className="philosophy-reveal"
+                    style={{
+                      padding: '4px 10px',
+                      borderRadius: '12px',
+                      backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                      border: '1px solid rgba(255, 255, 255, 0.08)',
+                      fontSize: '0.75rem',
+                      fontWeight: 500,
+                      color: '#F5F5F2',
+                    }}
+                  >
+                    {cap}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Bottom Status Marker */}
+            <div
+              className="philosophy-card-footer philosophy-reveal"
+              style={{
+                marginTop: '20px',
+                paddingTop: '14px',
+                borderTop: '1px solid rgba(255, 255, 255, 0.06)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                fontSize: '0.8rem',
+                color: '#A5A5A8',
+              }}
+            >
+              <span>Targeted Deliverable</span>
+              <span style={{ color: '#FF6A2A', fontWeight: 600 }}>100% Focused</span>
+            </div>
+          </div>
+
+          {/* =========================================================================
+              CARD 02 — MULTI-SERVICE SYNERGY
+              ========================================================================= */}
+          <div
+            ref={card2Ref}
+            className="philosophy-card philosophy-card-step-2"
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'flex-start',
+              padding: '30px 26px',
+              borderRadius: '18px',
+              background: 'linear-gradient(160deg, rgba(19, 20, 25, 0.98) 0%, rgba(14, 15, 20, 1) 100%)',
+              border: '1px solid rgba(255, 106, 42, 0.24)',
+              boxShadow: '0 15px 30px rgba(0, 0, 0, 0.48)',
+              transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+              position: 'relative',
+              overflow: 'hidden',
+              willChange: 'transform, opacity',
+            }}
+          >
+            {/* Top Accent Orange Glow Line */}
+            <div
+              className="philosophy-card-accent"
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '2px',
+                background: 'linear-gradient(90deg, rgba(255, 106, 42, 0.15) 0%, #FF6A2A 52%, rgba(255, 106, 42, 0.15) 100%)',
+              }}
+            />
+
+            <div className="philosophy-card-main">
+              {/* Stage Badge Header */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginBottom: '24px',
+                }}
+              >
+                <span
+                  className="philosophy-reveal"
+                  style={{
+                    fontFamily: "'Space Grotesk', sans-serif",
+                    fontSize: '2.15rem',
+                    fontWeight: 800,
+                    color: '#FF6A2A',
+                    lineHeight: 1,
+                  }}
+                >
+                  02
+                </span>
+                <div
+                  className="philosophy-reveal philosophy-icon-wrap"
+                  style={{
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '9px',
+                    backgroundColor: 'rgba(255, 106, 42, 0.1)',
+                    border: '1px solid rgba(255, 106, 42, 0.28)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#FF6A2A',
+                  }}
+                >
+                  <Layers size={18} />
+                </div>
+              </div>
+
+              {/* Title & Tagline */}
+              <h3
+                className="philosophy-reveal"
+                style={{
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontSize: '1.52rem',
+                  fontWeight: 700,
+                  color: '#FFFFFF',
+                  marginBottom: '8px',
+                  lineHeight: 1.2,
+                }}
+              >
+                Multi-Service Synergy
+              </h3>
+              <p
+                className="philosophy-reveal"
+                style={{
+                  fontSize: '0.92rem',
+                  fontWeight: 600,
+                  color: '#FF6A2A',
+                  marginBottom: '14px',
+                }}
+              >
+                Bring the right capabilities together.
+              </p>
+
+              <p
+                className="philosophy-reveal"
+                style={{
+                  fontSize: '0.89rem',
+                  color: '#A5A5A8',
+                  lineHeight: 1.55,
+                  marginBottom: '16px',
+                }}
+              >
+                Link the right capabilities in one workflow so brand, media, and growth move together.
+              </p>
+
+              {/* Synergy Pairings List */}
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '10px',
+                }}
+              >
+                {synergyPairs.map((pair) => (
+                  <div
+                    key={pair.title}
+                    className="philosophy-reveal"
+                    style={{
+                      padding: '9px 12px',
+                      borderRadius: '11px',
+                      backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                      border: '1px solid rgba(255, 255, 255, 0.09)',
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: '0.82rem',
+                        fontWeight: 700,
+                        color: '#FFFFFF',
+                        marginBottom: '3px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <span>{pair.title}</span>
+                      <span style={{ color: '#FF6A2A', fontSize: '0.75rem' }}>+</span>
+                    </div>
+                    <div style={{ fontSize: '0.76rem', color: '#A5A5A8' }}>{pair.desc}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Bottom Status Marker */}
+            <div
+              className="philosophy-card-footer philosophy-reveal"
+              style={{
+                marginTop: '22px',
+                paddingTop: '14px',
+                borderTop: '1px solid rgba(255, 255, 255, 0.06)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                fontSize: '0.8rem',
+                color: '#A5A5A8',
+              }}
+            >
+              <span>Cross-Pillar Alignment</span>
+              <span style={{ color: '#FF6A2A', fontWeight: 600 }}>Combined Impact</span>
+            </div>
+          </div>
+
+          {/* =========================================================================
+              CARD 03 — COMPLETE GROWTH PARTNER
+              ========================================================================= */}
+          <div
+            ref={card3Ref}
+            className="philosophy-card philosophy-card-step-3"
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'flex-start',
+              padding: '34px 28px',
+              borderRadius: '18px',
+              background: 'linear-gradient(150deg, rgba(20, 22, 28, 1) 0%, rgba(13, 14, 18, 1) 100%)',
+              border: '1px solid rgba(255, 255, 255, 0.14)',
+              boxShadow: '0 18px 36px rgba(0, 0, 0, 0.54)',
+              transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+              position: 'relative',
+              overflow: 'hidden',
+              willChange: 'transform, opacity',
+            }}
+          >
+            {/* Top Specular Gradient Line */}
+            <div
+              className="philosophy-card-accent"
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '2px',
+                background: 'linear-gradient(90deg, rgba(255, 106, 42, 0.2) 0%, #FF6A2A 48%, rgba(255, 255, 255, 0.5) 100%)',
+              }}
+            />
+
+            <div className="philosophy-card-main">
+              {/* Stage Badge Header */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginBottom: '24px',
+                }}
+              >
+                <span
+                  className="philosophy-reveal"
+                  style={{
+                    fontFamily: "'Space Grotesk', sans-serif",
+                    fontSize: '2.3rem',
+                    fontWeight: 800,
+                    color: '#FF6A2A',
+                    lineHeight: 1,
+                  }}
+                >
+                  03
+                </span>
+                <div
+                  className="philosophy-reveal philosophy-icon-wrap"
+                  style={{
+                    width: '38px',
+                    height: '38px',
+                    borderRadius: '10px',
+                    backgroundColor: 'rgba(255, 106, 42, 0.14)',
+                    border: '1px solid #FF6A2A',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#FFFFFF',
+                    boxShadow: '0 0 0 1px rgba(255, 106, 42, 0.2)',
+                  }}
+                >
+                  <Zap size={18} />
+                </div>
+              </div>
+
+              {/* Title & Tagline */}
+              <h3
+                className="philosophy-reveal"
+                style={{
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontSize: '1.62rem',
+                  fontWeight: 700,
+                  color: '#FFFFFF',
+                  marginBottom: '8px',
+                  lineHeight: 1.2,
+                }}
+              >
+                Complete Growth Partner
+              </h3>
+              <p
+                className="philosophy-reveal"
+                style={{
+                  fontSize: '0.93rem',
+                  fontWeight: 600,
+                  color: '#FF6A2A',
+                  marginBottom: '14px',
+                }}
+              >
+                One partner across your growth journey.
+              </p>
+
+              <p
+                className="philosophy-reveal"
+                style={{
+                  fontSize: '0.9rem',
+                  color: '#A5A5A8',
+                  lineHeight: 1.56,
+                  marginBottom: '18px',
+                }}
+              >
+                We integrate content, brand, growth, and technology into one measurable operating system.
+              </p>
+
+              {/* Integrated Ecosystem Pillars Diagram Box */}
+              <div
+                className="philosophy-reveal"
+                style={{
+                  padding: '14px',
+                  borderRadius: '14px',
+                  backgroundColor: 'rgba(255, 106, 42, 0.06)',
+                  border: '1px solid rgba(255, 106, 42, 0.2)',
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '10px',
+                }}
+              >
+                {growthPillars.map((p) => (
+                  <div key={p.title} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <CheckCircle2 size={14} color="#FF6A2A" style={{ flexShrink: 0 }} />
+                    <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#FFFFFF' }}>{p.title}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Bottom Status Marker */}
+            <div
+              className="philosophy-card-footer philosophy-reveal"
+              style={{
+                marginTop: '24px',
+                paddingTop: '16px',
+                borderTop: '1px solid rgba(255, 255, 255, 0.06)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                fontSize: '0.8rem',
+                color: '#A5A5A8',
+              }}
+            >
+              <span>Embedded Team</span>
+              <span style={{ color: '#FF6A2A', fontWeight: 700 }}>Full Growth Engine</span>
+            </div>
+          </div>
+        </div>
+
+        {/* =========================================================================
+            FINAL CTA SECTION (REVEALED BELOW CARDS)
+            ========================================================================= */}
+        <div
+          ref={ctaRef}
+          style={{
+            maxWidth: '900px',
+            margin: '0 auto',
+            padding: '40px 36px',
+            borderRadius: '24px',
+            background: 'linear-gradient(135deg, rgba(255, 106, 42, 0.12) 0%, rgba(255, 255, 255, 0.03) 100%)',
+            border: '1px solid rgba(255, 106, 42, 0.3)',
+            boxShadow: '0 20px 50px rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '24px',
+          }}
+        >
+          <div style={{ maxWidth: '520px' }}>
+            <h3
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: '1.6rem',
+                fontWeight: 700,
+                color: '#FFFFFF',
+                marginBottom: '8px',
+              }}
+            >
+              You choose where the journey begins.
+            </h3>
+            <p style={{ fontSize: '0.95rem', color: '#A5A5A8', margin: 0, lineHeight: 1.5 }}>
+              Start with what you need today. Bring us in for more when your business is ready.
+            </p>
+          </div>
+
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px' }}>
+            <button
+              onClick={() => onNavigate('calculator')}
+              className="philosophy-cta-primary"
+              style={{
+                padding: '14px 24px',
+                borderRadius: '12px',
+                backgroundColor: '#FF6A2A',
+                color: '#08090A',
+                fontSize: '0.88rem',
+                fontWeight: 700,
+                border: 'none',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                boxShadow: '0 6px 20px rgba(255, 106, 42, 0.35)',
+                transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+              }}
+            >
+              <span>START WITH ONE SERVICE</span>
+              <ArrowUpRight size={17} />
+            </button>
+
+            <button
+              onClick={() => onNavigate('contact')}
+              className="philosophy-cta-secondary"
+              style={{
+                padding: '14px 24px',
+                borderRadius: '12px',
+                backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                color: '#FFFFFF',
+                fontSize: '0.88rem',
+                fontWeight: 600,
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+              }}
+            >
+              <span>TALK TO OUR TEAM</span>
+              <ArrowUpRight size={17} />
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      {/* EMBEDDED CSS STYLES FOR HOVER & RESPONSIVENESS */}
+      <style>{`
+        .philosophy-section {
+          isolation: isolate;
+          background:
+            linear-gradient(180deg, #060709 0%, #090b10 46%, #060709 100%);
+        }
+
+        .philosophy-bg-shell,
+        .philosophy-bg-spotlight,
+        .philosophy-bg-ambient,
+        .philosophy-bg-grid,
+        .philosophy-bg-vignette,
+        .philosophy-bg-ambient {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+        }
+
+        .philosophy-bg-shell {
+          background:
+            radial-gradient(1100px 560px at 50% -8%, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.01) 40%, rgba(255, 255, 255, 0) 70%),
+            radial-gradient(960px 500px at 50% 112%, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 74%);
+          z-index: 1;
+        }
+
+        .philosophy-bg-spotlight {
+          background:
+            radial-gradient(620px 320px at 50% 24%, rgba(255, 106, 42, 0.14) 0%, rgba(255, 106, 42, 0.05) 36%, rgba(255, 106, 42, 0) 72%),
+            radial-gradient(840px 460px at 50% 22%, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0) 76%);
+          z-index: 2;
+          opacity: 0.92;
+        }
+
+        .philosophy-bg-ambient {
+          filter: blur(84px);
+          z-index: 1;
+          opacity: 0.38;
+        }
+
+        .philosophy-bg-ambient-left {
+          width: 460px;
+          height: 460px;
+          left: -180px;
+          top: 16%;
+          right: auto;
+          bottom: auto;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 72%);
+        }
+
+        .philosophy-bg-ambient-right {
+          width: 520px;
+          height: 520px;
+          right: -220px;
+          top: 36%;
+          left: auto;
+          bottom: auto;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(255, 106, 42, 0.22) 0%, rgba(255, 106, 42, 0) 74%);
+        }
+
+        .philosophy-bg-grid {
+          z-index: 3;
+          opacity: 0.22;
+          background-image:
+            linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(255, 255, 255, 0.038) 1px, transparent 1px);
+          background-size: 72px 72px;
+          mask-image: radial-gradient(120% 90% at 50% 45%, rgba(0, 0, 0, 0.75) 24%, rgba(0, 0, 0, 0.22) 62%, transparent 100%);
+          -webkit-mask-image: radial-gradient(120% 90% at 50% 45%, rgba(0, 0, 0, 0.75) 24%, rgba(0, 0, 0, 0.22) 62%, transparent 100%);
+        }
+
+        .philosophy-bg-vignette {
+          background:
+            radial-gradient(120% 100% at 50% 46%, rgba(6, 7, 9, 0) 34%, rgba(6, 7, 9, 0.78) 100%),
+            linear-gradient(180deg, rgba(6, 7, 9, 0) 0%, rgba(6, 7, 9, 0.18) 100%);
+          z-index: 4;
+        }
+
+        .philosophy-section .container {
+          z-index: 10;
+        }
+
+        .philosophy-card {
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+          translate: 0 0;
+          transition: translate 0.32s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s ease, box-shadow 0.32s ease, opacity 0.32s ease, filter 0.32s ease;
+        }
+
+        .philosophy-card-main {
+          display: flex;
+          flex-direction: column;
+          gap: 0;
+        }
+
+        .philosophy-card-step-1 {
+          --card-emphasis: 0.98;
+        }
+
+        .philosophy-card-step-2 {
+          --card-emphasis: 1;
+        }
+
+        .philosophy-card-step-3 {
+          --card-emphasis: 1.03;
+        }
+
+        .philosophy-icon-wrap {
+          transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+          .philosophy-cards-grid:hover .philosophy-card {
+            opacity: 0.9;
+            filter: saturate(0.92);
+          }
+
+          .philosophy-card:hover {
+            translate: 0 -6px;
+            opacity: 1 !important;
+            filter: none !important;
+            border-color: rgba(255, 106, 42, 0.42) !important;
+            box-shadow: 0 18px 32px rgba(0, 0, 0, 0.56), 0 6px 16px rgba(255, 106, 42, 0.12) !important;
+          }
+
+          .philosophy-card:hover .philosophy-icon-wrap {
+            transform: scale(1.02);
+            border-color: rgba(255, 106, 42, 0.5) !important;
+          }
+        }
+
+        .philosophy-cta-primary:hover {
+          background-color: #FF8249 !important;
+          transform: translateY(-2px);
+          box-shadow: 0 10px 28px rgba(255, 106, 42, 0.45) !important;
+        }
+
+        .philosophy-cta-secondary:hover {
+          background-color: rgba(255, 255, 255, 0.12) !important;
+          border-color: #FFFFFF !important;
+          transform: translateY(-2px);
+        }
+
+        /* Tablet Breakpoint */
+        @media (max-width: 1200px) {
+          .philosophy-cards-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 20px !important;
+          }
+        }
+
+        /* Mobile Breakpoint (< 900px) */
+        @media (max-width: 900px) {
+          .philosophy-cards-grid {
+            grid-template-columns: 1fr !important;
+            gap: 16px !important;
+          }
+
+          .philosophy-bg-grid {
+            opacity: 0.15;
+            background-size: 56px 56px;
+          }
+
+          .philosophy-bg-ambient {
+            filter: blur(66px);
+            opacity: 0.28;
+          }
+
+          .philosophy-bg-ambient-left {
+            width: 300px;
+            height: 300px;
+            left: -140px;
+            top: 12%;
+          }
+
+          .philosophy-bg-ambient-right {
+            width: 320px;
+            height: 320px;
+            right: -135px;
+            top: 58%;
+          }
+
+          .philosophy-card {
+            translate: 0 0 !important;
+          }
+
+          .philosophy-card-step-1,
+          .philosophy-card-step-2,
+          .philosophy-card-step-3 {
+            width: 100%;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .philosophy-card {
+            padding: 24px 18px !important;
+            border-radius: 16px !important;
+          }
+
+          .philosophy-cta-primary,
+          .philosophy-cta-secondary {
+            width: 100%;
+            justify-content: center;
+          }
+
+          .philosophy-card h3 {
+            font-size: 1.3rem !important;
+          }
+
+          .philosophy-card-footer {
+            font-size: 0.75rem !important;
+          }
+        }
+      `}</style>
+    </section>
+  );
+};
+
+export default AgencyPhilosophy;
