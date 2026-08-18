@@ -219,13 +219,14 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
         <div
           ref={headerRef}
           style={{
-            maxWidth: '800px',
-            margin: '0 auto 64px auto',
+            maxWidth: 'min(800px, 100%)',
+            margin: '0 auto clamp(40px, 6vw, 64px) auto',
             textAlign: 'center',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '16px',
+            gap: 'clamp(12px, 1.5vw, 16px)',
+            padding: '0 clamp(12px, 2vw, 24px)',
           }}
         >
           {/* Badge Pill */}
@@ -307,10 +308,11 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
           style={{
             display: 'grid',
             gridTemplateColumns: 'minmax(0, 0.86fr) minmax(0, 1fr) minmax(0, 1.12fr)',
-            gap: '24px',
+            gap: 'clamp(16px, 2vw, 24px)',
             alignItems: 'start',
-            marginBottom: '64px',
+            marginBottom: 'clamp(40px, 6vw, 64px)',
             position: 'relative',
+            padding: '0 clamp(12px, 2vw, 24px)',
           }}
         >
           {/* =========================================================================
@@ -323,7 +325,7 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'flex-start',
-              padding: '28px 24px',
+              padding: 'clamp(22px, 2vw, 28px) clamp(18px, 1.8vw, 24px)',
               borderRadius: '18px',
               background: 'linear-gradient(160deg, rgba(19, 20, 24, 0.95) 0%, rgba(13, 14, 18, 1) 100%)',
               border: '1px solid rgba(255, 255, 255, 0.09)',
@@ -482,7 +484,7 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'flex-start',
-              padding: '30px 26px',
+              padding: 'clamp(24px, 2.1vw, 30px) clamp(18px, 1.8vw, 26px)',
               borderRadius: '18px',
               background: 'linear-gradient(160deg, rgba(19, 20, 25, 0.98) 0%, rgba(14, 15, 20, 1) 100%)',
               border: '1px solid rgba(255, 106, 42, 0.24)',
@@ -652,7 +654,7 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'flex-start',
-              padding: '34px 28px',
+              padding: 'clamp(26px, 2.3vw, 34px) clamp(18px, 1.8vw, 28px)',
               borderRadius: '18px',
               background: 'linear-gradient(150deg, rgba(20, 22, 28, 1) 0%, rgba(13, 14, 18, 1) 100%)',
               border: '1px solid rgba(255, 255, 255, 0.14)',
@@ -803,10 +805,10 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
         <div
           ref={ctaRef}
           style={{
-            maxWidth: '900px',
+            maxWidth: 'min(900px, 100%)',
             margin: '0 auto',
-            padding: '40px 36px',
-            borderRadius: '24px',
+            padding: 'clamp(24px, 3vw, 40px) clamp(18px, 2.6vw, 36px)',
+            borderRadius: 'clamp(18px, 2.5vw, 24px)',
             background: 'linear-gradient(135deg, rgba(255, 106, 42, 0.12) 0%, rgba(255, 255, 255, 0.03) 100%)',
             border: '1px solid rgba(255, 106, 42, 0.3)',
             boxShadow: '0 20px 50px rgba(0, 0, 0, 0.5)',
@@ -1007,6 +1009,12 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
           --card-emphasis: 1.03;
         }
 
+        .philosophy-card-step-1,
+        .philosophy-card-step-2,
+        .philosophy-card-step-3 {
+          min-width: 0;
+        }
+
         .philosophy-icon-wrap {
           transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease;
         }
@@ -1045,14 +1053,28 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
 
         /* Tablet Breakpoint */
         @media (max-width: 1200px) {
-          .philosophy-shell {
-            padding: 0;
-            border-radius: 0;
-          }
-
           .philosophy-cards-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             gap: 20px !important;
+          }
+
+          .philosophy-card-step-1,
+          .philosophy-card-step-2 {
+            grid-column: auto;
+          }
+
+          .philosophy-card-step-3 {
+            grid-column: 1 / -1;
+          }
+
+          .philosophy-card-step-1,
+          .philosophy-card-step-2,
+          .philosophy-card-step-3 {
+            height: auto;
+          }
+
+          .philosophy-card-footer {
+            font-size: 0.76rem;
           }
         }
 
@@ -1061,6 +1083,7 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
           .philosophy-cards-grid {
             grid-template-columns: 1fr !important;
             gap: 16px !important;
+            padding: 0 12px;
           }
 
           .philosophy-bg-grid {
@@ -1087,11 +1110,6 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
             top: 58%;
           }
 
-          .philosophy-shell {
-            padding: 0;
-            border-radius: 0;
-          }
-
           .philosophy-card {
             translate: 0 0 !important;
           }
@@ -1104,9 +1122,25 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
         }
 
         @media (max-width: 640px) {
+          .philosophy-section {
+            padding: 72px 0 88px !important;
+          }
+
+          .philosophy-cards-grid {
+            gap: 12px !important;
+          }
+
+          .philosophy-heading-reveal {
+            width: 100%;
+          }
+
+          .philosophy-card h3 {
+            line-height: 1.15 !important;
+          }
+
           .philosophy-card {
-            padding: 24px 18px !important;
-            border-radius: 16px !important;
+            padding: 20px 16px !important;
+            border-radius: 14px !important;
           }
 
           .philosophy-cta-primary,
@@ -1121,6 +1155,33 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
 
           .philosophy-card-footer {
             font-size: 0.75rem !important;
+            margin-top: 18px !important;
+          }
+
+          .philosophy-card-main > div:first-child {
+            margin-bottom: 18px !important;
+          }
+
+          .philosophy-card .philosophy-reveal,
+          .philosophy-card p,
+          .philosophy-card span {
+            word-break: break-word;
+          }
+        }
+
+        @media (max-width: 430px) {
+          .philosophy-card-step-3 > .philosophy-card-main > div:last-child {
+            grid-template-columns: 1fr !important;
+          }
+
+          .philosophy-card h3 {
+            font-size: 1.18rem !important;
+          }
+
+          .philosophy-card-step-1,
+          .philosophy-card-step-2,
+          .philosophy-card-step-3 {
+            box-shadow: 0 12px 22px rgba(0, 0, 0, 0.42) !important;
           }
         }
       `}</style>
