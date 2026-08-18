@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ArrowUpRight, Menu, Sparkles, X } from 'lucide-react';
+import { ArrowUpRight, Menu, X } from 'lucide-react';
 
 interface PremiumNavbarProps {
   onNavigate: (sectionId: string) => void;
@@ -8,74 +8,147 @@ interface PremiumNavbarProps {
 export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>('home');
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 32);
+      setScrolled(window.scrollY > 24);
     };
 
     handleScroll();
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Intersection Observer for Active Section Tracking
+  useEffect(() => {
+    const sections = [
+      { id: 'hero', name: 'home' },
+      { id: 'four-pillars', name: 'services' },
+      { id: 'portfolio', name: 'work' },
+      { id: 'behind-scenes', name: 'industries' },
+      { id: 'brand-statement', name: 'about' },
+      { id: 'contact', name: 'contact' },
+    ];
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '-30% 0px -50% 0px',
+      threshold: 0,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const match = sections.find((s) => s.id === entry.target.id);
+          if (match) setActiveSection(match.name);
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach((s) => {
+      const el = document.getElementById(s.id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   const navItems = [
-    { label: 'Home', href: '#hero' },
-    { label: 'Introduction', href: '#about' },
-    { label: 'Pillars', href: '#services' },
-    { label: 'Work', href: '#portfolio' },
-    { label: 'Why Us', href: '#why' },
-    { label: 'Contact', href: '#contact' },
+    { label: 'Home', sectionId: 'hero', key: 'home' },
+    { label: 'Services', sectionId: 'four-pillars', key: 'services' },
+    { label: 'Work', sectionId: 'portfolio', key: 'work' },
+    { label: 'Industries', sectionId: 'behind-scenes', key: 'industries' },
+    { label: 'About', sectionId: 'brand-statement', key: 'about' },
   ];
 
-  const handleLinkClick = (event: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleLinkClick = (event: React.MouseEvent<HTMLAnchorElement>, sectionId: string, keyName: string) => {
     event.preventDefault();
-    const sectionId = href.replace('#', '');
+    setActiveSection(keyName);
     onNavigate(sectionId);
     setMobileMenuOpen(false);
   };
 
   return (
     <header
+      className="apple-header-wrapper"
       style={{
         position: 'fixed',
         top: 0,
         left: 0,
         right: 0,
         zIndex: 1000,
-        padding: scrolled ? '16px 0' : '24px 0',
-        transition: 'padding 0.3s ease',
+        paddingTop: scrolled ? '10px' : '16px',
+        paddingBottom: scrolled ? '10px' : '16px',
+        transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+        pointerEvents: 'none',
       }}
     >
-      <div className="container">
+      <div
+        className="apple-header-container"
+        style={{
+          width: '100%',
+          maxWidth: '1140px',
+          margin: '0 auto',
+          paddingLeft: '16px',
+          paddingRight: '16px',
+          pointerEvents: 'auto',
+        }}
+      >
+        {/* Floating Apple Liquid Glass Container */}
         <div
+          className="apple-glass-pill"
           style={{
+            position: 'relative',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: '12px 20px',
-            borderRadius: 'var(--radius-glass)',
-            background: scrolled ? 'var(--glass-bg)' : 'rgba(8, 9, 10, 0.42)',
-            backdropFilter: 'var(--glass-blur)',
-            WebkitBackdropFilter: 'var(--glass-blur)',
-            border: `1px solid ${scrolled ? 'var(--glass-border-bright)' : 'var(--glass-border)'}`,
-            boxShadow: scrolled ? 'var(--glass-shadow)' : 'none',
-            transition: 'var(--transition-smooth)',
-            position: 'relative',
+            height: '60px',
+            padding: '0 12px 0 18px',
+            borderRadius: '20px',
+            background: scrolled
+              ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.02) 40%, rgba(10, 11, 14, 0.88) 100%)'
+              : 'linear-gradient(180deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 40%, rgba(12, 13, 16, 0.6) 100%)',
+            backdropFilter: scrolled ? 'blur(30px) saturate(190%)' : 'blur(22px) saturate(160%)',
+            WebkitBackdropFilter: scrolled ? 'blur(30px) saturate(190%)' : 'blur(22px) saturate(160%)',
+            border: `1px solid ${
+              scrolled ? 'rgba(255, 255, 255, 0.15)' : 'rgba(255, 255, 255, 0.10)'
+            }`,
+            boxShadow: scrolled
+              ? 'inset 0 1px 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.3), 0 20px 50px rgba(0, 0, 0, 0.5)'
+              : 'inset 0 1px 1px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.2), 0 10px 30px rgba(0, 0, 0, 0.25)',
+            transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+            overflow: 'hidden',
           }}
         >
+          {/* Glass Top Specular Light Highlight Line */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: '10%',
+              right: '10%',
+              height: '1px',
+              background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent)',
+              pointerEvents: 'none',
+            }}
+          />
+
+          {/* LEFT: Shree Ram Production Logo */}
           <a
             href="#hero"
-            onClick={(event) => handleLinkClick(event, '#hero')}
+            onClick={(event) => handleLinkClick(event, 'hero', 'home')}
+            aria-label="Shree Ram Production Home"
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: '10px',
-              color: 'var(--text-main)',
+              color: '#FFFFFF',
               fontFamily: 'var(--font-heading)',
-              fontSize: '1.05rem',
-              fontWeight: 700,
-              letterSpacing: '0.04em',
+              textDecoration: 'none',
+              cursor: 'pointer',
+              zIndex: 2,
               minWidth: 0,
             }}
           >
@@ -84,205 +157,300 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: '34px',
-                height: '34px',
+                width: '32px',
+                height: '32px',
                 borderRadius: '10px',
-                background: 'linear-gradient(135deg, var(--accent-orange), #D44E14)',
-                color: '#FFFFFF',
-                fontSize: '0.84rem',
-                fontWeight: 800,
-                boxShadow: '0 0 16px rgba(255, 106, 42, 0.24)',
+                background: 'linear-gradient(135deg, #FF6A2A 0%, #E04E10 100%)',
+                color: '#08090A',
+                fontSize: '0.82rem',
+                fontWeight: 900,
+                letterSpacing: '-0.02em',
+                boxShadow: '0 0 16px rgba(255, 106, 42, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.4)',
                 flexShrink: 0,
               }}
             >
               SRP
             </span>
-            <span style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-              <span style={{ whiteSpace: 'nowrap' }}>SHREE RAM PRODUCTION</span>
-              <span
-                style={{
-                  fontSize: '0.64rem',
-                  fontWeight: 600,
-                  color: 'var(--text-muted)',
-                  letterSpacing: '0.14em',
-                }}
-              >
-                CREATIVE PRODUCTION STUDIO
-              </span>
+            <span
+              className="apple-logo-text"
+              style={{
+                fontSize: '0.92rem',
+                fontWeight: 700,
+                letterSpacing: '0.02em',
+                whiteSpace: 'nowrap',
+                color: '#FFFFFF',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              Shree Ram Production
             </span>
           </a>
 
+          {/* CENTER: Apple Minimal Desktop Nav Links */}
           <nav
             aria-label="Main Navigation"
+            className="apple-desktop-nav"
             style={{
               display: 'none',
               alignItems: 'center',
-              gap: '28px',
+              gap: '4px',
+              zIndex: 2,
             }}
-            className="premium-desktop-nav"
           >
-            {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                onClick={(event) => handleLinkClick(event, item.href)}
-                style={{
-                  fontSize: '0.9rem',
-                  fontWeight: 500,
-                  color: 'var(--text-muted)',
-                  transition: 'color 0.2s ease',
-                }}
-                onMouseEnter={(event) => (event.currentTarget.style.color = '#FFFFFF')}
-                onMouseLeave={(event) => (event.currentTarget.style.color = 'var(--text-muted)')}
-              >
-                {item.label}
-              </a>
-            ))}
+            {navItems.map((item) => {
+              const isActive = activeSection === item.key;
+              return (
+                <a
+                  key={item.key}
+                  href={`#${item.sectionId}`}
+                  onClick={(event) => handleLinkClick(event, item.sectionId, item.key)}
+                  style={{
+                    position: 'relative',
+                    padding: '6px 12px',
+                    borderRadius: '10px',
+                    fontSize: '0.85rem',
+                    fontWeight: 500,
+                    color: isActive ? '#FFFFFF' : '#F5F5F2',
+                    opacity: isActive ? 1 : 0.75,
+                    transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                  }}
+                  className={`apple-nav-item ${isActive ? 'active' : ''}`}
+                >
+                  {isActive && (
+                    <span
+                      style={{
+                        width: '5px',
+                        height: '5px',
+                        borderRadius: '50%',
+                        backgroundColor: '#FF6A2A',
+                        boxShadow: '0 0 8px #FF6A2A',
+                      }}
+                    />
+                  )}
+                  <span>{item.label}</span>
+                </a>
+              );
+            })}
           </nav>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div
-              className="premium-desktop-nav"
-              style={{
-                display: 'none',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '6px 12px',
-                borderRadius: 'var(--radius-pill)',
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                fontSize: '0.74rem',
-                color: 'var(--text-muted)',
-              }}
-            >
-              <span className="badge-pill-dot" />
-              <span>Premium studio capacity available</span>
-            </div>
-
+          {/* RIGHT: "Let's Talk ↗" CTA & Mobile Hamburger */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', zIndex: 2, flexShrink: 0 }}>
             <a
               href="#contact"
-              onClick={(event) => handleLinkClick(event, '#contact')}
+              onClick={(event) => handleLinkClick(event, 'contact', 'contact')}
+              className="apple-glass-cta"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '8px',
-                padding: '10px 18px',
-                borderRadius: 'var(--radius-btn)',
-                background: 'var(--accent-orange)',
-                color: '#FFFFFF',
-                fontSize: '0.85rem',
-                fontWeight: 600,
-                boxShadow: '0 6px 20px rgba(255, 106, 42, 0.24)',
+                gap: '5px',
+                padding: '8px 15px',
+                borderRadius: '11px',
+                background: '#FF6A2A',
+                color: '#08090A',
+                fontSize: '0.82rem',
+                fontWeight: 700,
+                letterSpacing: '0.01em',
+                textDecoration: 'none',
+                transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                boxShadow: '0 4px 16px rgba(255, 106, 42, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.4)',
                 whiteSpace: 'nowrap',
               }}
             >
-              <span>START A PROJECT</span>
-              <ArrowUpRight size={16} />
+              <span>Let's Talk</span>
+              <ArrowUpRight size={14} className="apple-cta-arrow" style={{ transition: 'transform 0.3s ease' }} />
             </a>
 
+            {/* Mobile Menu Toggle Button */}
             <button
-              onClick={() => setMobileMenuOpen((current) => !current)}
-              aria-label="Toggle Navigation Menu"
+              onClick={() => setMobileMenuOpen((curr) => !curr)}
+              aria-label="Toggle Menu"
+              className="apple-mobile-toggle"
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: '40px',
-                height: '40px',
+                width: '36px',
+                height: '36px',
                 borderRadius: '10px',
-                background: 'rgba(255, 255, 255, 0.06)',
-                border: '1px solid var(--glass-border)',
+                background: 'rgba(255, 255, 255, 0.08)',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
                 color: '#FFFFFF',
+                cursor: 'pointer',
+                transition: 'all 0.25s ease',
               }}
-              className="premium-mobile-toggle"
             >
-              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
           </div>
         </div>
       </div>
 
+      {/* MOBILE MENU FULL GLASS OVERLAY */}
       {mobileMenuOpen && (
         <div
+          className="apple-mobile-drawer"
           style={{
             position: 'fixed',
             inset: 0,
-            top: '80px',
-            backgroundColor: 'rgba(8, 9, 10, 0.96)',
-            backdropFilter: 'blur(24px)',
-            WebkitBackdropFilter: 'blur(24px)',
+            top: '72px',
+            backgroundColor: 'rgba(8, 9, 10, 0.95)',
+            backdropFilter: 'blur(32px) saturate(190%)',
+            WebkitBackdropFilter: 'blur(32px) saturate(190%)',
             zIndex: 999,
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            padding: '28px 24px 36px',
-            animation: 'fadeIn 0.3s ease-out forwards',
+            padding: '24px 24px 36px',
+            animation: 'appleFadeSlide 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            pointerEvents: 'auto',
+            overflowY: 'auto',
           }}
         >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                color: 'var(--accent-orange)',
-                fontSize: '0.78rem',
-                fontWeight: 700,
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-              }}
-            >
-              <Sparkles size={14} />
-              <span>Navigation Menu</span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#FF6A2A', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
+              Navigation
             </div>
 
-            {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                onClick={(event) => handleLinkClick(event, item.href)}
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: '1.9rem',
-                  fontWeight: 600,
-                  color: '#FFFFFF',
-                  paddingBottom: '12px',
-                  borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-                }}
-              >
-                {item.label}
-              </a>
-            ))}
+            {navItems.map((item) => {
+              const isActive = activeSection === item.key;
+              return (
+                <a
+                  key={item.key}
+                  href={`#${item.sectionId}`}
+                  onClick={(event) => handleLinkClick(event, item.sectionId, item.key)}
+                  style={{
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: '1.75rem',
+                    fontWeight: 600,
+                    color: isActive ? '#FF6A2A' : '#FFFFFF',
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    paddingBottom: '12px',
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.07)',
+                  }}
+                >
+                  <span>{item.label}</span>
+                  {isActive && <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#FF6A2A' }} />}
+                </a>
+              );
+            })}
           </div>
 
           <a
             href="#contact"
-            onClick={(event) => handleLinkClick(event, '#contact')}
+            onClick={(event) => handleLinkClick(event, 'contact', 'contact')}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '10px',
-              padding: '16px 22px',
-              borderRadius: 'var(--radius-btn)',
-              background: 'var(--accent-orange)',
-              color: '#FFFFFF',
+              gap: '8px',
+              padding: '15px',
+              borderRadius: '14px',
+              background: '#FF6A2A',
+              color: '#08090A',
               fontSize: '0.95rem',
-              fontWeight: 600,
+              fontWeight: 700,
+              textDecoration: 'none',
+              boxShadow: '0 8px 24px rgba(255, 106, 42, 0.3)',
+              marginTop: '24px',
             }}
           >
-            <span>LET'S TALK</span>
+            <span>Let's Talk</span>
             <ArrowUpRight size={18} />
           </a>
         </div>
       )}
 
+      {/* COMPREHENSIVE RESPONSIVE STYLES FOR APPLE NAVBAR */}
       <style>{`
-        @media (min-width: 1024px) {
-          .premium-desktop-nav { display: flex !important; }
+        @keyframes appleFadeSlide {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
+
+        .apple-nav-item:hover {
+          color: #FF6A2A !important;
+          opacity: 1 !important;
+          background: rgba(255, 255, 255, 0.08);
+          box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15);
+        }
+
+        .apple-nav-item.active {
+          background: rgba(255, 255, 255, 0.06);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .apple-glass-cta:hover {
+          background-color: #FF8249 !important;
+          transform: translateY(-1px) scale(1.02);
+          boxShadow: 0 8px 25px rgba(255, 106, 42, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.5) !important;
+        }
+
+        .apple-glass-cta:hover .apple-cta-arrow {
+          transform: translate(3px, -3px);
+        }
+
+        /* Desktop Breakpoint (1024px+) */
         @media (min-width: 1024px) {
-          .premium-mobile-toggle { display: none !important; }
+          .apple-desktop-nav {
+            display: flex !important;
+          }
+          .apple-mobile-toggle {
+            display: none !important;
+          }
+        }
+
+        /* Tablet Breakpoint (768px - 1023px) */
+        @media (min-width: 768px) and (max-width: 1023px) {
+          .apple-desktop-nav {
+            display: flex !important;
+            gap: 2px !important;
+          }
+          .apple-nav-item {
+            padding: 5px 9px !important;
+            font-size: 0.8rem !important;
+          }
+          .apple-mobile-toggle {
+            display: none !important;
+          }
+        }
+
+        /* Mobile Breakpoint (< 768px) */
+        @media (max-width: 767px) {
+          .apple-desktop-nav {
+            display: none !important;
+          }
+          .apple-mobile-toggle {
+            display: flex !important;
+          }
+          .apple-header-container {
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+          }
+          .apple-logo-text {
+            max-width: 130px !important;
+            font-size: 0.85rem !important;
+          }
+        }
+
+        /* Very Small Mobile (< 400px) */
+        @media (max-width: 400px) {
+          .apple-logo-text {
+            display: none !important;
+          }
         }
       `}</style>
     </header>
