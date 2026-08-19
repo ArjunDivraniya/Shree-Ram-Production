@@ -31,7 +31,6 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
   useEffect(() => {
     // Check reduced motion
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setIsReducedMotion(motionQuery.matches);
 
     const handleMotionChange = (e: MediaQueryListEvent) => {
       setIsReducedMotion(e.matches);
@@ -99,7 +98,7 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
           scrub: 0.8,
           onUpdate: (self) => {
             const p = self.progress;
-            let idx = 0;
+            let idx: number;
             if (p < 0.28) idx = 0;
             else if (p < 0.58) idx = 1;
             else if (p < 0.85) idx = 2;

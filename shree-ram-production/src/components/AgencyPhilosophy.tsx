@@ -19,11 +19,12 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
   const card3Ref = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
 
-  const [isReducedMotion, setIsReducedMotion] = useState<boolean>(false);
+  const [isReducedMotion, setIsReducedMotion] = useState<boolean>(() =>
+    typeof window !== 'undefined' ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false
+  );
   // Reduced Motion Check
   useEffect(() => {
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setIsReducedMotion(motionQuery.matches);
     const handleMotionChange = (e: MediaQueryListEvent) => setIsReducedMotion(e.matches);
     motionQuery.addEventListener('change', handleMotionChange);
     return () => motionQuery.removeEventListener('change', handleMotionChange);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { PortfolioItem } from '../types';
 import { PORTFOLIO_ITEMS } from '../data/content';
@@ -9,16 +9,9 @@ export const Portfolio: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const serviceParam = searchParams.get('service');
 
+  const serviceMatch = serviceParam ? findServiceById(serviceParam) : null;
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [selectedProject, setSelectedProject] = useState<PortfolioItem | null>(null);
-
-  const serviceMatch = serviceParam ? findServiceById(serviceParam) : null;
-
-  useEffect(() => {
-    if (serviceMatch) {
-      setActiveCategory('all');
-    }
-  }, [serviceParam, serviceMatch]);
 
   const categories = [
     { id: 'all', label: 'All Projects' },

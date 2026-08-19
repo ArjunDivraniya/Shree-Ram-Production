@@ -31,8 +31,8 @@ export const ProjectReel: React.FC<ProjectReelProps> = ({
   const offsetRef = useRef<number>(0);
   const speedMultiplierRef = useRef<number>(1);
   const scrollBoostRef = useRef<number>(0);
-  const lastScrollYRef = useRef<number>(typeof window !== 'undefined' ? window.scrollY : 0);
-  const lastTimeRef = useRef<number>(performance.now());
+  const lastScrollYRef = useRef<number>(0);
+  const lastTimeRef = useRef<number>(0);
   const isDraggingRef = useRef<boolean>(false);
   const dragStartXRef = useRef<number>(0);
   const dragStartOffsetRef = useRef<number>(0);

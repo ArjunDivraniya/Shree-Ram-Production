@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, X, TrendingUp, CheckCircle2 } from 'lucide-react';
 import type { PillarWithServices, PortfolioItem, ServiceDetail } from '../../types';
@@ -23,13 +23,6 @@ export const PillarShowcase: React.FC<PillarShowcaseProps> = ({
   const { ref, isInView } = useInView<HTMLElement>({ threshold: 0.1 });
   const reducedMotion = useReducedMotion();
 
-  const [activeServiceId, setActiveServiceId] = useState(pillar.services[0].id);
-  const [direction, setDirection] = useState<'down' | 'up'>('down');
-  const [selectedProject, setSelectedProject] = useState<PortfolioItem | null>(null);
-
-  const activeService =
-    pillar.services.find((s) => s.id === activeServiceId) ?? pillar.services[0];
-
   const resolveProjects = useCallback((service: ServiceDetail): PortfolioItem[] => {
     const projects = service.projectIds
       .map((id) => PORTFOLIO_ITEMS.find((p) => p.id === id))
@@ -43,9 +36,22 @@ export const PillarShowcase: React.FC<PillarShowcaseProps> = ({
     return projects.slice(0, 5);
   }, []);
 
+  const [prevPillarId, setPrevPillarId] = useState<string>(pillar.id);
+  const [activeServiceId, setActiveServiceId] = useState<string>(pillar.services[0].id);
   const [displayProjects, setDisplayProjects] = useState<PortfolioItem[]>(() =>
     resolveProjects(pillar.services[0]),
   );
+  const [direction, setDirection] = useState<'down' | 'up'>('down');
+  const [selectedProject, setSelectedProject] = useState<PortfolioItem | null>(null);
+
+  if (prevPillarId !== pillar.id) {
+    setPrevPillarId(pillar.id);
+    setActiveServiceId(pillar.services[0].id);
+    setDisplayProjects(resolveProjects(pillar.services[0]));
+  }
+
+  const activeService =
+    pillar.services.find((s) => s.id === activeServiceId) ?? pillar.services[0];
 
   const handleServiceSelect = useCallback(
     (serviceId: string) => {
@@ -64,11 +70,6 @@ export const PillarShowcase: React.FC<PillarShowcaseProps> = ({
     },
     [activeServiceId, pillar.services, resolveProjects],
   );
-
-  useEffect(() => {
-    setActiveServiceId(pillar.services[0].id);
-    setDisplayProjects(resolveProjects(pillar.services[0]));
-  }, [pillar.id, pillar.services, resolveProjects]);
 
   const stagger = (delay: number) =>
     reducedMotion

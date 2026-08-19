@@ -85,7 +85,6 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
   // Check reduced motion
   useEffect(() => {
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setIsReducedMotion(motionQuery.matches);
     const handleMotionChange = (e: MediaQueryListEvent) => setIsReducedMotion(e.matches);
     motionQuery.addEventListener('change', handleMotionChange);
     return () => motionQuery.removeEventListener('change', handleMotionChange);

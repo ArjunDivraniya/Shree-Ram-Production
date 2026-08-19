@@ -72,7 +72,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
       {/* Hero Content Container */}
       <div className="container" style={{ position: 'relative', zIndex: 10 }}>
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
-          
+
           {/* Studio Brand Pill */}
           <div
             style={{
