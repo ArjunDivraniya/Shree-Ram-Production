@@ -5,22 +5,48 @@ import { ArrowUpRight, MessageSquare, Phone, Mail } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-interface ContactCTAProps {
-  preselectedServices?: string[];
-}
-
-export const ContactCTA: React.FC<ContactCTAProps> = () => {
+export const ContactCTA: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const labelRef = useRef<HTMLDivElement>(null);
-  const heading1Ref = useRef<HTMLDivElement>(null);
-  const heading2Ref = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
+  const headingLine1Ref = useRef<HTMLDivElement>(null);
+  const headingLine2Ref = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLParagraphElement>(null);
   const reassuranceRef = useRef<HTMLDivElement>(null);
+  const primaryCtaRef = useRef<HTMLButtonElement>(null);
   const accentLineRef = useRef<HTMLDivElement>(null);
+  const optionsContainerRef = useRef<HTMLDivElement>(null);
   const optionsRef = useRef<(HTMLAnchorElement | null)[]>([]);
   const footerNoteRef = useRef<HTMLDivElement>(null);
 
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  // Subtle cursor follower light state
+  const [mousePos, setMousePos] = useState<{ x: number; y: number; opacity: number }>({
+    x: 0,
+    y: 0,
+    opacity: 0,
+  });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    if (!sectionRef.current) return;
+    const rect = sectionRef.current.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      opacity: 1,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setMousePos((prev) => ({ ...prev, opacity: 0 }));
+  };
+
+  // Smooth scroll focus to contact options
+  const scrollToContactOptions = () => {
+    if (optionsContainerRef.current) {
+      optionsContainerRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
 
   useEffect(() => {
     if (!sectionRef.current) return;
@@ -33,7 +59,7 @@ export const ContactCTA: React.FC<ContactCTAProps> = () => {
         },
       });
 
-      // 1. Label reveals with small upward fade
+      // 1. Background subtle dark transition & Let's Talk label reveal
       if (labelRef.current) {
         tl.fromTo(
           labelRef.current,
@@ -42,24 +68,24 @@ export const ContactCTA: React.FC<ContactCTAProps> = () => {
         );
       }
 
-      // 2. Main heading reveals line-by-line with smooth clip/mask animation
-      if (heading1Ref.current && heading2Ref.current) {
+      // 2. Main heading reveals line-by-line using clip/mask animation
+      if (headingLine1Ref.current && headingLine2Ref.current) {
         tl.fromTo(
-          [heading1Ref.current, heading2Ref.current],
-          { opacity: 0, y: 40, clipPath: 'inset(100% 0% 0% 0%)' },
+          [headingLine1Ref.current, headingLine2Ref.current],
+          { opacity: 0, y: 45, clipPath: 'inset(100% 0% 0% 0%)' },
           {
             opacity: 1,
             y: 0,
             clipPath: 'inset(0% 0% 0% 0%)',
-            duration: 0.8,
-            stagger: 0.15,
+            duration: 0.85,
+            stagger: 0.14,
             ease: 'power3.out',
           },
           '-=0.3'
         );
       }
 
-      // 3. Supporting text & reassurance fade/slide in
+      // 3. Supporting text & reassurance fade upward
       if (textRef.current && reassuranceRef.current) {
         tl.fromTo(
           [textRef.current, reassuranceRef.current],
@@ -69,7 +95,17 @@ export const ContactCTA: React.FC<ContactCTAProps> = () => {
         );
       }
 
-      // 4. Accent line draws across section
+      // 4. Primary CTA button reveal
+      if (primaryCtaRef.current) {
+        tl.fromTo(
+          primaryCtaRef.current,
+          { opacity: 0, y: 20, scale: 0.96 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'back.out(1.4)' },
+          '-=0.3'
+        );
+      }
+
+      // 5. Accent light line draws across the section
       if (accentLineRef.current) {
         tl.fromTo(
           accentLineRef.current,
@@ -79,12 +115,12 @@ export const ContactCTA: React.FC<ContactCTAProps> = () => {
         );
       }
 
-      // 5. Contact options reveal sequentially with subtle stagger
+      // 6. Contact options reveal sequentially
       const validOptions = optionsRef.current.filter(Boolean);
       if (validOptions.length > 0) {
         tl.fromTo(
           validOptions,
-          { opacity: 0, y: 30 },
+          { opacity: 0, y: 32 },
           {
             opacity: 1,
             y: 0,
@@ -96,7 +132,7 @@ export const ContactCTA: React.FC<ContactCTAProps> = () => {
         );
       }
 
-      // 6. Footer Note reveal
+      // 7. Closing footer note reveal
       if (footerNoteRef.current) {
         tl.fromTo(
           footerNoteRef.current,
@@ -115,7 +151,7 @@ export const ContactCTA: React.FC<ContactCTAProps> = () => {
       num: '01',
       title: 'WHATSAPP',
       ctaText: 'Start a conversation',
-      href: 'https://wa.me/919876543210?text=Hello%20Shree%20Ram%20Production%2C%20I%20would%20like%20to%20discuss%20a%20project.',
+      href: 'https://wa.me/919876543210?text=Hello%20Shree%20Ram%20Production%2C%20I%20would%20like%20to%20start%20a%20conversation.',
       icon: MessageSquare,
     },
     {
@@ -138,6 +174,8 @@ export const ContactCTA: React.FC<ContactCTAProps> = () => {
     <section
       ref={sectionRef}
       id="contact"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       style={{
         padding: '140px 0 120px 0',
         backgroundColor: '#08090A',
@@ -145,36 +183,57 @@ export const ContactCTA: React.FC<ContactCTAProps> = () => {
         overflow: 'hidden',
       }}
     >
-      {/* Subtle Ambient Radial Lighting & Grain Vignette */}
+      {/* Subtle Radial Orange Ambient Light Behind Heading */}
       <div
         aria-hidden="true"
         style={{
           position: 'absolute',
-          inset: 0,
-          backgroundImage: `
-            radial-gradient(circle at 50% 45%, rgba(255, 106, 42, 0.08) 0%, transparent 60%),
-            radial-gradient(circle at 80% 80%, rgba(255, 106, 42, 0.03) 0%, transparent 40%)
-          `,
+          top: '20%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '600px',
+          height: '400px',
+          background: 'radial-gradient(circle, rgba(255, 106, 42, 0.12) 0%, transparent 70%)',
           pointerEvents: 'none',
           zIndex: 1,
+          filter: 'blur(50px)',
+        }}
+      />
+
+      {/* Subtle Cursor Follower Light Halo */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          left: `${mousePos.x}px`,
+          top: `${mousePos.y}px`,
+          width: '450px',
+          height: '450px',
+          transform: 'translate(-50%, -50%)',
+          background: 'radial-gradient(circle, rgba(255, 106, 42, 0.08) 0%, transparent 65%)',
+          opacity: mousePos.opacity,
+          pointerEvents: 'none',
+          zIndex: 2,
+          transition: 'opacity 0.4s ease',
+          filter: 'blur(40px)',
         }}
       />
 
       <div className="container" style={{ position: 'relative', zIndex: 5, maxWidth: '1100px' }}>
         
         {/* TOP SECTION HEADER */}
-        <div style={{ marginBottom: '56px' }}>
+        <div style={{ marginBottom: '48px' }}>
           
-          {/* Small Label */}
+          {/* Main Label */}
           <div ref={labelRef} className="badge-pill" style={{ marginBottom: '24px', width: 'fit-content' }}>
             <span className="badge-pill-dot" />
             <span>LET'S TALK</span>
           </div>
 
-          {/* Main Heading (Split in 2 Lines for Clip/Mask Reveal) */}
+          {/* Main Heading (Line-by-line Masked Clip Reveal) */}
           <h2
             style={{
-              fontSize: 'clamp(2.6rem, 5.5vw, 5.2rem)',
+              fontSize: 'clamp(2.6rem, 5.5vw, 5.4rem)',
               fontWeight: 800,
               lineHeight: 1.02,
               textTransform: 'uppercase',
@@ -184,34 +243,35 @@ export const ContactCTA: React.FC<ContactCTAProps> = () => {
               fontFamily: 'var(--font-heading)',
             }}
           >
-            <div ref={heading1Ref} style={{ willChange: 'transform, opacity, clip-path' }}>
-              LET'S BUILD SOMETHING
+            <div ref={headingLine1Ref} style={{ willChange: 'transform, opacity, clip-path' }}>
+              LET'S BUILD
             </div>
             <div
-              ref={heading2Ref}
+              ref={headingLine2Ref}
               style={{
                 color: 'var(--accent-orange)',
                 willChange: 'transform, opacity, clip-path',
               }}
             >
-              THAT GROWS.
+              SOMETHING THAT GROWS.
             </div>
           </h2>
 
-          {/* Supporting Text & Small Reassurance */}
+          {/* Supporting Text & Reassurance Statement */}
           <div
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
               gap: '28px',
               alignItems: 'baseline',
+              marginBottom: '32px',
             }}
           >
             <p
               ref={textRef}
               style={{
                 fontSize: 'clamp(1.1rem, 1.8vw, 1.35rem)',
-                color: '#CBD5E1',
+                color: '#F5F5F2',
                 lineHeight: 1.6,
                 maxWidth: '680px',
                 margin: 0,
@@ -224,10 +284,9 @@ export const ContactCTA: React.FC<ContactCTAProps> = () => {
             <div
               ref={reassuranceRef}
               style={{
-                fontSize: '0.95rem',
+                fontSize: '0.98rem',
                 fontWeight: 600,
-                color: 'rgba(255, 255, 255, 0.65)',
-                fontStyle: 'italic',
+                color: '#A5A5A8',
                 borderLeft: '2px solid var(--accent-orange)',
                 paddingLeft: '16px',
               }}
@@ -236,24 +295,50 @@ export const ContactCTA: React.FC<ContactCTAProps> = () => {
             </div>
           </div>
 
+          {/* Optional Primary CTA Button above contact links */}
+          <button
+            ref={primaryCtaRef}
+            onClick={scrollToContactOptions}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              padding: '14px 28px',
+              borderRadius: 'var(--radius-pill)',
+              backgroundColor: 'var(--accent-orange)',
+              color: '#FFFFFF',
+              fontSize: '0.9rem',
+              fontWeight: 800,
+              letterSpacing: '0.06em',
+              border: 'none',
+              cursor: 'pointer',
+              boxShadow: '0 8px 30px var(--accent-orange-glow)',
+              transition: 'var(--transition-smooth)',
+            }}
+          >
+            <span>START A CONVERSATION</span>
+            <ArrowUpRight size={18} />
+          </button>
+
         </div>
 
-        {/* THIN ORANGE ACCENT DRAW LINE */}
+        {/* THIN ORANGE ACCENT LIGHT DRAW LINE */}
         <div
           ref={accentLineRef}
           style={{
             width: '100%',
             height: '1px',
-            backgroundColor: 'rgba(255, 106, 42, 0.35)',
+            backgroundColor: 'rgba(255, 106, 42, 0.4)',
             marginBottom: '48px',
             willChange: 'transform',
           }}
         />
 
         {/* ====================================================================
-            3 DIRECT CONTACT OPTIONS (LARGE EDITORIAL INTERACTIVE LINKS)
+            3 LARGE INTERACTIVE CONTACT OPTIONS (EDITORIAL LINKS)
             ==================================================================== */}
         <div
+          ref={optionsContainerRef}
           style={{
             display: 'flex',
             flexDirection: 'column',
@@ -278,16 +363,29 @@ export const ContactCTA: React.FC<ContactCTAProps> = () => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  padding: '36px 0',
+                  padding: '38px 0',
                   borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
                   textDecoration: 'none',
                   position: 'relative',
-                  opacity: isSiblingHovered ? 0.4 : 1,
+                  opacity: isSiblingHovered ? 0.35 : 1,
                   transition: 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
                   cursor: 'pointer',
                 }}
               >
-                {/* Left Side: Number, Category & Hover Accent */}
+                {/* Active Option Ambient Hover Background Highlight */}
+                {isHovered && (
+                  <div
+                    aria-hidden="true"
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      background: 'radial-gradient(ellipse at center, rgba(255, 106, 42, 0.06) 0%, transparent 80%)',
+                      pointerEvents: 'none',
+                    }}
+                  />
+                )}
+
+                {/* Left Side: Number & Title */}
                 <div
                   style={{
                     display: 'flex',
@@ -302,7 +400,7 @@ export const ContactCTA: React.FC<ContactCTAProps> = () => {
                       fontFamily: 'var(--font-heading)',
                       fontSize: '1.1rem',
                       fontWeight: 800,
-                      color: isHovered ? 'var(--accent-orange)' : 'var(--text-dim)',
+                      color: isHovered ? 'var(--accent-orange)' : '#A5A5A8',
                       letterSpacing: '0.1em',
                       transition: 'color 0.4s ease',
                     }}
@@ -313,9 +411,9 @@ export const ContactCTA: React.FC<ContactCTAProps> = () => {
                   <h3
                     style={{
                       fontFamily: 'var(--font-heading)',
-                      fontSize: 'clamp(1.6rem, 3.2vw, 2.8rem)',
+                      fontSize: 'clamp(1.7rem, 3.4vw, 3.0rem)',
                       fontWeight: 800,
-                      color: isHovered ? '#FFFFFF' : '#E2E8F0',
+                      color: isHovered ? '#FFFFFF' : '#F5F5F2',
                       letterSpacing: '-0.01em',
                       margin: 0,
                       transition: 'color 0.4s ease',
@@ -325,21 +423,21 @@ export const ContactCTA: React.FC<ContactCTAProps> = () => {
                   </h3>
                 </div>
 
-                {/* Right Side: Action Text & Moving Arrow */}
+                {/* Right Side: CTA Text & Moving Arrow */}
                 <div
                   style={{
                     display: 'flex',
                     alignItems: 'center',
                     gap: '12px',
-                    transform: isHovered ? 'translate(6px, -4px)' : 'translate(0, 0)',
+                    transform: isHovered ? 'translate(5px, -5px)' : 'translate(0, 0)',
                     transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
                   }}
                 >
                   <span
                     style={{
-                      fontSize: 'clamp(0.95rem, 1.4vw, 1.2rem)',
-                      fontWeight: 600,
-                      color: isHovered ? 'var(--accent-orange)' : 'var(--text-muted)',
+                      fontSize: 'clamp(0.95rem, 1.4vw, 1.25rem)',
+                      fontWeight: 700,
+                      color: isHovered ? 'var(--accent-orange)' : '#A5A5A8',
                       transition: 'color 0.4s ease',
                     }}
                   >
@@ -347,16 +445,16 @@ export const ContactCTA: React.FC<ContactCTAProps> = () => {
                   </span>
 
                   <ArrowUpRight
-                    size={26}
+                    size={28}
                     color={isHovered ? 'var(--accent-orange)' : '#A5A5A8'}
                     style={{
-                      transform: isHovered ? 'translate(6px, -6px)' : 'translate(0, 0)',
+                      transform: isHovered ? 'translate(5px, -5px)' : 'translate(0, 0)',
                       transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s ease',
                     }}
                   />
                 </div>
 
-                {/* Subtle Hover Orange Underline Draw Accent */}
+                {/* Subtle Orange Underline Draw Accent */}
                 <div
                   style={{
                     position: 'absolute',
@@ -368,7 +466,7 @@ export const ContactCTA: React.FC<ContactCTAProps> = () => {
                     transform: isHovered ? 'scaleX(1)' : 'scaleX(0)',
                     transformOrigin: 'left center',
                     transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-                    boxShadow: isHovered ? '0 0 12px var(--accent-orange)' : 'none',
+                    boxShadow: isHovered ? '0 0 14px var(--accent-orange)' : 'none',
                   }}
                 />
               </a>
@@ -383,8 +481,8 @@ export const ContactCTA: React.FC<ContactCTAProps> = () => {
             textAlign: 'center',
             fontSize: '0.85rem',
             fontWeight: 800,
-            letterSpacing: '0.12em',
-            color: 'var(--text-dim)',
+            letterSpacing: '0.14em',
+            color: '#A5A5A8',
             textTransform: 'uppercase',
           }}
         >
@@ -400,7 +498,7 @@ export const ContactCTA: React.FC<ContactCTAProps> = () => {
             padding: 90px 0 80px 0 !important;
           }
           #contact a {
-            padding: 24px 0 !important;
+            padding: 26px 0 !important;
             flex-direction: column !important;
             align-items: flex-start !important;
             gap: 12px !important;
