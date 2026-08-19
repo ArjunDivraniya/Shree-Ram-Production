@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { ServicesHero } from '../components/services/ServicesHero';
 import { PillarShowcase } from '../components/services/PillarShowcase';
-import { ServicesViewAllWork, ServicesCTA } from '../components/services/ServicesCTA';
+import { ServicesCTA } from '../components/services/ServicesCTA';
 import { Footer } from '../components/Footer';
 import { SERVICES_PILLARS } from '../data/servicesData';
 import '../components/services/services.css';
@@ -30,7 +30,6 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate }) => {
         ))}
       </div>
 
-      <ServicesViewAllWork />
       <ServicesCTA />
       <Footer onNavigate={onNavigate} />
     </main>
