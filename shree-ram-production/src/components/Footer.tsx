@@ -1,6 +1,6 @@
 import React from 'react';
 import { MapPin, Globe } from 'lucide-react';
-import mainLogo from '../assets/logo/Main Logo.jpeg';
+import mainLogo from '../assets/logo/shreeramproduction-logo.png';
 
 interface FooterProps {
   onNavigate: (sectionId: string) => void;

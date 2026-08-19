@@ -22,7 +22,7 @@ export const PremiumHomepage: React.FC<PremiumHomepageProps> = ({ onNavigate }) 
       <Hero onNavigate={onNavigate} />
       <BrandStatement onNavigate={onNavigate} />
       <ScrollDrivenPillars onNavigate={onNavigate} />
-      <Portfolio />
+      <Portfolio isHomepage={true} onNavigate={onNavigate} />
       <ProcessFlywheel />
       <BehindTheScenes />
       <ProjectCalculator onSelectServices={setPreselectedServices} />

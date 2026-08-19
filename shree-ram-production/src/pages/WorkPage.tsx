@@ -9,7 +9,7 @@ interface WorkPageProps {
 export const WorkPage: React.FC<WorkPageProps> = ({ onNavigate }) => {
   return (
     <main style={{ backgroundColor: '#08090A', paddingTop: '100px' }}>
-      <Portfolio />
+      <Portfolio isHomepage={false} />
       <Footer onNavigate={onNavigate} />
     </main>
   );
