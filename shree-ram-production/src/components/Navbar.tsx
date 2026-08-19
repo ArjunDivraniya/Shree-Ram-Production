@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ArrowUpRight, Menu, X } from 'lucide-react';
-import mainLogo from '../assets/logo/Main Logo.jpeg';
+import mainLogo from '../assets/logo/shreeramproduction-logo.png';
 
 interface NavbarProps {
   onNavigate: (sectionId: string) => void;
@@ -179,20 +179,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate }) => {
                 }}
               />
             </span>
-            <span
-              className="apple-logo-text"
-              style={{
-                fontSize: '0.92rem',
-                fontWeight: 700,
-                letterSpacing: '0.02em',
-                whiteSpace: 'nowrap',
-                color: '#FFFFFF',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-              }}
-            >
-              Shree Ram Production
-            </span>
+            
+            
           </a>
 
           {/* CENTER: Apple Minimal Desktop Nav Links */}

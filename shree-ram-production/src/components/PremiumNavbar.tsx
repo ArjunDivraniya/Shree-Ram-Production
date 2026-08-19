@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowUpRight, Menu, X } from 'lucide-react';
-import mainLogo from '../assets/logo/Main Logo.jpeg';
+import mainLogo from '../assets/logo/shreeramproduction-logo.png';
 
 interface PremiumNavbarProps {
   onNavigate: (sectionId: string) => void;
@@ -216,14 +216,11 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: '34px',
-                height: '34px',
-                borderRadius: '10px',
-                overflow: 'hidden',
-                border: '1.5px solid rgba(255, 106, 42, 0.4)',
-                boxShadow: '0 0 16px rgba(255, 106, 42, 0.35)',
-                flexShrink: 0,
-                backgroundColor: '#08090A',
+                width: '100px',
+                height: '100px',
+               
+                
+                
               }}
             >
               <img
