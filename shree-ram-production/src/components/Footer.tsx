@@ -152,7 +152,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <MapPin size={16} color="var(--accent-orange)" />
-                <span>Mumbai Main Studio, India</span>
+                <span>Ahmedabad Gujrat, India</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Globe size={16} color="var(--accent-orange)" />
