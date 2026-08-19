@@ -78,3 +78,19 @@ export interface ContactFormData {
   timeline: string;
   message: string;
 }
+
+export interface ServiceDetail {
+  id: string;
+  number: string;
+  name: string;
+  description: string;
+  projectIds: string[];
+}
+
+export interface PillarWithServices {
+  id: string;
+  number: string;
+  title: string;
+  description: string;
+  services: ServiceDetail[];
+}

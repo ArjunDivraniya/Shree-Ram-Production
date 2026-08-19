@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowUpRight, Menu, X } from 'lucide-react';
 import mainLogo from '../assets/logo/Main Logo.jpeg';
 
@@ -11,6 +12,9 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('home');
 
+  const location = useLocation();
+  const navigate = useNavigate();
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 24);
@@ -21,8 +25,10 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Intersection Observer for Active Section Tracking
+  // Intersection Observer for Active Section Tracking on homepage
   useEffect(() => {
+    if (location.pathname !== '/') return;
+
     const sections = [
       { id: 'hero', name: 'home' },
       { id: 'four-pillars', name: 'services' },
@@ -53,21 +59,72 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, [location.pathname]);
 
   const navItems = [
-    { label: 'Home', sectionId: 'hero', key: 'home' },
-    { label: 'Services', sectionId: 'four-pillars', key: 'services' },
-    { label: 'Work', sectionId: 'portfolio', key: 'work' },
-    { label: 'Industries', sectionId: 'behind-scenes', key: 'industries' },
-    { label: 'About', sectionId: 'brand-statement', key: 'about' },
+    { label: 'Home', sectionId: 'hero', key: 'home', route: '/' },
+    { label: 'Services', sectionId: 'four-pillars', key: 'services', route: '/services' },
+    { label: 'Work', sectionId: 'portfolio', key: 'work', route: '/work' },
+    { label: 'Industries', sectionId: 'behind-scenes', key: 'industries', route: null },
+    { label: 'About', sectionId: 'brand-statement', key: 'about', route: null },
   ];
 
-  const handleLinkClick = (event: React.MouseEvent<HTMLAnchorElement>, sectionId: string, keyName: string) => {
+  const checkIsActive = (itemKey: string): boolean => {
+    if (location.pathname === '/services') {
+      return itemKey === 'services';
+    }
+    if (location.pathname === '/work') {
+      return itemKey === 'work';
+    }
+    if (location.pathname === '/') {
+      return activeSection === itemKey;
+    }
+    return false;
+  };
+
+  const handleLinkClick = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    sectionId: string,
+    keyName: string,
+    route: string | null
+  ) => {
     event.preventDefault();
-    setActiveSection(keyName);
-    onNavigate(sectionId);
     setMobileMenuOpen(false);
+
+    if (route === '/services') {
+      if (location.pathname === '/services') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        navigate('/services');
+      }
+      return;
+    }
+
+    if (route === '/work') {
+      if (location.pathname === '/work') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        navigate('/work');
+      }
+      return;
+    }
+
+    if (route === '/') {
+      if (location.pathname === '/') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        navigate('/');
+      }
+      return;
+    }
+
+    // Anchor navigation for Industries / About / Contact
+    if (location.pathname === '/') {
+      setActiveSection(keyName);
+      onNavigate(sectionId);
+    } else {
+      navigate(`/#${sectionId}`);
+    }
   };
 
   return (
@@ -138,8 +195,8 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
 
           {/* LEFT: Shree Ram Production Logo */}
           <a
-            href="#hero"
-            onClick={(event) => handleLinkClick(event, 'hero', 'home')}
+            href="/"
+            onClick={(event) => handleLinkClick(event, 'hero', 'home', '/')}
             aria-label="Shree Ram Production Home"
             style={{
               display: 'flex',
@@ -207,12 +264,12 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
             }}
           >
             {navItems.map((item) => {
-              const isActive = activeSection === item.key;
+              const isActive = checkIsActive(item.key);
               return (
                 <a
                   key={item.key}
-                  href={`#${item.sectionId}`}
-                  onClick={(event) => handleLinkClick(event, item.sectionId, item.key)}
+                  href={item.route ?? `#${item.sectionId}`}
+                  onClick={(event) => handleLinkClick(event, item.sectionId, item.key, item.route)}
                   style={{
                     position: 'relative',
                     padding: '6px 12px',
@@ -250,7 +307,7 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', zIndex: 2, flexShrink: 0 }}>
             <a
               href="#contact"
-              onClick={(event) => handleLinkClick(event, 'contact', 'contact')}
+              onClick={(event) => handleLinkClick(event, 'contact', 'contact', null)}
               className="apple-glass-cta"
               style={{
                 display: 'inline-flex',
@@ -325,12 +382,12 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
             </div>
 
             {navItems.map((item) => {
-              const isActive = activeSection === item.key;
+              const isActive = checkIsActive(item.key);
               return (
                 <a
                   key={item.key}
-                  href={`#${item.sectionId}`}
-                  onClick={(event) => handleLinkClick(event, item.sectionId, item.key)}
+                  href={item.route ?? `#${item.sectionId}`}
+                  onClick={(event) => handleLinkClick(event, item.sectionId, item.key, item.route)}
                   style={{
                     fontFamily: 'var(--font-heading)',
                     fontSize: '1.75rem',
@@ -353,7 +410,7 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
 
           <a
             href="#contact"
-            onClick={(event) => handleLinkClick(event, 'contact', 'contact')}
+            onClick={(event) => handleLinkClick(event, 'contact', 'contact', null)}
             style={{
               display: 'inline-flex',
               alignItems: 'center',

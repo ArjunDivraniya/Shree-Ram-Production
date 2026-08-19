@@ -1,11 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import type { PortfolioItem } from '../types';
 import { PORTFOLIO_ITEMS } from '../data/content';
+import { findServiceById } from '../utils/serviceUtils';
 import { ArrowUpRight, X, TrendingUp } from 'lucide-react';
 
 export const Portfolio: React.FC = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const serviceParam = searchParams.get('service');
+
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [selectedProject, setSelectedProject] = useState<PortfolioItem | null>(null);
+
+  const serviceMatch = serviceParam ? findServiceById(serviceParam) : null;
+
+  useEffect(() => {
+    if (serviceMatch) {
+      setActiveCategory('all');
+    }
+  }, [serviceParam, serviceMatch]);
 
   const categories = [
     { id: 'all', label: 'All Projects' },
@@ -15,9 +28,19 @@ export const Portfolio: React.FC = () => {
     { id: 'technology', label: 'Technology' },
   ];
 
-  const filteredProjects = activeCategory === 'all'
+  let filteredProjects = activeCategory === 'all'
     ? PORTFOLIO_ITEMS
     : PORTFOLIO_ITEMS.filter((item) => item.category === activeCategory);
+
+  if (serviceMatch) {
+    const serviceProjectIds = new Set(serviceMatch.service.projectIds);
+    filteredProjects = filteredProjects.filter((item) => serviceProjectIds.has(item.id));
+  }
+
+  const clearServiceFilter = () => {
+    searchParams.delete('service');
+    setSearchParams(searchParams, { replace: true });
+  };
 
   return (
     <section
@@ -41,8 +64,31 @@ export const Portfolio: React.FC = () => {
         >
           <div className="badge-pill">
             <span className="badge-pill-dot" />
-            <span>SELECTED WORK & CASE STUDIES</span>
+            <span>{serviceMatch ? `${serviceMatch.service.name.toUpperCase()} WORK` : 'SELECTED WORK & CASE STUDIES'}</span>
           </div>
+
+          {serviceMatch && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+              <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+                Showing work for <strong style={{ color: '#FFFFFF' }}>{serviceMatch.service.name}</strong>
+              </span>
+              <button
+                onClick={clearServiceFilter}
+                style={{
+                  padding: '6px 14px',
+                  borderRadius: 'var(--radius-pill)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  color: 'var(--text-muted)',
+                  fontSize: '0.8rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                }}
+              >
+                Clear filter
+              </button>
+            </div>
+          )}
 
           <div
             style={{
