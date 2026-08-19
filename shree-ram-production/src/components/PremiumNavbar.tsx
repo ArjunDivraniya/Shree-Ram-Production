@@ -233,20 +233,7 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
                 }}
               />
             </span>
-            <span
-              className="apple-logo-text"
-              style={{
-                fontSize: '0.92rem',
-                fontWeight: 700,
-                letterSpacing: '0.02em',
-                whiteSpace: 'nowrap',
-                color: '#FFFFFF',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-              }}
-            >
-              Shree Ram Production
-            </span>
+           
           </a>
 
           {/* CENTER: Apple Minimal Desktop Nav Links */}
