@@ -173,7 +173,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
       gsap.set(row3Ref.current, { xPercent: -50 });
 
       // 3. Scroll Velocity & Dynamic Skew Physics Engine
-      let resetTimeout: NodeJS.Timeout;
+      let resetTimeout: ReturnType<typeof setTimeout>;
 
       ScrollTrigger.create({
         trigger: sectionRef.current,
