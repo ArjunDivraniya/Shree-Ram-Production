@@ -8,6 +8,8 @@ interface ProjectCardProps {
   serviceName: string;
   onSelect?: (project: PortfolioItem) => void;
   index: number;
+  depthTier?: 'foreground' | 'middle' | 'background';
+  isHovered?: boolean;
 }
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({
@@ -15,16 +17,24 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   serviceName,
   onSelect,
   index,
+  depthTier = 'foreground',
+  isHovered = false,
 }) => {
   const reducedMotion = useReducedMotion();
 
+  const cardClasses = [
+    'services-project-card',
+    'editorial',
+    `tier-${depthTier}`,
+    isHovered ? 'hovered' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
     <article
-      className="services-project-card"
+      className={cardClasses}
       style={{
-        flex: '0 0 auto',
-        width: '100%',
-        minWidth: 0,
         cursor: onSelect ? 'pointer' : 'default',
         animationDelay: reducedMotion ? '0ms' : `${index * 60}ms`,
       }}
@@ -46,24 +56,35 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           loading="lazy"
           className="services-project-image"
         />
-        <div className="services-project-overlay" aria-hidden="true" />
-        <div className="services-project-meta glass-panel">
-          <span className="services-project-service">{serviceName}</span>
-          {project.client && (
-            <>
-              <span className="services-project-dot">·</span>
-              <span className="services-project-client">{project.client}</span>
-            </>
-          )}
+
+        {/* Hover overlay with title & CTA button */}
+        <div className="services-project-hover-overlay" aria-hidden="true">
+          <div className="services-project-hover-content">
+            <h4 className="services-project-title-hover">{project.title}</h4>
+            <div className="services-project-cta-pill">
+              <span>VIEW PROJECT</span>
+              <ArrowUpRight size={14} className="services-project-arrow" />
+            </div>
+          </div>
         </div>
+
+        {/* Top-right metric tag */}
+        {project.metrics?.value && (
+          <div className="services-project-metric-badge glass-panel">
+            <span>{project.metrics.value}</span>
+          </div>
+        )}
       </div>
 
-      <div className="services-project-info">
-        <h4 className="services-project-title">{project.title}</h4>
-        <div className="services-project-link">
-          <span>View Project</span>
-          <ArrowUpRight size={14} className="services-project-arrow" />
-        </div>
+      {/* Minimal Editorial Footer */}
+      <div className="services-project-editorial-footer">
+        <span className="services-project-service-tag">{serviceName}</span>
+        {project.client && (
+          <>
+            <span className="services-project-dot">·</span>
+            <span className="services-project-client-name">{project.client}</span>
+          </>
+        )}
       </div>
     </article>
   );

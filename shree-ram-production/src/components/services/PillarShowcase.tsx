@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, X, TrendingUp, CheckCircle2 } from 'lucide-react';
 import type { PillarWithServices, PortfolioItem, ServiceDetail } from '../../types';
 import { PORTFOLIO_ITEMS } from '../../data/content';
 import { ServiceSelector } from './ServiceSelector';
-import { ProjectCard } from './ProjectCard';
+import { CinematicProjectStage } from './CinematicProjectStage';
 import { useInView } from '../../hooks/useInView';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 
@@ -24,11 +24,8 @@ export const PillarShowcase: React.FC<PillarShowcaseProps> = ({
   const reducedMotion = useReducedMotion();
 
   const [activeServiceId, setActiveServiceId] = useState(pillar.services[0].id);
-  const [displayService, setDisplayService] = useState<ServiceDetail>(pillar.services[0]);
-  const [phase, setPhase] = useState<'idle' | 'exit' | 'enter'>('idle');
+  const [direction, setDirection] = useState<'down' | 'up'>('down');
   const [selectedProject, setSelectedProject] = useState<PortfolioItem | null>(null);
-
-  const transitionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const activeService =
     pillar.services.find((s) => s.id === activeServiceId) ?? pillar.services[0];
@@ -37,7 +34,13 @@ export const PillarShowcase: React.FC<PillarShowcaseProps> = ({
     const projects = service.projectIds
       .map((id) => PORTFOLIO_ITEMS.find((p) => p.id === id))
       .filter((p): p is PortfolioItem => Boolean(p));
-    return projects.slice(0, 4);
+
+    // Fallback if service has fewer than 4 projects
+    if (projects.length < 4) {
+      const remaining = PORTFOLIO_ITEMS.filter((p) => !projects.some((existing) => existing.id === p.id));
+      return [...projects, ...remaining.slice(0, 5 - projects.length)];
+    }
+    return projects.slice(0, 5);
   }, []);
 
   const [displayProjects, setDisplayProjects] = useState<PortfolioItem[]>(() =>
@@ -48,48 +51,23 @@ export const PillarShowcase: React.FC<PillarShowcaseProps> = ({
     (serviceId: string) => {
       if (serviceId === activeServiceId) return;
 
-      const nextService = pillar.services.find((s) => s.id === serviceId);
-      if (!nextService) return;
+      const currIdx = pillar.services.findIndex((s) => s.id === activeServiceId);
+      const nextIdx = pillar.services.findIndex((s) => s.id === serviceId);
 
+      setDirection(nextIdx > currIdx ? 'down' : 'up');
       setActiveServiceId(serviceId);
 
-      if (reducedMotion) {
-        setDisplayService(nextService);
+      const nextService = pillar.services.find((s) => s.id === serviceId);
+      if (nextService) {
         setDisplayProjects(resolveProjects(nextService));
-        return;
       }
-
-      if (transitionTimerRef.current) {
-        clearTimeout(transitionTimerRef.current);
-      }
-
-      setPhase('exit');
-      const exitDuration = window.innerWidth < 768 ? 160 : 200;
-
-      transitionTimerRef.current = setTimeout(() => {
-        setDisplayService(nextService);
-        setDisplayProjects(resolveProjects(nextService));
-        setPhase('enter');
-
-        transitionTimerRef.current = setTimeout(() => {
-          setPhase('idle');
-        }, 380);
-      }, exitDuration);
     },
-    [activeServiceId, pillar.services, reducedMotion, resolveProjects],
+    [activeServiceId, pillar.services, resolveProjects],
   );
 
   useEffect(() => {
-    return () => {
-      if (transitionTimerRef.current) clearTimeout(transitionTimerRef.current);
-    };
-  }, []);
-
-  useEffect(() => {
     setActiveServiceId(pillar.services[0].id);
-    setDisplayService(pillar.services[0]);
     setDisplayProjects(resolveProjects(pillar.services[0]));
-    setPhase('idle');
   }, [pillar.id, pillar.services, resolveProjects]);
 
   const stagger = (delay: number) =>
@@ -101,48 +79,31 @@ export const PillarShowcase: React.FC<PillarShowcaseProps> = ({
           transition: `opacity 0.7s var(--ease-out-expo) ${delay}ms, transform 0.7s var(--ease-out-expo) ${delay}ms`,
         };
 
-  const contentClass = [
-    'services-content-panel',
-    phase === 'exit' ? 'exiting' : '',
-    phase === 'enter' ? 'entering' : '',
-  ]
-    .filter(Boolean)
-    .join(' ');
-
   const selectorBlock = (
     <ServiceSelector
       services={pillar.services}
       activeServiceId={activeServiceId}
       onSelect={handleServiceSelect}
+      isReversed={isReversed}
     />
   );
 
   const detailBlock = (
-    <div className={contentClass}>
-      <div className="services-selected-header">
-        <span className="services-selected-label">Selected Service</span>
-        <div className="services-selected-number">{displayService.number}</div>
-        <h3 className="services-selected-title">{displayService.name}</h3>
-        <p className="services-selected-description">{displayService.description}</p>
-      </div>
-
-      <div className="services-projects-grid" role="list" aria-label={`${displayService.name} projects`}>
-        {displayProjects.map((project, idx) => (
-          <ProjectCard
-            key={`${displayService.id}-${project.id}`}
-            project={project}
-            serviceName={displayService.name}
-            onSelect={setSelectedProject}
-            index={idx}
-          />
-        ))}
-      </div>
+    <div className="services-cinematic-panel">
+      {/* GSAP Cinematic Stage */}
+      <CinematicProjectStage
+        service={activeService}
+        projects={displayProjects}
+        onSelectProject={setSelectedProject}
+        direction={direction}
+        isReversed={isReversed}
+      />
 
       <Link
-        to={`/work?service=${displayService.id}`}
+        to={`/work?service=${activeService.id}`}
         className="services-view-work-link"
       >
-        <span>View All {displayService.name} Work</span>
+        <span>View All {activeService.name} Work</span>
         <ArrowUpRight size={16} className="services-view-work-arrow" />
       </Link>
     </div>
@@ -155,7 +116,7 @@ export const PillarShowcase: React.FC<PillarShowcaseProps> = ({
       aria-labelledby={`pillar-title-${pillar.id}`}
       className="services-pillar-section"
     >
-      {/* Pillar transition indicator */}
+      {/* Pillar counter indicator */}
       <div className="services-pillar-counter" style={stagger(0)}>
         <span className="services-pillar-counter-current">{pillar.number}</span>
         <span className="services-pillar-counter-sep">/</span>
