@@ -177,7 +177,7 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
   return (
     <section
       ref={sectionRef}
-      id="about"
+      id="brand-statement"
       className="philosophy-section"
       style={{
         padding: '88px 0 104px',

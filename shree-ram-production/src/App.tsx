@@ -4,6 +4,7 @@ import { PremiumNavbar } from './components/PremiumNavbar';
 import { PremiumHomepage } from './components/PremiumHomepage';
 import { ServicesPage } from './pages/ServicesPage';
 import { WorkPage } from './pages/WorkPage';
+import { AboutPage } from './pages/AboutPage';
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -44,6 +45,7 @@ function AppRoutes() {
         <Route path="/" element={<PremiumHomepage onNavigate={handleNavigate} />} />
         <Route path="/services" element={<ServicesPage onNavigate={handleHomeNavigate} />} />
         <Route path="/work" element={<WorkPage onNavigate={handleHomeNavigate} />} />
+        <Route path="/about" element={<AboutPage onNavigate={handleHomeNavigate} />} />
       </Routes>
     </>
   );

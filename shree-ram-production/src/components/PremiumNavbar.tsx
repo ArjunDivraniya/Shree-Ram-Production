@@ -66,7 +66,7 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
     { label: 'Services', sectionId: 'four-pillars', key: 'services', route: '/services' },
     { label: 'Work', sectionId: 'portfolio', key: 'work', route: '/work' },
     { label: 'Industries', sectionId: 'behind-scenes', key: 'industries', route: null },
-    { label: 'About', sectionId: 'brand-statement', key: 'about', route: null },
+    { label: 'About', sectionId: 'brand-statement', key: 'about', route: '/about' },
   ];
 
   const checkIsActive = (itemKey: string): boolean => {
@@ -75,6 +75,9 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
     }
     if (location.pathname === '/work') {
       return itemKey === 'work';
+    }
+    if (location.pathname === '/about') {
+      return itemKey === 'about';
     }
     if (location.pathname === '/') {
       return activeSection === itemKey;
@@ -118,7 +121,16 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
       return;
     }
 
-    // Anchor navigation for Industries / About / Contact
+    if (route === '/about') {
+      if (location.pathname === '/about') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        navigate('/about');
+      }
+      return;
+    }
+
+    // Anchor navigation for Industries / Contact
     if (location.pathname === '/') {
       setActiveSection(keyName);
       onNavigate(sectionId);

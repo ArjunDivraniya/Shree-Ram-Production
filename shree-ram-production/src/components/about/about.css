@@ -1,0 +1,258 @@
+/* ==========================================================================
+   ABOUT US PAGE — MASTER STYLESHEET
+   Cinematic, Editorial, Premium, Human & Minimal
+   ========================================================================== */
+
+/* Hero Animations & Visual Elements */
+.about-hero-section {
+  position: relative;
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 160px 0 100px 0;
+  overflow: hidden;
+  background-color: #08090A;
+}
+
+.about-hero-glow {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 700px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(255, 106, 42, 0.14) 0%, rgba(255, 106, 42, 0.02) 50%, transparent 70%);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.about-hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Our Story Editorial Section */
+.story-highlight-word {
+  color: #FF6A2A;
+  font-weight: 700;
+  position: relative;
+  display: inline-block;
+}
+
+.story-image-frame {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  /* border: 1px solid rgba(255, 255, 255, 0.1); */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+.story-image-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.story-image-frame:hover img {
+  transform: scale(1.04);
+}
+
+/* What We Believe - Principles */
+.belief-row {
+  position: relative;
+  padding: 44px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background-color 0.3s ease;
+}
+
+.belief-row-line {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #FF6A2A 0%, rgba(255, 106, 42, 0.3) 50%, transparent 100%);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.belief-row:hover .belief-row-line {
+  transform: scaleX(1);
+}
+
+/* Asymmetric Team Gallery Layout (Desktop) */
+.team-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.team-card-pos-0 {
+  grid-column: 2 / span 5;
+}
+
+.team-card-pos-1 {
+  grid-column: 8 / span 4;
+  margin-top: 60px;
+}
+
+.team-card-pos-2 {
+  grid-column: 1 / span 4;
+  margin-top: -20px;
+}
+
+.team-card-pos-3 {
+  grid-column: 6 / span 5;
+  margin-top: 40px;
+}
+
+.team-portrait-wrapper {
+  position: relative;
+  aspect-ratio: 3/4;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: #141518;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.team-portrait-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(25%) contrast(105%);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+}
+
+.team-portrait-wrapper:hover .team-portrait-img {
+  transform: scale(1.06);
+  filter: grayscale(0%) contrast(110%);
+}
+
+.team-portrait-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(8, 9, 10, 0.92) 100%);
+  opacity: 0.85;
+  transition: opacity 0.4s ease;
+}
+
+.team-portrait-wrapper:hover .team-portrait-overlay {
+  opacity: 0.95;
+}
+
+.team-portrait-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px;
+  z-index: 3;
+}
+
+.team-accent-bar {
+  width: 24px;
+  height: 2px;
+  background-color: #FF6A2A;
+  margin-bottom: 12px;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.team-portrait-wrapper:hover .team-accent-bar {
+  width: 48px;
+}
+
+/* Side Drawer / Detail Modal */
+.team-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(8, 9, 10, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 2000;
+  display: flex;
+  justify-content: flex-end;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.team-drawer-panel {
+  width: 100%;
+  max-width: 520px;
+  height: 100%;
+  background-color: #0E0F12;
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 40px;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.8);
+  animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Process Section & Path */
+.process-path-svg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 32px;
+  width: 2px;
+  pointer-events: none;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 1023px) {
+  .team-gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  .team-card-pos-0,
+  .team-card-pos-1,
+  .team-card-pos-2,
+  .team-card-pos-3 {
+    grid-column: span 1 !important;
+    margin-top: 0 !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .about-hero-section {
+    padding: 120px 0 70px 0;
+    min-height: auto;
+  }
+  .team-gallery-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .team-portrait-wrapper {
+    aspect-ratio: 4/5;
+  }
+  .team-drawer-panel {
+    max-width: 100%;
+    padding: 28px 20px;
+  }
+  .belief-row {
+    padding: 28px 0;
+  }
+}
