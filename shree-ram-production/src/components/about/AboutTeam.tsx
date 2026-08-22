@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Arjun from '../../assets/out team/Arjun-2.png'
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -22,7 +23,7 @@ const TEAM_MEMBERS: TeamMember[] = [
     surname: 'Divraniya',
     pillar: 'CONTENT & PRODUCTION',
     role: 'Cinematography & Field Execution',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=900&q=85',
+    image: Arjun,
   },
   {
     id: 'team-2',
@@ -31,7 +32,7 @@ const TEAM_MEMBERS: TeamMember[] = [
     surname: 'Sharma',
     pillar: 'BRAND & CREATIVE',
     role: 'Creative Direction & Brand Systems',
-    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=900&q=85',
+    image: Arjun,
   },
   {
     id: 'team-3',
@@ -40,7 +41,7 @@ const TEAM_MEMBERS: TeamMember[] = [
     surname: 'Kothari',
     pillar: 'MARKETING & GROWTH',
     role: 'Omnichannel Performance Scaling',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=900&q=85',
+    image: Arjun,
   },
   {
     id: 'team-4',
@@ -49,7 +50,7 @@ const TEAM_MEMBERS: TeamMember[] = [
     surname: 'Patel',
     pillar: 'TECHNOLOGY & DIGITAL',
     role: 'Web Architecture & Interactive Media',
-    image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=900&q=85',
+    image: Arjun,
   },
 ];
 
@@ -204,7 +205,7 @@ export const AboutTeam: React.FC = () => {
               >
                 {/* Photo Container */}
                 <div className="team-portrait-img-box">
-                  <img
+                  <img 
                     ref={(el) => { imagesRef.current[idx] = el; }}
                     src={member.image}
                     alt={`${member.firstName} ${member.surname}`}

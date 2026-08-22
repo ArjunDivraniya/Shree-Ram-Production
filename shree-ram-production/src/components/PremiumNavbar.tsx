@@ -35,7 +35,6 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
       { id: 'portfolio', name: 'work' },
       { id: 'behind-scenes', name: 'industries' },
       { id: 'brand-statement', name: 'about' },
-      { id: 'contact', name: 'contact' },
     ];
 
     const observerOptions = {
@@ -67,6 +66,7 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
     { label: 'Work', sectionId: 'portfolio', key: 'work', route: '/work' },
     { label: 'Industries', sectionId: 'behind-scenes', key: 'industries', route: null },
     { label: 'About', sectionId: 'brand-statement', key: 'about', route: '/about' },
+    { label: 'Contact', sectionId: 'contact', key: 'contact', route: '/contact' },
   ];
 
   const checkIsActive = (itemKey: string): boolean => {
@@ -78,6 +78,9 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
     }
     if (location.pathname === '/about') {
       return itemKey === 'about';
+    }
+    if (location.pathname === '/contact') {
+      return itemKey === 'contact';
     }
     if (location.pathname === '/') {
       return activeSection === itemKey;
@@ -130,7 +133,16 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
       return;
     }
 
-    // Anchor navigation for Industries / Contact
+    if (route === '/contact') {
+      if (location.pathname === '/contact') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        navigate('/contact');
+      }
+      return;
+    }
+
+    // Anchor navigation for Industries
     if (location.pathname === '/') {
       setActiveSection(keyName);
       onNavigate(sectionId);
@@ -301,8 +313,8 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
           {/* RIGHT: "Let's Talk ↗" CTA & Mobile Hamburger */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', zIndex: 2, flexShrink: 0 }}>
             <a
-              href="#contact"
-              onClick={(event) => handleLinkClick(event, 'contact', 'contact', null)}
+              href="/contact"
+              onClick={(event) => handleLinkClick(event, 'contact', 'contact', '/contact')}
               className="apple-glass-cta"
               style={{
                 display: 'inline-flex',
@@ -404,8 +416,8 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
           </div>
 
           <a
-            href="#contact"
-            onClick={(event) => handleLinkClick(event, 'contact', 'contact', null)}
+            href="/contact"
+            onClick={(event) => handleLinkClick(event, 'contact', 'contact', '/contact')}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
