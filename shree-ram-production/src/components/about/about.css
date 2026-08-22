@@ -1,9 +1,11 @@
 /* ==========================================================================
-   ABOUT US PAGE — MASTER STYLESHEET
-   Cinematic, Editorial, Premium, Human & Minimal
+   SHREE RAM PRODUCTION — CINEMATIC ABOUT PAGE STYLESHEET
+   Identity: Black (#08090A), White (#FFFFFF), Orange (#FF6A2A), Muted (#A5A5A8)
    ========================================================================== */
 
-/* Hero Animations & Visual Elements */
+/* --------------------------------------------------------------------------
+   1. HERO SECTION & AMBIENT LIGHT
+   -------------------------------------------------------------------------- */
 .about-hero-section {
   position: relative;
   min-height: 85vh;
@@ -20,10 +22,10 @@
   top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 700px;
-  height: 450px;
-  background: radial-gradient(circle, rgba(255, 106, 42, 0.14) 0%, rgba(255, 106, 42, 0.02) 50%, transparent 70%);
-  filter: blur(80px);
+  width: 750px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(255, 106, 42, 0.16) 0%, rgba(255, 106, 42, 0.03) 50%, transparent 75%);
+  filter: blur(90px);
   pointer-events: none;
   z-index: 1;
 }
@@ -32,8 +34,8 @@
   position: absolute;
   inset: 0;
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
   background-size: 80px 80px;
   mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
   -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
@@ -41,218 +43,386 @@
   z-index: 1;
 }
 
-/* Our Story Editorial Section */
-.story-highlight-word {
-  color: #FF6A2A;
-  font-weight: 700;
+/* --------------------------------------------------------------------------
+   2. WHO WE ARE
+   -------------------------------------------------------------------------- */
+.who-we-are-section {
   position: relative;
+  padding: 140px 0;
+  background-color: #08090A;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.emphasis-word {
   display: inline-block;
-}
-
-.story-image-frame {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  color: #FF6A2A;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
   position: relative;
-  border-radius: 16px;
-  overflow: hidden;
-  /* border: 1px solid rgba(255, 255, 255, 0.1); */
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  transition: transform 0.3s ease, color 0.3s ease;
 }
 
-.story-image-frame img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+.emphasis-word:hover {
+  transform: translateY(-2px);
+  color: #FFFFFF;
 }
 
-.story-image-frame:hover img {
-  transform: scale(1.04);
-}
-
-/* What We Believe - Principles */
-.belief-row {
+/* --------------------------------------------------------------------------
+   3. OUR PHILOSOPHY (EDITORIAL ROWS)
+   -------------------------------------------------------------------------- */
+.philosophy-row {
   position: relative;
-  padding: 44px 0;
+  padding: 48px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  transition: background-color 0.3s ease;
+  transition: background-color 0.4s ease;
 }
 
-.belief-row-line {
+.philosophy-line {
   position: absolute;
   bottom: -1px;
   left: 0;
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, #FF6A2A 0%, rgba(255, 106, 42, 0.3) 50%, transparent 100%);
+  background: linear-gradient(90deg, #FF6A2A 0%, rgba(255, 106, 42, 0.4) 60%, transparent 100%);
   transform: scaleX(0);
   transform-origin: left center;
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.belief-row:hover .belief-row-line {
+.philosophy-row:hover .philosophy-line {
   transform: scaleX(1);
 }
 
-/* Asymmetric Team Gallery Layout (Desktop) */
-.team-gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 32px;
-  align-items: start;
-}
-
-.team-card-pos-0 {
-  grid-column: 2 / span 5;
-}
-
-.team-card-pos-1 {
-  grid-column: 8 / span 4;
-  margin-top: 60px;
-}
-
-.team-card-pos-2 {
-  grid-column: 1 / span 4;
-  margin-top: -20px;
-}
-
-.team-card-pos-3 {
-  grid-column: 6 / span 5;
-  margin-top: 40px;
-}
-
-.team-portrait-wrapper {
+/* --------------------------------------------------------------------------
+   4. OUR CAPABILITIES
+   -------------------------------------------------------------------------- */
+.capability-card {
   position: relative;
-  aspect-ratio: 3/4;
+  background-color: #111215;
   border-radius: 16px;
-  overflow: hidden;
-  background-color: #141518;
   border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  transition: border-color 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+.capability-card:hover {
+  border-color: rgba(255, 106, 42, 0.45);
+  transform: translateY(-6px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 106, 42, 0.08);
+}
+
+/* --------------------------------------------------------------------------
+   5, 6, 7, 8. OUR TEAM — SINGLE HORIZONTAL ROW & SIGNATURE OVERLAP ANIMATION
+   -------------------------------------------------------------------------- */
+.team-section {
+  position: relative;
+  padding: 140px 0;
+  background-color: #08090A;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.team-horizontal-wrapper {
+  position: relative;
+  width: 100%;
+  margin-top: 56px;
+}
+
+/* Desktop: ONE Single Horizontal Row */
+.team-horizontal-row {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  width: 100%;
+  align-items: stretch;
+}
+
+.team-portrait-card {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  aspect-ratio: 3 / 4.2;
+  border-radius: 18px;
+  overflow: hidden;
+  background-color: #121316;
+  border: 1px solid rgba(255, 255, 255, 0.09);
   cursor: pointer;
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), 
+              opacity 0.4s ease, 
+              border-color 0.4s ease,
+              box-shadow 0.4s ease;
+}
+
+/* Sibling dimming effect on hover */
+.team-horizontal-row:hover .team-portrait-card:not(:hover) {
+  opacity: 0.45;
+  filter: grayscale(30%);
+}
+
+.team-portrait-card:hover {
+  transform: scale(1.035) translateY(-4px);
+  border-color: rgba(255, 106, 42, 0.5);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.7), 0 0 24px rgba(255, 106, 42, 0.15);
+  z-index: 10;
+}
+
+.team-portrait-img-box {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 18px;
 }
 
 .team-portrait-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: grayscale(25%) contrast(105%);
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+  filter: brightness(0.95) contrast(1.05);
+  transform: scale(1.05);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+  will-change: transform;
 }
 
-.team-portrait-wrapper:hover .team-portrait-img {
-  transform: scale(1.06);
-  filter: grayscale(0%) contrast(110%);
+.team-portrait-card:hover .team-portrait-img {
+  transform: scale(1.08);
+  filter: brightness(1.08) contrast(1.1);
 }
 
-.team-portrait-overlay {
+/* Gradient Overlay at Bottom */
+.team-portrait-gradient {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, transparent 40%, rgba(8, 9, 10, 0.92) 100%);
-  opacity: 0.85;
+  background: linear-gradient(180deg, transparent 30%, rgba(8, 9, 10, 0.65) 60%, rgba(8, 9, 10, 0.96) 100%);
+  opacity: 0.9;
   transition: opacity 0.4s ease;
+  pointer-events: none;
 }
 
-.team-portrait-wrapper:hover .team-portrait-overlay {
-  opacity: 0.95;
+.team-portrait-card:hover .team-portrait-gradient {
+  opacity: 1;
+  background: linear-gradient(180deg, transparent 25%, rgba(8, 9, 10, 0.75) 55%, rgba(8, 9, 10, 0.98) 100%);
 }
 
-.team-portrait-content {
+/* Inner Text Container clipped inside image */
+.team-portrait-meta {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 24px;
-  z-index: 3;
+  padding: 24px 20px;
+  z-index: 5;
+  overflow: hidden; /* Ensures text is clipped inside photo boundary */
 }
 
-.team-accent-bar {
-  width: 24px;
+.team-accent-pill {
+  width: 20px;
   height: 2px;
   background-color: #FF6A2A;
-  margin-bottom: 12px;
-  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-bottom: 10px;
+  border-radius: 2px;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+  box-shadow: 0 0 8px rgba(255, 106, 42, 0.6);
 }
 
-.team-portrait-wrapper:hover .team-accent-bar {
-  width: 48px;
+.team-portrait-card:hover .team-accent-pill {
+  width: 38px;
+  box-shadow: 0 0 14px rgba(255, 106, 42, 0.9);
 }
 
-/* Side Drawer / Detail Modal */
-.team-drawer-backdrop {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(8, 9, 10, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  z-index: 2000;
-  display: flex;
-  justify-content: flex-end;
-  animation: fadeIn 0.3s ease forwards;
-}
-
-.team-drawer-panel {
-  width: 100%;
-  max-width: 520px;
-  height: 100%;
-  background-color: #0E0F12;
-  border-left: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 40px;
-  overflow-y: auto;
+/* Signature Name Overlap Styling */
+.team-signature-box {
   position: relative;
-  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.8);
-  animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  display: block;
+  margin-bottom: 6px;
+  margin-top: 4px;
+  will-change: transform, opacity;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes slideInRight {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
+.team-bold-firstname {
+  font-family: var(--font-heading);
+  font-size: clamp(1.3rem, 1.8vw, 1.75rem);
+  font-weight: 900;
+  color: #FFFFFF;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1;
+  display: block;
 }
 
-/* Process Section & Path */
-.process-path-svg {
+.team-script-surname {
+  font-family: 'Caveat', 'Dancing Script', cursive;
+  font-size: clamp(1.75rem, 2.5vw, 2.35rem);
+  font-weight: 700;
+  color: #FF6A2A;
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 32px;
-  width: 2px;
+  left: 20px;
+  top: -12px;
+  transform: rotate(-6deg);
   pointer-events: none;
+  text-shadow: 0 2px 10px rgba(8, 9, 10, 0.95), 0 0 15px rgba(255, 106, 42, 0.4);
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+  transition: transform 0.4s ease, color 0.4s ease;
 }
 
-/* Responsive Media Queries */
-@media (max-width: 1023px) {
-  .team-gallery-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
+.team-pillar-tag {
+  font-size: clamp(0.72rem, 0.8vw, 0.8rem);
+  font-weight: 800;
+  color: #FF6A2A;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+
+.team-emerge-role {
+  font-size: clamp(0.78rem, 0.88vw, 0.86rem);
+  font-weight: 500;
+  color: #A5A5A8;
+  margin: 0;
+  line-height: 1.3;
+  will-change: transform, opacity;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s ease;
+}
+
+.team-portrait-card:hover .team-signature-box {
+  transform: translateY(-2px) !important;
+}
+
+.team-portrait-card:hover .team-script-surname {
+  color: #FFA073;
+  transform: rotate(-4deg) scale(1.05);
+}
+
+.team-portrait-card:hover .team-emerge-role {
+  color: #F5F5F2;
+}
+
+/* --------------------------------------------------------------------------
+   8. MOBILE TEAM SWIPE GALLERY
+   -------------------------------------------------------------------------- */
+@media (max-width: 991px) {
+  .team-horizontal-wrapper {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 24px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-left: -20px;
+    margin-right: -20px;
+    width: calc(100% + 40px);
+    scrollbar-width: none; /* Firefox */
   }
-  .team-card-pos-0,
-  .team-card-pos-1,
-  .team-card-pos-2,
-  .team-card-pos-3 {
-    grid-column: span 1 !important;
-    margin-top: 0 !important;
+
+  .team-horizontal-wrapper::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
   }
+
+  .team-horizontal-row {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    width: max-content;
+  }
+
+  .team-portrait-card {
+    flex: 0 0 76vw;
+    max-width: 320px;
+    aspect-ratio: 3 / 4.2;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .team-horizontal-row:hover .team-portrait-card:not(:hover) {
+    opacity: 1;
+    filter: none;
+  }
+
+  .team-signature-box,
+  .team-emerge-role {
+    transform: translateY(0) !important;
+    opacity: 1 !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   9. OUR APPROACH (CONNECTED SVG SCROLL LINE)
+   -------------------------------------------------------------------------- */
+.approach-stage-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  gap: 24px;
+  align-items: baseline;
+  padding: 24px 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.approach-node-dot {
+  position: absolute;
+  left: -40px;
+  top: 30px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: #08090A;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  transition: border-color 0.4s ease, box-shadow 0.4s ease, background-color 0.4s ease;
+}
+
+.approach-stage-card.active .approach-node-dot {
+  border-color: #FF6A2A;
+  background-color: #FF6A2A;
+  box-shadow: 0 0 14px rgba(255, 106, 42, 0.8);
+}
+
+/* --------------------------------------------------------------------------
+   10. WHAT MAKES US DIFFERENT
+   -------------------------------------------------------------------------- */
+.diff-highlight-pill {
+  display: inline-block;
+  padding: 16px 28px;
+  border-radius: 12px;
+  background-color: #121316;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: var(--font-heading);
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: 0.02em;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.diff-highlight-pill:hover {
+  border-color: #FF6A2A;
+  color: #FF6A2A;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4), 0 0 16px rgba(255, 106, 42, 0.12);
+}
+
+/* --------------------------------------------------------------------------
+   11. HUMAN STATEMENT
+   -------------------------------------------------------------------------- */
+.human-statement-frame {
+  position: relative;
+  background: linear-gradient(135deg, #111216 0%, #17181D 50%, #0E0F12 100%);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 72px 56px;
+  overflow: hidden;
 }
 
 @media (max-width: 767px) {
-  .about-hero-section {
-    padding: 120px 0 70px 0;
-    min-height: auto;
-  }
-  .team-gallery-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  .team-portrait-wrapper {
-    aspect-ratio: 4/5;
-  }
-  .team-drawer-panel {
-    max-width: 100%;
-    padding: 28px 20px;
-  }
-  .belief-row {
-    padding: 28px 0;
+  .human-statement-frame {
+    padding: 40px 24px;
+    border-radius: 16px;
   }
 }

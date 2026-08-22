@@ -11,7 +11,6 @@ interface Capability {
   title: string;
   desc: string;
   icon: React.ElementType;
-  image: string;
 }
 
 const CAPABILITIES: Capability[] = [
@@ -20,28 +19,24 @@ const CAPABILITIES: Capability[] = [
     title: 'CONTENT & PRODUCTION',
     desc: 'Cinematic commercials, brand films, high-end photography & 3D motion design.',
     icon: Video,
-    image: 'https://images.unsplash.com/photo-1579165466741-7f35e4755660?auto=format&fit=crop&w=600&q=80',
   },
   {
     num: '02',
     title: 'BRAND & CREATIVE',
     desc: 'Visual identity systems, strategy, packaging design & creative direction.',
     icon: Palette,
-    image: 'https://images.unsplash.com/photo-1600132806370-bf17e65e942f?auto=format&fit=crop&w=600&q=80',
   },
   {
     num: '03',
     title: 'MARKETING & GROWTH',
     desc: 'Paid performance acquisition, SEO engines, viral content & CRO funnels.',
     icon: TrendingUp,
-    image: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=600&q=80',
   },
   {
     num: '04',
     title: 'TECHNOLOGY & DIGITAL',
     desc: 'Custom web applications, e-commerce storefronts, interactive platforms & AI workflows.',
     icon: Code2,
-    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80',
   },
 ];
 
@@ -65,12 +60,13 @@ export const AboutCapabilities: React.FC = () => {
           {
             opacity: 1,
             y: 0,
-            duration: 0.7,
+            duration: 0.75,
             stagger: 0.12,
             ease: 'power3.out',
             scrollTrigger: {
               trigger: sectionRef.current,
               start: 'top 78%',
+              toggleActions: 'play none none reverse',
             },
           }
         );
@@ -84,7 +80,7 @@ export const AboutCapabilities: React.FC = () => {
     <section
       ref={sectionRef}
       style={{
-        padding: '120px 0',
+        padding: '110px 0',
         backgroundColor: '#08090A',
         position: 'relative',
         borderTop: '1px solid rgba(255, 255, 255, 0.06)',
@@ -92,7 +88,7 @@ export const AboutCapabilities: React.FC = () => {
     >
       <div className="container" style={{ maxWidth: '1180px' }}>
         
-        {/* Section Header */}
+        {/* Header */}
         <div
           style={{
             display: 'flex',
@@ -100,13 +96,13 @@ export const AboutCapabilities: React.FC = () => {
             alignItems: 'flex-end',
             justifyContent: 'space-between',
             gap: '24px',
-            marginBottom: '52px',
+            marginBottom: '48px',
           }}
         >
           <div>
-            <div className="badge-pill" style={{ marginBottom: '16px' }}>
+            <div className="badge-pill" style={{ marginBottom: '16px', display: 'inline-flex' }}>
               <span className="badge-pill-dot" />
-              <span>CORE PILLARS</span>
+              <span>OUR CAPABILITIES</span>
             </div>
 
             <h2
@@ -120,10 +116,11 @@ export const AboutCapabilities: React.FC = () => {
                 textTransform: 'uppercase',
               }}
             >
-              OUR FOUR CAPABILITIES
+              FOUR CORE PILLARS
             </h2>
           </div>
 
+          {/* CTA Button */}
           <button
             onClick={() => navigate('/services')}
             className="apple-glass-cta"
@@ -131,27 +128,37 @@ export const AboutCapabilities: React.FC = () => {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '8px',
-              padding: '12px 24px',
-              borderRadius: 'var(--radius-pill)',
+              padding: '14px 28px',
+              borderRadius: '999px',
               background: '#FF6A2A',
               color: '#08090A',
-              fontSize: '0.85rem',
+              fontSize: '0.88rem',
               fontWeight: 800,
               letterSpacing: '0.04em',
-              transition: 'var(--transition-smooth)',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 8px 24px rgba(255, 106, 42, 0.35)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = 'none';
             }}
           >
-            <span>EXPLORE OUR SERVICES</span>
-            <ArrowUpRight size={16} />
+            <span>EXPLORE SERVICES</span>
+            <ArrowUpRight size={18} />
           </button>
         </div>
 
-        {/* Compact Grid Visual System */}
+        {/* Compact Connected Grid Layout */}
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-            gap: '24px',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: '20px',
           }}
         >
           {CAPABILITIES.map((cap, idx) => {
@@ -161,57 +168,21 @@ export const AboutCapabilities: React.FC = () => {
               <div
                 key={cap.num}
                 ref={(el) => { cardsRef.current[idx] = el; }}
-                style={{
-                  position: 'relative',
-                  backgroundColor: '#121316',
-                  borderRadius: '16px',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  padding: '28px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  overflow: 'hidden',
-                  transition: 'all 0.35s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(255, 106, 42, 0.4)';
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
+                className="capability-card"
               >
-                {/* Background Image Preview Accent */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    width: '120px',
-                    height: '120px',
-                    opacity: 0.12,
-                    maskImage: 'radial-gradient(circle at top right, black 30%, transparent 80%)',
-                    WebkitMaskImage: 'radial-gradient(circle at top right, black 30%, transparent 80%)',
-                    pointerEvents: 'none',
-                  }}
-                >
-                  <img src={cap.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                </div>
-
                 <div>
                   <div
                     style={{
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',
-                      marginBottom: '20px',
+                      marginBottom: '24px',
                     }}
                   >
                     <span
                       style={{
                         fontFamily: 'var(--font-heading)',
-                        fontSize: '1.2rem',
+                        fontSize: '1.25rem',
                         fontWeight: 800,
                         color: '#FF6A2A',
                       }}
@@ -221,11 +192,11 @@ export const AboutCapabilities: React.FC = () => {
 
                     <div
                       style={{
-                        width: '38px',
-                        height: '38px',
+                        width: '40px',
+                        height: '40px',
                         borderRadius: '10px',
-                        backgroundColor: 'rgba(255, 255, 255, 0.04)',
-                        border: '1px solid rgba(255, 255, 255, 0.08)',
+                        backgroundColor: 'rgba(255, 106, 42, 0.08)',
+                        border: '1px solid rgba(255, 106, 42, 0.2)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -239,11 +210,11 @@ export const AboutCapabilities: React.FC = () => {
                   <h3
                     style={{
                       fontFamily: 'var(--font-heading)',
-                      fontSize: '1.15rem',
+                      fontSize: '1.2rem',
                       fontWeight: 800,
                       color: '#FFFFFF',
-                      marginBottom: '10px',
-                      lineHeight: 1.25,
+                      marginBottom: '12px',
+                      lineHeight: 1.2,
                     }}
                   >
                     {cap.title}
@@ -251,32 +222,14 @@ export const AboutCapabilities: React.FC = () => {
 
                   <p
                     style={{
-                      fontSize: '0.88rem',
+                      fontSize: '0.9rem',
                       color: '#A5A5A8',
-                      lineHeight: 1.55,
+                      lineHeight: 1.6,
                       margin: 0,
                     }}
                   >
                     {cap.desc}
                   </p>
-                </div>
-
-                <div
-                  style={{
-                    marginTop: '24px',
-                    paddingTop: '16px',
-                    borderTop: '1px solid rgba(255, 255, 255, 0.06)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    fontSize: '0.78rem',
-                    fontWeight: 700,
-                    color: '#68696D',
-                    letterSpacing: '0.06em',
-                  }}
-                >
-                  <span>PILLAR {cap.num}</span>
-                  <span style={{ color: '#FF6A2A' }}>FULL SPEC ↗</span>
                 </div>
               </div>
             );
@@ -287,3 +240,5 @@ export const AboutCapabilities: React.FC = () => {
     </section>
   );
 };
+
+export default AboutCapabilities;

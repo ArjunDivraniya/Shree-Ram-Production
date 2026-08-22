@@ -27,7 +27,7 @@ export const AboutHero: React.FC = () => {
 
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-      // 1. Label fade/slide
+      // 1. Label fade/slide upward
       if (labelRef.current) {
         tl.fromTo(
           labelRef.current,
@@ -36,7 +36,7 @@ export const AboutHero: React.FC = () => {
         );
       }
 
-      // 2. Heading line-by-line clip reveal
+      // 2. Heading line-by-line clip-path reveal
       const lines = [line1Ref.current, line2Ref.current, line3Ref.current].filter(Boolean);
       if (lines.length > 0) {
         tl.fromTo(
@@ -53,22 +53,24 @@ export const AboutHero: React.FC = () => {
         );
       }
 
-      // 3. Description fade upward
+      // 3. Description fade upward with small stagger
       if (descRef.current) {
         tl.fromTo(
           descRef.current,
-          { opacity: 0, y: 22 },
+          { opacity: 0, y: 20 },
           { opacity: 1, y: 0, duration: 0.6 },
-          '-=0.3'
+          '-=0.35'
         );
       }
 
-      // Subtle pulse on background glow
+      // 4. Subtle orange ambient light moving slowly in background
       if (glowRef.current) {
         gsap.to(glowRef.current, {
-          scale: 1.1,
+          x: '+=30',
+          y: '+=20',
+          scale: 1.12,
           opacity: 0.85,
-          duration: 4,
+          duration: 6,
           repeat: -1,
           yoyo: true,
           ease: 'sine.inOut',
@@ -96,7 +98,7 @@ export const AboutHero: React.FC = () => {
           <span>ABOUT SHREE RAM PRODUCTION</span>
         </div>
 
-        {/* Main Heading (Line by Line) */}
+        {/* Large Heading */}
         <h1
           style={{
             fontFamily: 'var(--font-heading)',
@@ -118,7 +120,7 @@ export const AboutHero: React.FC = () => {
           <div
             ref={line3Ref}
             style={{
-              color: 'var(--accent-orange)',
+              color: '#FF6A2A',
               willChange: 'transform, opacity, clip-path',
             }}
           >
@@ -126,23 +128,25 @@ export const AboutHero: React.FC = () => {
           </div>
         </h1>
 
-        {/* Short Description */}
+        {/* Short Supporting Description */}
         <p
           ref={descRef}
           style={{
             fontSize: 'clamp(1.1rem, 2vw, 1.35rem)',
             color: '#F5F5F2',
             lineHeight: 1.6,
-            maxWidth: '740px',
+            maxWidth: '760px',
             margin: '0 auto',
             fontFamily: 'var(--font-body)',
             opacity: 0.9,
           }}
         >
-          Shree Ram Production brings creative production, branding, marketing and technology together to help businesses build stronger brands and grow with purpose.
+          Shree Ram Production combines production, creative, marketing and technology to help businesses grow with purpose.
         </p>
 
       </div>
     </section>
   );
 };
+
+export default AboutHero;

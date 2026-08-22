@@ -7,7 +7,8 @@ gsap.registerPlugin(ScrollTrigger);
 export const AboutDifferentiation: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const cardsRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLParagraphElement>(null);
+  const pillsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!sectionRef.current) return;
@@ -20,23 +21,47 @@ export const AboutDifferentiation: React.FC = () => {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 75%',
+          toggleActions: 'play none none reverse',
         },
       });
 
       if (headingRef.current) {
         tl.fromTo(
           headingRef.current.children,
-          { opacity: 0, y: 30 },
-          { opacity: 1, y: 0, duration: 0.7, stagger: 0.12, ease: 'power3.out' }
+          { opacity: 0, y: 35, clipPath: 'inset(100% 0% 0% 0%)' },
+          {
+            opacity: 1,
+            y: 0,
+            clipPath: 'inset(0% 0% 0% 0%)',
+            duration: 0.85,
+            stagger: 0.14,
+            ease: 'power3.out',
+          }
         );
       }
 
-      if (cardsRef.current) {
+      if (textRef.current) {
         tl.fromTo(
-          cardsRef.current.children,
-          { opacity: 0, y: 25 },
-          { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'power2.out' },
+          textRef.current,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },
           '-=0.3'
+        );
+      }
+
+      if (pillsRef.current) {
+        tl.fromTo(
+          pillsRef.current.children,
+          { opacity: 0, y: 24, scale: 0.96 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.7,
+            stagger: 0.12,
+            ease: 'power3.out',
+          },
+          '-=0.35'
         );
       }
     }, sectionRef);
@@ -44,133 +69,90 @@ export const AboutDifferentiation: React.FC = () => {
     return () => ctx.revert();
   }, []);
 
-  const highlightPillars = [
-    {
-      title: 'SINGLE SERVICE',
-      desc: 'Targeted execution for one immediate priority (e.g. video shoot, rebrand, or web app).',
-    },
-    {
-      title: 'MULTI-SERVICE',
-      desc: 'Syncing 2-3 capabilities together to multiply campaign impact.',
-    },
-    {
-      title: 'COMPLETE GROWTH PARTNER',
-      desc: 'Dedicated multidisciplinary team driving full-stack creative & tech strategy.',
-    },
+  const highlights = [
+    { title: 'SINGLE SERVICE', label: 'Specific Business Need' },
+    { title: 'MULTI-SERVICE', label: 'Synergistic Combination' },
+    { title: 'COMPLETE SOLUTION', label: 'Full Growth Architecture' },
   ];
 
   return (
     <section
       ref={sectionRef}
       style={{
-        padding: '130px 0',
+        padding: '140px 0',
         backgroundColor: '#08090A',
         position: 'relative',
         borderTop: '1px solid rgba(255, 255, 255, 0.06)',
       }}
     >
-      <div className="container" style={{ maxWidth: '1100px', textAlign: 'center' }}>
+      <div className="container" style={{ maxWidth: '1140px', textAlign: 'center' }}>
         
-        <div className="badge-pill" style={{ marginBottom: '24px', display: 'inline-flex' }}>
+        {/* Label */}
+        <div className="badge-pill" style={{ marginBottom: '28px', display: 'inline-flex' }}>
           <span className="badge-pill-dot" />
           <span>WHAT MAKES US DIFFERENT</span>
         </div>
 
-        {/* Strong Statement Heading */}
+        {/* Large Typography Heading */}
         <h2
           ref={headingRef}
           style={{
             fontFamily: 'var(--font-heading)',
-            fontSize: 'clamp(2.4rem, 5.5vw, 4.8rem)',
+            fontSize: 'clamp(2.5rem, 5.8vw, 5.2rem)',
             fontWeight: 800,
-            lineHeight: 1.05,
+            lineHeight: 1.04,
             letterSpacing: '-0.03em',
             textTransform: 'uppercase',
             color: '#FFFFFF',
-            marginBottom: '32px',
+            marginBottom: '36px',
           }}
         >
-          <div>ONE PARTNER.</div>
-          <div>MULTIPLE CAPABILITIES.</div>
-          <div style={{ color: 'var(--accent-orange)' }}>ONE SHARED GOAL.</div>
+          <div style={{ willChange: 'transform, opacity, clip-path' }}>ONE NEED.</div>
+          <div style={{ willChange: 'transform, opacity, clip-path' }}>ONE SERVICE.</div>
+          <div style={{ color: '#FF6A2A', willChange: 'transform, opacity, clip-path' }}>
+            OR THE WHOLE ENGINE.
+          </div>
         </h2>
 
         {/* Supporting Text */}
         <p
+          ref={textRef}
           style={{
             fontSize: 'clamp(1.1rem, 2vw, 1.35rem)',
             color: '#A5A5A8',
-            lineHeight: 1.6,
+            lineHeight: 1.65,
             maxWidth: '780px',
-            margin: '0 auto 60px auto',
+            margin: '0 auto 64px auto',
           }}
         >
-          Whether a business needs one specific service or a combination of capabilities, we adapt around the actual need instead of forcing a fixed package.
+          We don't force every business into the same solution. Start with exactly what you need and bring in additional capabilities when they create real value.
         </p>
 
-        {/* 3 Highlight Cards */}
+        {/* Large Typography Highlight Transitions */}
         <div
-          ref={cardsRef}
+          ref={pillsRef}
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '24px',
-            textAlign: 'left',
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '20px',
           }}
         >
-          {highlightPillars.map((item) => (
-            <div
-              key={item.title}
-              style={{
-                backgroundColor: '#121316',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                borderRadius: '16px',
-                padding: '32px 28px',
-                transition: 'all 0.35s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = '#FF6A2A';
-                e.currentTarget.style.transform = 'translateY(-4px)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}
-            >
-              <div
-                style={{
-                  width: '8px',
-                  height: '8px',
-                  borderRadius: '50%',
-                  backgroundColor: '#FF6A2A',
-                  marginBottom: '18px',
-                  boxShadow: '0 0 10px #FF6A2A',
-                }}
-              />
-
-              <h3
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: '1.25rem',
-                  fontWeight: 800,
-                  color: '#FFFFFF',
-                  letterSpacing: '0.02em',
-                  marginBottom: '12px',
-                }}
-              >
-                {item.title}
-              </h3>
-
-              <p
-                style={{
-                  fontSize: '0.92rem',
-                  color: '#A5A5A8',
-                  lineHeight: 1.6,
-                  margin: 0,
-                }}
-              >
-                {item.desc}
-              </p>
+          {highlights.map((item) => (
+            <div key={item.title} className="diff-highlight-pill">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span
+                  style={{
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '50%',
+                    backgroundColor: '#FF6A2A',
+                    boxShadow: '0 0 10px #FF6A2A',
+                  }}
+                />
+                <span>{item.title}</span>
+              </div>
             </div>
           ))}
         </div>
@@ -179,3 +161,5 @@ export const AboutDifferentiation: React.FC = () => {
     </section>
   );
 };
+
+export default AboutDifferentiation;

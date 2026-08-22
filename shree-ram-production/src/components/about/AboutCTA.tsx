@@ -24,14 +24,15 @@ export const AboutCTA: React.FC = () => {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 75%',
+          toggleActions: 'play none none reverse',
         },
       });
 
       if (headingRef.current) {
         tl.fromTo(
-          headingRef.current,
+          headingRef.current.children,
           { opacity: 0, y: 35, clipPath: 'inset(100% 0% 0% 0%)' },
-          { opacity: 1, y: 0, clipPath: 'inset(0% 0% 0% 0%)', duration: 0.85, ease: 'power3.out' }
+          { opacity: 1, y: 0, clipPath: 'inset(0% 0% 0% 0%)', duration: 0.85, stagger: 0.12, ease: 'power3.out' }
         );
       }
 
@@ -98,14 +99,14 @@ export const AboutCTA: React.FC = () => {
         aria-hidden="true"
         style={{
           position: 'absolute',
-          top: '30%',
+          top: '35%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
           width: '700px',
           height: '400px',
           background: 'radial-gradient(circle, rgba(255, 106, 42, 0.14) 0%, transparent 70%)',
           pointerEvents: 'none',
-          filter: 'blur(60px)',
+          filter: 'blur(65px)',
         }}
       />
 
@@ -131,8 +132,10 @@ export const AboutCTA: React.FC = () => {
             marginBottom: '24px',
           }}
         >
-          LET'S CREATE{' '}
-          <span style={{ color: 'var(--accent-orange)' }}>SOMETHING THAT MATTERS.</span>
+          <div style={{ willChange: 'transform, opacity, clip-path' }}>LET'S BUILD</div>
+          <div style={{ color: '#FF6A2A', willChange: 'transform, opacity, clip-path' }}>
+            SOMETHING THAT GROWS.
+          </div>
         </h2>
 
         {/* Supporting Text */}
@@ -146,10 +149,10 @@ export const AboutCTA: React.FC = () => {
             marginBottom: '64px',
           }}
         >
-          Have a project in mind, need one service, or looking for a long-term creative partner? Let's talk.
+          Have a project in mind, need one service, or looking for a creative partner? Let's talk.
         </p>
 
-        {/* 3 Contact Options */}
+        {/* 3 Real Contact Options (WhatsApp, Call, Email) */}
         <div
           style={{
             display: 'flex',
@@ -198,7 +201,7 @@ export const AboutCTA: React.FC = () => {
                       fontFamily: 'var(--font-heading)',
                       fontSize: '1.1rem',
                       fontWeight: 800,
-                      color: isHovered ? 'var(--accent-orange)' : '#A5A5A8',
+                      color: isHovered ? '#FF6A2A' : '#A5A5A8',
                       letterSpacing: '0.1em',
                       transition: 'color 0.4s ease',
                     }}
@@ -235,7 +238,7 @@ export const AboutCTA: React.FC = () => {
                     style={{
                       fontSize: 'clamp(0.95rem, 1.4vw, 1.25rem)',
                       fontWeight: 700,
-                      color: isHovered ? 'var(--accent-orange)' : '#A5A5A8',
+                      color: isHovered ? '#FF6A2A' : '#A5A5A8',
                       transition: 'color 0.4s ease',
                     }}
                   >
@@ -244,7 +247,7 @@ export const AboutCTA: React.FC = () => {
 
                   <ArrowUpRight
                     size={28}
-                    color={isHovered ? 'var(--accent-orange)' : '#A5A5A8'}
+                    color={isHovered ? '#FF6A2A' : '#A5A5A8'}
                     style={{
                       transform: isHovered ? 'translate(5px, -5px)' : 'translate(0, 0)',
                       transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s ease',
@@ -260,11 +263,11 @@ export const AboutCTA: React.FC = () => {
                     left: 0,
                     width: '100%',
                     height: '2px',
-                    backgroundColor: 'var(--accent-orange)',
+                    backgroundColor: '#FF6A2A',
                     transform: isHovered ? 'scaleX(1)' : 'scaleX(0)',
                     transformOrigin: 'left center',
                     transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-                    boxShadow: isHovered ? '0 0 14px var(--accent-orange)' : 'none',
+                    boxShadow: isHovered ? '0 0 14px #FF6A2A' : 'none',
                   }}
                 />
               </a>
@@ -276,3 +279,5 @@ export const AboutCTA: React.FC = () => {
     </section>
   );
 };
+
+export default AboutCTA;
