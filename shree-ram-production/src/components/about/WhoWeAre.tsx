@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import mainLogo from '../../assets/logo/shreeramproduction-logo.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,6 +12,8 @@ export const WhoWeAre: React.FC = () => {
   const descRef = useRef<HTMLDivElement>(null);
   const wordsRef = useRef<(HTMLSpanElement | null)[]>([]);
   const visualRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLImageElement>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!sectionRef.current) return;
@@ -74,19 +77,26 @@ export const WhoWeAre: React.FC = () => {
         );
       }
 
-      // 5. Subtle visual reveal
-      if (visualRef.current) {
+      // 5. Premium logo showcase — fade-in + scale 0.95 → 1
+      if (logoRef.current) {
         tl.fromTo(
-          visualRef.current,
-          { opacity: 0, scale: 1.05, clipPath: 'inset(10% 0% 10% 0%)' },
+          logoRef.current,
+          { opacity: 0, scale: 0.95 },
           {
             opacity: 1,
             scale: 1,
-            clipPath: 'inset(0% 0% 0% 0%)',
-            duration: 1.0,
+            duration: 0.9,
             ease: 'power3.out',
           },
-          '-=0.5'
+          '-=0.4'
+        );
+      }
+      if (glowRef.current) {
+        tl.fromTo(
+          glowRef.current,
+          { opacity: 0 },
+          { opacity: 1, duration: 0.9, ease: 'power2.out' },
+          '<'
         );
       }
     }, sectionRef);
@@ -165,77 +175,56 @@ export const WhoWeAre: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: Subtle Visual Reveal */}
+          {/* Right Column: Clean Premium Brand Showcase — logo directly on dark background */}
           <div
             ref={visualRef}
+            className="who-we-are-visual"
             style={{
               position: 'relative',
-              height: '520px',
-              borderRadius: '24px',
-              overflow: 'hidden',
-              background: 'linear-gradient(140deg, #121316 0%, #1A1B20 50%, #0E0F12 100%)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
-              boxShadow: '0 30px 60px rgba(0, 0, 0, 0.6)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: '520px',
+              padding: '40px 20px',
+              background: 'transparent',
+              border: 'none',
+              boxShadow: 'none',
+              overflow: 'visible',
             }}
           >
-            {/* Ambient Lighting Grids */}
+            {/* Very subtle soft gold/orange ambient glow */}
             <div
+              ref={glowRef}
+              aria-hidden="true"
+              className="who-we-are-glow"
               style={{
                 position: 'absolute',
-                inset: 0,
-                backgroundImage: `
-                  radial-gradient(ellipse 65% 55% at 50% 40%, rgba(255, 106, 42, 0.15) 0%, transparent 75%),
-                  radial-gradient(ellipse 40% 40% at 80% 80%, rgba(255, 255, 255, 0.04) 0%, transparent 60%)
-                `,
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: 'min(520px, 90%)',
+                height: 'min(520px, 90%)',
+                background:
+                  'radial-gradient(circle, rgba(255, 106, 42, 0.10) 0%, rgba(212, 160, 67, 0.08) 28%, rgba(255, 106, 42, 0.04) 48%, transparent 72%)',
+                filter: 'blur(36px)',
                 pointerEvents: 'none',
               }}
             />
-
-            <div
+            <img
+              ref={logoRef}
+              src={mainLogo}
+              alt="Shree Ram Production"
+              className="who-we-are-logo"
               style={{
-                position: 'absolute',
-                inset: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexDirection: 'column',
-                gap: '20px',
-                padding: '48px',
-                textAlign: 'center',
+                position: 'relative',
+                zIndex: 1,
+                width: 'clamp(300px, 36vw, 460px)',
+                maxWidth: '100%',
+                height: 'auto',
+                objectFit: 'contain',
+                display: 'block',
               }}
-            >
-              <div
-                style={{
-                  width: '88px',
-                  height: '88px',
-                  borderRadius: '50%',
-                  border: '1px solid rgba(255, 106, 42, 0.35)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  background: 'rgba(255, 106, 42, 0.06)',
-                  boxShadow: '0 0 30px rgba(255, 106, 42, 0.2)',
-                }}
-              >
-                <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#FF6A2A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polygon points="5 3 19 12 5 21 5 3" />
-                </svg>
-              </div>
-
-              <p
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: '1.25rem',
-                  fontWeight: 700,
-                  color: '#FFFFFF',
-                  maxWidth: '340px',
-                  lineHeight: 1.5,
-                  letterSpacing: '-0.01em',
-                }}
-              >
-                WE CRAFT STORIES THAT ELEVATE BRANDS AND CAPTIVATE AUDIENCES.
-              </p>
-            </div>
+            />
           </div>
 
         </div>

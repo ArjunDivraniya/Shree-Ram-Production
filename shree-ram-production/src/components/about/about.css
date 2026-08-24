@@ -69,6 +69,32 @@
   color: #FFFFFF;
 }
 
+/* Who We Are — premium logo showcase (no card, logo directly on dark bg) */
+.who-we-are-visual {
+  min-height: 520px;
+}
+
+@media (max-width: 1024px) {
+  .who-we-are-visual {
+    min-height: 440px;
+  }
+}
+
+@media (max-width: 768px) {
+  .who-we-are-visual {
+    min-height: 380px !important;
+    padding: 32px 16px !important;
+  }
+  .who-we-are-logo {
+    width: min(78vw, 340px) !important;
+  }
+  .who-we-are-glow {
+    width: min(380px, 88%) !important;
+    height: min(380px, 88%) !important;
+    filter: blur(28px) !important;
+  }
+}
+
 /* --------------------------------------------------------------------------
    3. OUR PHILOSOPHY (EDITORIAL ROWS)
    -------------------------------------------------------------------------- */
@@ -96,30 +122,326 @@
 }
 
 /* --------------------------------------------------------------------------
-   4. OUR CAPABILITIES
+   4. OUR CAPABILITIES — FOUR CORE PILLARS — EDITORIAL TALL CARDS
+   Premium · Bold · Cinematic · No Icons · Oversized Typography
    -------------------------------------------------------------------------- */
-.capability-card {
+.capabilities-section {
   position: relative;
-  background-color: #111215;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 32px 28px;
+  background-color: #08090A;
+}
+
+.cap-cta {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, background-color 0.3s ease;
+  will-change: transform;
+}
+.cap-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255, 106, 42, 0.35);
+  background-color: #FF8249 !important;
+}
+.cap-cta:focus-visible {
+  outline: 2px solid #FF6A2A;
+  outline-offset: 3px;
+}
+
+.pillar-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  align-items: stretch;
+}
+
+.pillar-card {
+  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  min-height: 420px;
+  height: 100%;
+  padding: 28px 26px 24px;
+  border-radius: 20px;
+  background: #111214;
+  border: 1px solid rgba(255, 255, 255, 0.10);
   overflow: hidden;
-  transition: border-color 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+  cursor: pointer;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, background-color 0.4s ease, box-shadow 0.4s ease, filter 0.4s ease, opacity 0.4s ease;
+  will-change: transform;
+  isolation: isolate;
 }
 
-.capability-card:hover {
-  border-color: rgba(255, 106, 42, 0.45);
-  transform: translateY(-6px);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 106, 42, 0.08);
+.pillar-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(560px 320px at 50% 0%, rgba(255, 106, 42, 0.09), transparent 68%);
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  pointer-events: none;
+  z-index: 0;
 }
 
-/* --------------------------------------------------------------------------
-   5, 6, 7, 8. OUR TEAM — SINGLE HORIZONTAL ROW & SIGNATURE OVERLAP ANIMATION
-   -------------------------------------------------------------------------- */
+.pillar-card.is-active::before,
+.pillar-card:hover::before {
+  opacity: 1;
+}
+
+.pillar-card.is-active,
+.pillar-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  border-color: rgba(255, 106, 42, 0.62);
+  background-color: #15161A;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.58), 0 0 28px rgba(255, 106, 42, 0.12);
+}
+
+.pillar-card.is-dimmed {
+  opacity: 0.62;
+  filter: brightness(0.92) saturate(0.9);
+}
+
+.pillar-card:focus-visible {
+  outline: 2px solid #FF6A2A;
+  outline-offset: 3px;
+  border-color: rgba(255, 106, 42, 0.62);
+}
+
+/* Title — 2 rows · 1 word per row · expanded high + extra bold */
+.pillar-card__title {
+  position: relative;
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.95rem, 2.65vw, 2.65rem);
+  font-weight: 950;
+  line-height: 0.82;
+  letter-spacing: -0.06em;
+  text-transform: uppercase;
+  min-height: auto;
+  height: auto;
+  z-index: 1;
+  white-space: pre-line;
+  word-break: keep-all;
+  overflow-wrap: normal;
+  hyphens: none;
+  display: block;
+  /* force exactly 2 rows, each row one word, no wrapping inside word */
+  text-wrap: nowrap;
+  /* strong vertical stretch + extra bold */
+  transform: scaleY(1.38);
+  transform-origin: top left;
+}
+
+.pillar-title-base,
+.pillar-title-fill {
+  line-height: 0.82;
+  letter-spacing: -0.06em;
+  white-space: pre-line;
+  word-break: keep-all;
+}
+
+.pillar-title-base {
+  display: block;
+  color: #FFFFFF;
+  font-weight: 950;
+  font-stretch: expanded;
+  -webkit-text-stroke: 1.1px rgba(255, 255, 255, 0.18);
+  text-shadow: 0 1px 0 rgba(0,0,0,0.45), 0 0 0 rgba(255,255,255,0.3);
+  transition: color 0.35s ease, opacity 0.35s ease;
+}
+
+.pillar-title-fill {
+  position: absolute;
+  inset: 0;
+  display: block;
+  white-space: pre-line;
+  color: transparent;
+  background: linear-gradient(90deg, #FF6A2A 0%, #FF8249 50%, #FF6A2A 100%);
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.72s cubic-bezier(0.16, 1, 0.3, 1), background-position 0.72s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.pillar-card.is-active .pillar-title-base,
+.pillar-card:hover .pillar-title-base {
+  color: transparent;
+  opacity: 0;
+}
+
+.pillar-card.is-active .pillar-title-fill,
+.pillar-card:hover .pillar-title-fill {
+  clip-path: inset(0 0 0 0);
+  background-position: 0 0;
+}
+
+.pillar-card:active .pillar-title-fill {
+  clip-path: inset(0 0 0 0);
+}
+
+.pillar-card__desc {
+  position: relative;
+  z-index: 1;
+  margin: 44px 0 0;
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #A5A5A8;
+  opacity: 0.92;
+  transition: color 0.35s ease, opacity 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  flex: 0 0 auto;
+}
+
+.pillar-card.is-active .pillar-card__desc,
+.pillar-card:hover .pillar-card__desc {
+  color: #E8E8E6;
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+/* Number — same font as title, expanded high + extra bold, bottom-right anchored */
+.pillar-card__number {
+  position: absolute;
+  right: 20px;
+  bottom: 14px;
+  font-family: var(--font-heading);
+  font-size: clamp(2.85rem, 3.8vw, 3.85rem);
+  font-weight: 950;
+  line-height: 0.8;
+  letter-spacing: -0.065em;
+  z-index: 1;
+  pointer-events: none;
+  width: auto;
+  height: auto;
+  transform: scaleY(1.42);
+  transform-origin: bottom right;
+  font-stretch: expanded;
+}
+
+.pillar-number-base,
+.pillar-number-fill {
+  display: block;
+  font-family: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+}
+
+.pillar-number-base {
+  color: rgba(255, 255, 255, 0.08);
+  transition: opacity 0.35s ease;
+}
+
+.pillar-number-fill {
+  position: absolute;
+  inset: 0;
+  color: transparent;
+  background: linear-gradient(90deg, #FF6A2A 0%, #FF8249 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.68s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pillar-card.is-active .pillar-number-base,
+.pillar-card:hover .pillar-number-base {
+  opacity: 0;
+}
+
+.pillar-card.is-active .pillar-number-fill,
+.pillar-card:hover .pillar-number-fill {
+  clip-path: inset(0 0 0 0);
+}
+
+.pillar-card.is-active .pillar-card__number,
+.pillar-card:hover .pillar-card__number {
+  transform: translateY(-2px);
+}
+
+/* Flexible spacer pushes number to bottom */
+.pillar-card::after {
+  content: "";
+  flex: 1 1 auto;
+  min-height: 24px;
+}
+
+/* Tablet 2x2 */
+@media (max-width: 1024px) {
+  .pillar-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+  .pillar-card {
+    min-height: 380px;
+    padding: 26px 22px 20px;
+  }
+  .pillar-card__title {
+    font-size: clamp(1.85rem, 4vw, 2.45rem);
+    line-height: 0.82;
+  }
+  .pillar-card__number {
+    font-size: clamp(2.55rem, 5.5vw, 3.35rem);
+  }
+}
+
+/* Mobile 2x2 or 1-col */
+@media (max-width: 640px) {
+  .pillar-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .pillar-card {
+    min-height: 300px;
+    padding: 20px 16px 18px;
+    border-radius: 16px;
+  }
+  .pillar-card__title {
+    font-size: clamp(1.65rem, 5.2vw, 2.05rem);
+    line-height: 0.82;
+  }
+  .pillar-card__desc {
+    font-size: 0.84rem;
+    margin-top: 18px;
+  }
+  .pillar-card__number {
+    font-size: 2.15rem;
+    right: 14px;
+    bottom: 12px;
+  }
+  .pillar-card:active {
+    transform: translateY(-4px) scale(1.005);
+    border-color: rgba(255, 106, 42, 0.62);
+  }
+}
+
+@media (max-width: 380px) {
+  .pillar-grid {
+    grid-template-columns: 1fr;
+  }
+  .pillar-card {
+    min-height: 360px;
+  }
+  .pillar-card__title {
+    font-size: 1.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pillar-card,
+  .pillar-title-fill,
+  .pillar-number-fill,
+  .pillar-card__desc {
+    transition: none !important;
+  }
+  .pillar-card:hover,
+  .pillar-card.is-active {
+    transform: none !important;
+  }
+}
+
 .team-section {
   position: relative;
   padding: 140px 0;

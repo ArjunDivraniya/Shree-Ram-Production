@@ -10,7 +10,6 @@ interface PremiumNavbarProps {
 export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState<string>('home');
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -25,46 +24,9 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Intersection Observer for Active Section Tracking on homepage
-  useEffect(() => {
-    if (location.pathname !== '/') return;
-
-    const sections = [
-      { id: 'hero', name: 'home' },
-      { id: 'four-pillars', name: 'services' },
-      { id: 'portfolio', name: 'work' },
-      { id: 'behind-scenes', name: 'industries' },
-      { id: 'brand-statement', name: 'about' },
-    ];
-
-    const observerOptions = {
-      root: null,
-      rootMargin: '-30% 0px -50% 0px',
-      threshold: 0,
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const match = sections.find((s) => s.id === entry.target.id);
-          if (match) setActiveSection(match.name);
-        }
-      });
-    }, observerOptions);
-
-    sections.forEach((s) => {
-      const el = document.getElementById(s.id);
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, [location.pathname]);
-
   const navItems = [
     { label: 'Home', sectionId: 'hero', key: 'home', route: '/' },
     { label: 'Services', sectionId: 'four-pillars', key: 'services', route: '/services' },
-    { label: 'Work', sectionId: 'portfolio', key: 'work', route: '/work' },
-    { label: 'Industries', sectionId: 'behind-scenes', key: 'industries', route: null },
     { label: 'About', sectionId: 'brand-statement', key: 'about', route: '/about' },
     { label: 'Contact', sectionId: 'contact', key: 'contact', route: '/contact' },
   ];
@@ -73,9 +35,6 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
     if (location.pathname === '/services') {
       return itemKey === 'services';
     }
-    if (location.pathname === '/work') {
-      return itemKey === 'work';
-    }
     if (location.pathname === '/about') {
       return itemKey === 'about';
     }
@@ -83,7 +42,7 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
       return itemKey === 'contact';
     }
     if (location.pathname === '/') {
-      return activeSection === itemKey;
+      return itemKey === 'home';
     }
     return false;
   };
@@ -91,7 +50,7 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
   const handleLinkClick = (
     event: React.MouseEvent<HTMLAnchorElement>,
     sectionId: string,
-    keyName: string,
+    _keyName: string,
     route: string | null
   ) => {
     event.preventDefault();
@@ -102,15 +61,6 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         navigate('/services');
-      }
-      return;
-    }
-
-    if (route === '/work') {
-      if (location.pathname === '/work') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        navigate('/work');
       }
       return;
     }
@@ -142,9 +92,8 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
       return;
     }
 
-    // Anchor navigation for Industries
+    // Fallback anchor navigation (if any legacy anchor remains)
     if (location.pathname === '/') {
-      setActiveSection(keyName);
       onNavigate(sectionId);
     } else {
       navigate(`/#${sectionId}`);

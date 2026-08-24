@@ -1,184 +1,158 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Arjun from '../../assets/out team/Arjun-2.png'
+import ArjunImg from '../../assets/out team/Arjun-2.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export interface TeamMember {
   id: string;
-  num: string;
   firstName: string;
   surname: string;
   pillar: string;
   role: string;
   image: string;
+  objectPosition?: string;
 }
 
 const TEAM_MEMBERS: TeamMember[] = [
   {
     id: 'team-1',
-    num: '01',
     firstName: 'ARJUN',
     surname: 'Divraniya',
     pillar: 'CONTENT & PRODUCTION',
     role: 'Cinematography & Field Execution',
-    image: Arjun,
+    image: ArjunImg,
+    objectPosition: 'center top',
   },
   {
     id: 'team-2',
-    num: '02',
     firstName: 'PRIYA',
     surname: 'Sharma',
     pillar: 'BRAND & CREATIVE',
     role: 'Creative Direction & Brand Systems',
-    image: Arjun,
+    image: ArjunImg,
+    objectPosition: 'center top',
   },
   {
     id: 'team-3',
-    num: '03',
     firstName: 'DEV',
     surname: 'Kothari',
     pillar: 'MARKETING & GROWTH',
     role: 'Omnichannel Performance Scaling',
-    image: Arjun,
+    image: ArjunImg,
+    objectPosition: 'center top',
   },
   {
     id: 'team-4',
-    num: '04',
     firstName: 'ANANYA',
     surname: 'Patel',
     pillar: 'TECHNOLOGY & DIGITAL',
     role: 'Web Architecture & Interactive Media',
-    image: Arjun,
+    image: ArjunImg,
+    objectPosition: 'center top',
   },
 ];
 
 export const AboutTeam: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const badgeRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const imagesRef = useRef<(HTMLImageElement | null)[]>([]);
   const gradientsRef = useRef<(HTMLDivElement | null)[]>([]);
-  const namesRef = useRef<(HTMLDivElement | null)[]>([]);
-  const rolesRef = useRef<(HTMLParagraphElement | null)[]>([]);
+  const accentRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const pillarRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const nameRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const roleRefs = useRef<(HTMLParagraphElement | null)[]>([]);
 
-  useEffect(() => {
-    if (!sectionRef.current) return;
+  useLayoutEffect(() => {
+    const root = sectionRef.current;
+    if (!root) return;
 
     const ctx = gsap.context(() => {
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      
-      const validCards = cardsRef.current.filter(Boolean);
-      const validImages = imagesRef.current.filter(Boolean);
-      const validGradients = gradientsRef.current.filter(Boolean);
-      const validNames = namesRef.current.filter(Boolean);
-      const validRoles = rolesRef.current.filter(Boolean);
+
+      // Fallback to querySelector so animation works even if refs are not yet flushed in StrictMode
+      const qCards = Array.from(root.querySelectorAll<HTMLDivElement>('.team-portrait-card'));
+      const qImages = Array.from(root.querySelectorAll<HTMLImageElement>('.team-portrait-img'));
+      const qGradients = Array.from(root.querySelectorAll<HTMLDivElement>('.team-portrait-gradient'));
+      const qAccents = Array.from(root.querySelectorAll<HTMLDivElement>('.team-accent-pill'));
+      const qPillars = Array.from(root.querySelectorAll<HTMLDivElement>('.team-pillar-tag'));
+      const qNames = Array.from(root.querySelectorAll<HTMLDivElement>('.team-signature-box'));
+      const qRoles = Array.from(root.querySelectorAll<HTMLParagraphElement>('.team-emerge-role'));
+
+      const validCards = (cardsRef.current.filter(Boolean) as HTMLDivElement[]).length ? (cardsRef.current.filter(Boolean) as HTMLDivElement[]) : qCards;
+      const validImages = (imagesRef.current.filter(Boolean) as HTMLImageElement[]).length ? (imagesRef.current.filter(Boolean) as HTMLImageElement[]) : qImages;
+      const validGradients = (gradientsRef.current.filter(Boolean) as HTMLDivElement[]).length ? (gradientsRef.current.filter(Boolean) as HTMLDivElement[]) : qGradients;
+      const validAccents = (accentRefs.current.filter(Boolean) as HTMLDivElement[]).length ? (accentRefs.current.filter(Boolean) as HTMLDivElement[]) : qAccents;
+      const validPillars = (pillarRefs.current.filter(Boolean) as HTMLDivElement[]).length ? (pillarRefs.current.filter(Boolean) as HTMLDivElement[]) : qPillars;
+      const validNames = (nameRefs.current.filter(Boolean) as HTMLDivElement[]).length ? (nameRefs.current.filter(Boolean) as HTMLDivElement[]) : qNames;
+      const validRoles = (roleRefs.current.filter(Boolean) as HTMLParagraphElement[]).length ? (roleRefs.current.filter(Boolean) as HTMLParagraphElement[]) : qRoles;
+
+      const headingEl = headingRef.current || (root.querySelector('h2') as HTMLElement | null);
+      const badgeEl = badgeRef.current || (root.querySelector('.badge-pill') as HTMLElement | null);
 
       if (prefersReducedMotion) {
-        gsap.set(validCards, { opacity: 1, clipPath: 'inset(0% 0% 0% 0%)' });
-        gsap.set(validImages, { scale: 1 });
-        gsap.set(validGradients, { opacity: 1 });
-        gsap.set(validNames, { y: 0, opacity: 1 });
-        gsap.set(validRoles, { y: 0, opacity: 1 });
+        gsap.set(validCards, { autoAlpha: 1, y: 0, scale: 1, clipPath: 'inset(0% 0% 0% 0%)', clearProps: 'clipPath,transform' });
+        gsap.set(validImages, { scale: 1, autoAlpha: 1, clearProps: 'transform' });
+        gsap.set(validGradients, { autoAlpha: 1 });
+        gsap.set([...validAccents, ...validPillars, ...validNames, ...validRoles], { y: 0, autoAlpha: 1, clearProps: 'transform' });
+        if (headingEl) gsap.set(headingEl, { y: 0, autoAlpha: 1, clipPath: 'inset(0% 0% 0% 0%)', clearProps: 'clipPath' });
+        if (badgeEl) gsap.set(badgeEl, { y: 0, autoAlpha: 1 });
         return;
       }
 
-      // Initial state: hide signature name & role inside clipped overflow
-      gsap.set(validNames, { y: '100%', opacity: 0 });
-      gsap.set(validRoles, { y: '120%', opacity: 0 });
-      gsap.set(validGradients, { opacity: 0 });
+      // Initial hidden — bottom reveal: elements sit below and slide up masked by .team-portrait-meta overflow:hidden
+      gsap.set(validCards, { autoAlpha: 0, y: 44, scale: 0.97, clipPath: 'inset(100% 0% 0% 0%)' });
+      gsap.set(validImages, { scale: 1.08, autoAlpha: 0 });
+      gsap.set(validGradients, { autoAlpha: 0 });
+      gsap.set(validAccents, { y: 20, autoAlpha: 0 });
+      gsap.set(validPillars, { y: 24, autoAlpha: 0 });
+      gsap.set(validNames, { y: 36, autoAlpha: 0 });
+      gsap.set(validRoles, { y: 28, autoAlpha: 0 });
+      if (headingEl) gsap.set(headingEl, { y: 24, autoAlpha: 0, clipPath: 'inset(0 100% 0 0)' });
+      if (badgeEl) gsap.set(badgeEl, { y: 12, autoAlpha: 0 });
 
-      // Master ScrollTrigger Timeline
-      const mainTL = gsap.timeline({
+      const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 72%',
+          trigger: root,
+          start: 'top 78%',
           toggleActions: 'play none none reverse',
+          invalidateOnRefresh: true,
         },
       });
 
-      // 1. Photos reveal one after another with clip mask reveal + scale 1.05 -> 1
-      mainTL.fromTo(
-        validCards,
-        {
-          opacity: 0,
-          clipPath: 'inset(100% 0% 0% 0%)',
-        },
-        {
-          opacity: 1,
-          clipPath: 'inset(0% 0% 0% 0%)',
-          duration: 0.95,
-          stagger: 0.12,
-          ease: 'power3.out',
-        }
-      );
+      if (badgeEl) tl.to(badgeEl, { y: 0, autoAlpha: 1, duration: 0.45, ease: 'power3.out' }, 0);
+      if (headingEl) tl.to(headingEl, { y: 0, autoAlpha: 1, clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power3.out' }, 0.06);
 
-      mainTL.fromTo(
-        validImages,
-        { scale: 1.05 },
-        {
-          scale: 1,
-          duration: 1.1,
-          stagger: 0.12,
-          ease: 'power2.out',
-        },
-        '<=0'
-      );
+      // Cards reveal with clip + scale — stagger keeps equal weight
+      tl.to(validCards, { autoAlpha: 1, y: 0, scale: 1, clipPath: 'inset(0% 0% 0% 0%)', duration: 0.85, stagger: 0.1, ease: 'power3.out' }, 0.14);
+      tl.to(validImages, { scale: 1, autoAlpha: 1, duration: 0.9, stagger: 0.1, ease: 'power2.out' }, 0.16);
+      tl.to(validGradients, { autoAlpha: 0.9, duration: 0.5, stagger: 0.07, ease: 'power2.out' }, 0.42);
+      // Bottom info sequential bottom-up: orange line → pillar → name (extra-bold + handwritten overlap) → role
+      tl.to(validAccents, { y: 0, autoAlpha: 1, duration: 0.46, stagger: 0.07, ease: 'power3.out' }, 0.48);
+      tl.to(validPillars, { y: 0, autoAlpha: 1, duration: 0.46, stagger: 0.07, ease: 'power3.out' }, 0.54);
+      tl.to(validNames, { y: 0, autoAlpha: 1, duration: 0.62, stagger: 0.07, ease: 'power3.out' }, 0.60);
+      tl.to(validRoles, { y: 0, autoAlpha: 1, duration: 0.5, stagger: 0.07, ease: 'power3.out' }, 0.66);
 
-      // 2. Subtle dark gradient appears at the bottom of each photo
-      mainTL.to(
-        validGradients,
-        {
-          opacity: 0.9,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: 'power2.out',
-        },
-        '-=0.5'
-      );
-
-      // 3. After the photo settles, NAME (with handwritten surname signature) and ROLE slide upward from INSIDE the photo
-      mainTL.to(
-        validNames,
-        {
-          y: '0%',
-          opacity: 1,
-          duration: 0.65,
-          stagger: 0.1,
-          ease: 'power3.out',
-        },
-        '-=0.4'
-      );
-
-      mainTL.to(
-        validRoles,
-        {
-          y: '0%',
-          opacity: 1,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: 'power3.out',
-        },
-        '-=0.55'
-      );
-
-    }, sectionRef);
+      ScrollTrigger.refresh();
+    }, root);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={sectionRef} className="team-section">
+    <section ref={sectionRef} className="team-section" aria-labelledby="team-heading">
       <div className="container" style={{ maxWidth: '1280px' }}>
-        
-        {/* Section Header */}
         <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 60px auto' }}>
-          <div className="badge-pill" style={{ marginBottom: '20px', display: 'inline-flex' }}>
+          <div ref={badgeRef} className="badge-pill" style={{ marginBottom: '20px', display: 'inline-flex' }}>
             <span className="badge-pill-dot" />
             <span>OUR TEAM</span>
           </div>
-
           <h2
+            ref={headingRef}
+            id="team-heading"
             style={{
               fontFamily: 'var(--font-heading)',
               fontSize: 'clamp(2.2rem, 4.5vw, 3.8rem)',
@@ -194,7 +168,6 @@ export const AboutTeam: React.FC = () => {
           </h2>
         </div>
 
-        {/* ONE SINGLE HORIZONTAL TEAM ROW (Desktop Single Row / Mobile Swipeable) */}
         <div className="team-horizontal-wrapper">
           <div className="team-horizontal-row">
             {TEAM_MEMBERS.map((member, idx) => (
@@ -203,41 +176,29 @@ export const AboutTeam: React.FC = () => {
                 ref={(el) => { cardsRef.current[idx] = el; }}
                 className="team-portrait-card"
               >
-                {/* Photo Container */}
                 <div className="team-portrait-img-box">
-                  <img 
+                  <img
                     ref={(el) => { imagesRef.current[idx] = el; }}
                     src={member.image}
                     alt={`${member.firstName} ${member.surname}`}
                     className="team-portrait-img"
+                    style={member.objectPosition ? { objectPosition: member.objectPosition } : undefined}
+                    loading="lazy"
+                    decoding="async"
                   />
-                  
-                  {/* Subtle Dark Gradient Overlay */}
-                  <div
-                    ref={(el) => { gradientsRef.current[idx] = el; }}
-                    className="team-portrait-gradient"
-                  />
+                  <div ref={(el) => { gradientsRef.current[idx] = el; }} className="team-portrait-gradient" />
                 </div>
 
-                {/* Meta Container (Clipped Text Inside Image) */}
                 <div className="team-portrait-meta">
-                  <div className="team-accent-pill" />
-                  
-                  <div className="team-pillar-tag">{member.pillar}</div>
-
-                  {/* Unique Signature Name Overlap */}
-                  <div
-                    ref={(el) => { namesRef.current[idx] = el; }}
-                    className="team-signature-box"
-                  >
+                  <div ref={(el) => { accentRefs.current[idx] = el; }} className="team-accent-pill" />
+                  <div ref={(el) => { pillarRefs.current[idx] = el; }} className="team-pillar-tag">
+                    {member.pillar}
+                  </div>
+                  <div ref={(el) => { nameRefs.current[idx] = el; }} className="team-signature-box">
                     <span className="team-bold-firstname">{member.firstName}</span>
                     <span className="team-script-surname">{member.surname}</span>
                   </div>
-
-                  <p
-                    ref={(el) => { rolesRef.current[idx] = el; }}
-                    className="team-emerge-role"
-                  >
+                  <p ref={(el) => { roleRefs.current[idx] = el; }} className="team-emerge-role">
                     {member.role}
                   </p>
                 </div>
@@ -245,7 +206,6 @@ export const AboutTeam: React.FC = () => {
             ))}
           </div>
         </div>
-
       </div>
     </section>
   );

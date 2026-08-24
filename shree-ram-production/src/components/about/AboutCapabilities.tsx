@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowUpRight, Video, Palette, TrendingUp, Code2 } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -10,75 +10,104 @@ interface Capability {
   num: string;
   title: string;
   desc: string;
-  icon: React.ElementType;
 }
 
 const CAPABILITIES: Capability[] = [
   {
     num: '01',
-    title: 'CONTENT & PRODUCTION',
+    title: 'CONTENT\nPRODUCTION',
     desc: 'Cinematic commercials, brand films, high-end photography & 3D motion design.',
-    icon: Video,
   },
   {
     num: '02',
-    title: 'BRAND & CREATIVE',
+    title: 'BRAND\nCREATIVE',
     desc: 'Visual identity systems, strategy, packaging design & creative direction.',
-    icon: Palette,
   },
   {
     num: '03',
-    title: 'MARKETING & GROWTH',
+    title: 'MARKETING\nGROWTH',
     desc: 'Paid performance acquisition, SEO engines, viral content & CRO funnels.',
-    icon: TrendingUp,
   },
   {
     num: '04',
-    title: 'TECHNOLOGY & DIGITAL',
+    title: 'TECHNOLOGY\nDIGITAL',
     desc: 'Custom web applications, e-commerce storefronts, interactive platforms & AI workflows.',
-    icon: Code2,
   },
 ];
 
 export const AboutCapabilities: React.FC = () => {
   const navigate = useNavigate();
   const sectionRef = useRef<HTMLElement>(null);
+  const labelRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const ctaRef = useRef<HTMLButtonElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const [hovered, setHovered] = useState<number | null>(null);
 
   useEffect(() => {
     if (!sectionRef.current) return;
-
     const ctx = gsap.context(() => {
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (prefersReducedMotion) return;
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const label = labelRef.current;
+      const heading = headingRef.current;
+      const cta = ctaRef.current;
+      const cards = cardsRef.current.filter(Boolean) as HTMLDivElement[];
+      if (reduce) {
+        gsap.set([label, heading, cta].filter(Boolean), { opacity: 1, y: 0, clipPath: 'none' });
+        gsap.set(cards, { opacity: 1, y: 0, scale: 1 });
+        return;
+      }
 
-      const validCards = cardsRef.current.filter(Boolean);
-      if (validCards.length > 0) {
-        gsap.fromTo(
-          validCards,
-          { opacity: 0, y: 30 },
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 78%',
+          once: true,
+        },
+      });
+
+      if (label) {
+        tl.fromTo(label, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' });
+      }
+      if (heading) {
+        const lines = heading.querySelectorAll<HTMLElement>('.cap-heading-line');
+        if (lines.length) {
+          tl.fromTo(
+            lines,
+            { opacity: 0, y: 32, clipPath: 'inset(100% 0% 0% 0%)' },
+            { opacity: 1, y: 0, clipPath: 'inset(0% 0% 0% 0%)', duration: 0.75, stagger: 0.1, ease: 'power3.out' },
+            '-=0.2'
+          );
+        } else {
+          tl.fromTo(heading, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.2');
+        }
+      }
+      if (cta) {
+        tl.fromTo(cta, { opacity: 0, y: 12, scale: 0.98 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'power3.out' }, '-=0.35');
+      }
+      if (cards.length) {
+        tl.fromTo(
+          cards,
+          { opacity: 0, y: 50, scale: 0.97 },
           {
             opacity: 1,
             y: 0,
-            duration: 0.75,
-            stagger: 0.12,
+            scale: 1,
+            duration: 0.7,
+            stagger: 0.09,
             ease: 'power3.out',
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: 'top 78%',
-              toggleActions: 'play none none reverse',
-            },
-          }
+          },
+          '-=0.2'
         );
       }
     }, sectionRef);
-
     return () => ctx.revert();
   }, []);
 
   return (
     <section
       ref={sectionRef}
+      className="capabilities-section"
       style={{
         padding: '110px 0',
         backgroundColor: '#08090A',
@@ -87,8 +116,6 @@ export const AboutCapabilities: React.FC = () => {
       }}
     >
       <div className="container" style={{ maxWidth: '1180px' }}>
-        
-        {/* Header */}
         <div
           style={{
             display: 'flex',
@@ -100,12 +127,12 @@ export const AboutCapabilities: React.FC = () => {
           }}
         >
           <div>
-            <div className="badge-pill" style={{ marginBottom: '16px', display: 'inline-flex' }}>
+            <div ref={labelRef} className="badge-pill" style={{ marginBottom: '16px', display: 'inline-flex' }}>
               <span className="badge-pill-dot" />
               <span>OUR CAPABILITIES</span>
             </div>
-
             <h2
+              ref={headingRef}
               style={{
                 fontFamily: 'var(--font-heading)',
                 fontSize: 'clamp(2.0rem, 4vw, 3.2rem)',
@@ -114,16 +141,21 @@ export const AboutCapabilities: React.FC = () => {
                 letterSpacing: '-0.02em',
                 color: '#FFFFFF',
                 textTransform: 'uppercase',
+                margin: 0,
               }}
             >
-              FOUR CORE PILLARS
+              <span className="cap-heading-line" style={{ display: 'block', overflow: 'hidden' }}>
+                FOUR CORE
+              </span>
+              <span className="cap-heading-line" style={{ display: 'block', overflow: 'hidden', color: '#FF6A2A' }}>
+                PILLARS
+              </span>
             </h2>
           </div>
-
-          {/* CTA Button */}
           <button
+            ref={ctaRef}
             onClick={() => navigate('/services')}
-            className="apple-glass-cta"
+            className="cap-cta"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -137,15 +169,6 @@ export const AboutCapabilities: React.FC = () => {
               letterSpacing: '0.04em',
               border: 'none',
               cursor: 'pointer',
-              transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 8px 24px rgba(255, 106, 42, 0.35)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = 'none';
             }}
           >
             <span>EXPLORE SERVICES</span>
@@ -153,89 +176,41 @@ export const AboutCapabilities: React.FC = () => {
           </button>
         </div>
 
-        {/* Compact Connected Grid Layout */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-            gap: '20px',
-          }}
-        >
+        <div className="pillar-grid">
           {CAPABILITIES.map((cap, idx) => {
-            const IconComp = cap.icon;
-
+            const isActive = hovered === idx;
+            const isDimmed = hovered !== null && !isActive;
             return (
               <div
                 key={cap.num}
-                ref={(el) => { cardsRef.current[idx] = el; }}
-                className="capability-card"
+                ref={(el) => {
+                  cardsRef.current[idx] = el;
+                }}
+                className={`pillar-card ${isActive ? 'is-active' : ''} ${isDimmed ? 'is-dimmed' : ''}`}
+                tabIndex={0}
+                aria-label={`${cap.title.replace('\n', ' ')} — ${cap.desc}`}
+                onMouseEnter={() => setHovered(idx)}
+                onMouseLeave={() => setHovered(null)}
+                onFocus={() => setHovered(idx)}
+                onBlur={() => setHovered(null)}
               >
-                <div>
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      marginBottom: '24px',
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontFamily: 'var(--font-heading)',
-                        fontSize: '1.25rem',
-                        fontWeight: 800,
-                        color: '#FF6A2A',
-                      }}
-                    >
-                      {cap.num}
-                    </span>
-
-                    <div
-                      style={{
-                        width: '40px',
-                        height: '40px',
-                        borderRadius: '10px',
-                        backgroundColor: 'rgba(255, 106, 42, 0.08)',
-                        border: '1px solid rgba(255, 106, 42, 0.2)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#FF6A2A',
-                      }}
-                    >
-                      <IconComp size={18} />
-                    </div>
-                  </div>
-
-                  <h3
-                    style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: '1.2rem',
-                      fontWeight: 800,
-                      color: '#FFFFFF',
-                      marginBottom: '12px',
-                      lineHeight: 1.2,
-                    }}
-                  >
+                <h3 className="pillar-card__title">
+                  <span className="pillar-title-base">{cap.title}</span>
+                  <span className="pillar-title-fill" aria-hidden="true">
                     {cap.title}
-                  </h3>
+                  </span>
+                </h3>
 
-                  <p
-                    style={{
-                      fontSize: '0.9rem',
-                      color: '#A5A5A8',
-                      lineHeight: 1.6,
-                      margin: 0,
-                    }}
-                  >
-                    {cap.desc}
-                  </p>
+                <p className="pillar-card__desc">{cap.desc}</p>
+
+                <div className="pillar-card__number" aria-hidden="true">
+                  <span className="pillar-number-base">{cap.num}</span>
+                  <span className="pillar-number-fill">{cap.num}</span>
                 </div>
               </div>
             );
           })}
         </div>
-
       </div>
     </section>
   );

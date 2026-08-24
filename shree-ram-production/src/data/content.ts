@@ -1,7 +1,7 @@
 import type { ServicePillar, PortfolioItem, ProcessStep, Testimonial, BehindTheScenesItem, CalculatorOption } from '../types';
 
 export const HERO_STATS = [
-  { label: 'Client Value Generated', value: '$50M+' },
+  { label: 'Client Value Generated', value: '₹400Cr+' },
   { label: 'Global Campaigns Executed', value: '250+' },
   { label: 'Avg ROI Growth', value: '4.8x' },
   { label: 'Creative Excellence Rate', value: '99.4%' },
@@ -191,7 +191,7 @@ export const PORTFOLIO_ITEMS: PortfolioItem[] = [
     metrics: { label: 'Retail Pre-Orders', value: '100% Sold Out' },
     summary: 'Custom glass bottle architecture, tactile debossed labels, and wooden presentation box for a limited-run spirit.',
     deliverables: ['Structural Package Design', 'Label Graphics', 'Collector Box', 'Unboxing Assets'],
-    challenge: 'Command a premium $400 retail shelf price with bespoke physical packaging design.',
+    challenge: 'Command a premium ₹33,000 retail shelf price with bespoke physical packaging design.',
     solution: 'Partnered with European glass artisans to engineer heavy-base custom decanters with metal seals.'
   },
   {
@@ -235,7 +235,7 @@ export const PORTFOLIO_ITEMS: PortfolioItem[] = [
     metrics: { label: 'Blended ROAS', value: '5.2x' },
     summary: 'Direct-response paid social advertising and creator partnership program driving global e-commerce revenue.',
     deliverables: ['TikTok Ad Creative', 'Influencer UGC Engine', 'Meta Scaling Strategy'],
-    challenge: 'Scale ad spend from $10k/mo to $250k/mo without exhausting creative fatigue.',
+    challenge: 'Scale ad spend from ₹8L/mo to ₹2Cr/mo without exhausting creative fatigue.',
     solution: 'Built an in-house creator network producing 40 raw UGC hooks per week for rapid testing.'
   },
   {

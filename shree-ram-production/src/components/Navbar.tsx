@@ -26,8 +26,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate }) => {
     const sections = [
       { id: 'hero', name: 'home' },
       { id: 'four-pillars', name: 'services' },
-      { id: 'portfolio', name: 'work' },
-      { id: 'behind-scenes', name: 'industries' },
       { id: 'brand-statement', name: 'about' },
       { id: 'contact', name: 'contact' },
     ];

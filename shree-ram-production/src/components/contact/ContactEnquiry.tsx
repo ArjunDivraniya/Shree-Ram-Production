@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { ArrowUpRight, Check, ArrowLeft, CheckCircle2, ChevronDown } from 'lucide-react';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { contactIntroAnimation, progressAnimation, serviceSelectionAnimation, successAnimation } from './animations';
+import { triggerDualTeamNotification, TEAM_EMAIL, TEAM_WHATSAPP_DISPLAY } from '../../utils/notify';
 import './contact.css';
 
 const SERVICE_OPTIONS = [
@@ -189,11 +190,30 @@ export const ContactEnquiry: React.FC = () => {
     if (!valid1) { goToStep(1); return; }
     if (!valid2) { goToStep(2); return; }
     setSubmitState('sending');
+
+    // --- Dual notification: Email + WhatsApp to team (so we can take note immediately) ---
+    const _serviceLabels = SERVICE_OPTIONS.filter(o => formData.services.includes(o.id)).map(o => o.label);
+    const _budgetLabel = BUDGET_OPTIONS.find(b => b.id === formData.budget)?.label ?? '';
+    const payload = {
+      services: _serviceLabels,
+      name: formData.name,
+      business: formData.business,
+      email: formData.email,
+      phone: formData.phone,
+      website: formData.website,
+      industry: formData.industry,
+      goal: formData.goal,
+      budgetLabel: _budgetLabel,
+      preferences: formData.preferences,
+    };
+    // Trigger both — team receives Email and WhatsApp for every enquiry
+    triggerDualTeamNotification(payload);
+
     window.setTimeout(() => {
       setSubmitState('received');
       window.setTimeout(() => setShowSuccess(true), 520);
     }, 1400);
-  }, [step, validateStep, goToStep, handleNext]);
+  }, [step, validateStep, goToStep, handleNext, formData]);
 
   const selectedServiceLabels = SERVICE_OPTIONS.filter(o => formData.services.includes(o.id)).map(o => o.label);
   const budgetLabel = BUDGET_OPTIONS.find(b => b.id === formData.budget)?.label ?? '';
@@ -208,8 +228,8 @@ export const ContactEnquiry: React.FC = () => {
           <div ref={successRef} className="srp-success">
             <div className="srp-success__kicker"><CheckCircle2 size={14} aria-hidden="true" /><span>Message received</span></div>
             <h2 className="srp-success__title">Thank you.<br /><span style={{ color: 'var(--accent-orange)' }}>Your message is on its way.</span></h2>
-            <p className="srp-success__subtitle">We’ll review your requirements and get back to you soon.</p>
-            <p className="srp-success__copy">Whether you need one service or a complete growth solution, we’ll figure out the right way forward together. If it’s urgent, reach us via WhatsApp or Call.</p>
+            <p className="srp-success__subtitle">We’ve received your enquiry and notified our team instantly via Email &amp; WhatsApp — we’ll review and get back to you soon.</p>
+            <p className="srp-success__copy">A copy has been prepared for <strong style={{ color: '#FFFFFF' }}>{TEAM_EMAIL}</strong> and WhatsApp <strong style={{ color: '#FFFFFF' }}>{TEAM_WHATSAPP_DISPLAY}</strong> so we never miss your request. Whether you need one service or a complete growth solution, we’ll figure out the right way forward together. If it’s urgent, reach us via WhatsApp or Call.</p>
             <div className="srp-success__actions">
               <a href={CONTACT_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" className="srp-btn srp-btn--primary"><span>Message on WhatsApp</span><span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={16} /></span></a>
               <a href={CONTACT_LINKS.email} className="srp-btn srp-btn--ghost"><span>Send an email</span><ArrowUpRight size={16} aria-hidden="true" /></a>
@@ -397,6 +417,9 @@ export const ContactEnquiry: React.FC = () => {
                         return <button key={opt.id} type="button" className={['srp-pref__pill', active ? 'srp-pref__pill--active' : ''].filter(Boolean).join(' ')} aria-pressed={active} onClick={() => togglePref(opt.id)}>{opt.label}</button>;
                       })}
                     </div>
+                  </div>
+                  <div style={{ marginTop: 16, padding: '12px 14px', borderRadius: 10, background: 'rgba(255,106,42,0.08)', border: '1px solid rgba(255,106,42,0.18)', fontSize: '0.82rem', lineHeight: 1.5, color: '#D6D6D8' }}>
+                    <span style={{ fontWeight: 700, color: '#FF6A2A' }}>Note:</span> On submit, our team is notified instantly via <strong style={{ color: '#FFFFFF' }}>Email</strong> ({TEAM_EMAIL}) and <strong style={{ color: '#FFFFFF' }}>WhatsApp</strong> ({TEAM_WHATSAPP_DISPLAY}) so we can take note right away.
                   </div>
                 </div>
               )}
