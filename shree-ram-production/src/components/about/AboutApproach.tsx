@@ -58,45 +58,63 @@ export const AboutApproach: React.FC = () => {
     if (cards.length !== STAGES.length) return;
 
     const ctx = gsap.context(() => {
-      // initial positions: first card in place, others below viewport
-      gsap.set(cards[0], { yPercent: 0, scale: 1, rotation: 0 });
-      gsap.set(cards.slice(1), { yPercent: 108, scale: 0.96, rotation: 0 });
+      // Clean initial state – 01 in place, 02-04 stacked below, ready to slide up and overlap
+      gsap.set(cards[0], { yPercent: 0, scale: 1, transformOrigin: 'center top', willChange: 'transform' });
+      gsap.set(cards.slice(1), { yPercent: 110, scale: 0.98, transformOrigin: 'center top', willChange: 'transform' });
+      // slight behind-cards push so depth is visible after they stack
+      // use y (px) for the pinned-behind offset so yPercent remains reversible
+      gsap.set(cards.slice(0, 3), { filter: 'brightness(1)' });
 
-      // subtle offset stack hint: each card slightly offset when active (handled via timeline tweens)
       const tl = gsap.timeline({
+        defaults: { ease: 'none', overwrite: 'auto' },
         scrollTrigger: {
           trigger: wrapperRef.current,
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 0.85,
+          scrub: 1.05,
           pin: stickyRef.current,
+          pinSpacing: true,
           anticipatePin: 1,
+          fastScrollEnd: true,
+          invalidateOnRefresh: true,
           onUpdate: (self) => {
             const p = self.progress;
             let idx = 0;
-            if (p < 0.25) idx = 0;
-            else if (p < 0.52) idx = 1;
-            else if (p < 0.78) idx = 2;
+            if (p < 0.22) idx = 0;
+            else if (p < 0.48) idx = 1;
+            else if (p < 0.74) idx = 2;
             else idx = 3;
-            setActiveIndex(idx);
+            setActiveIndex((prev) => (prev !== idx ? idx : prev));
           },
         },
       });
 
-      // Card 2 slides over Card 1
-      tl.to(cards[1], { yPercent: 0, scale: 1, duration: 1, ease: 'none' }, 0.2)
-        .to(cards[0], { scale: 0.94, yPercent: -4, duration: 1, ease: 'none' }, 0.2)
-        .to({}, { duration: 0.6 });
+      // --- Polished, perfectly reversible stacked sequence ---
+      // Each transition is paired: incoming card slides y 110% -> 0, outgoing card scales + y offset + slight dim
+      // Using explicit labels keeps forward/reverse identical.
 
-      // Card 3 over Card 2
-      tl.to(cards[2], { yPercent: 0, scale: 1, duration: 1, ease: 'none' }, 1.8)
-        .to(cards[1], { scale: 0.94, yPercent: -4, duration: 1, ease: 'none' }, 1.8)
-        .to({}, { duration: 0.6 });
+      // 01 -> 02
+      tl.to(cards[1], { yPercent: 0, scale: 1, duration: 0.9 }, 0.35)
+        .to(cards[0], { scale: 0.95, yPercent: -3.5, filter: 'brightness(0.92)', duration: 0.9 }, 0.35);
 
-      // Card 4 over Card 3
-      tl.to(cards[3], { yPercent: 0, scale: 1, duration: 1, ease: 'none' }, 3.4)
-        .to(cards[2], { scale: 0.94, yPercent: -4, duration: 1, ease: 'none' }, 3.4)
-        .to({}, { duration: 0.8 });
+      // hold 01+02
+      tl.to({}, { duration: 0.45 });
+
+      // 02 -> 03
+      tl.to(cards[2], { yPercent: 0, scale: 1, duration: 0.9 }, 1.7)
+        .to(cards[1], { scale: 0.95, yPercent: -3.5, filter: 'brightness(0.92)', duration: 0.9 }, 1.7);
+
+      tl.to({}, { duration: 0.45 });
+
+      // 03 -> 04
+      tl.to(cards[3], { yPercent: 0, scale: 1, duration: 0.9 }, 3.05)
+        .to(cards[2], { scale: 0.95, yPercent: -3.5, filter: 'brightness(0.92)', duration: 0.9 }, 3.05);
+
+      // final hold so 04 settles before unpin
+      tl.to({}, { duration: 0.65 });
+
+      // Optional: subtle scrubbed glow on active card border – driven by timeline so reverse is mirrored
+      // (kept subtle to avoid fighting CSS transition)
     }, wrapperRef);
 
     return () => ctx.revert();
@@ -138,7 +156,11 @@ export const AboutApproach: React.FC = () => {
                 className="approach-stack-card"
                 style={{ position: 'relative' } as React.CSSProperties}
               >
-                <div className="approach-card-num">{stage.num}</div>
+                <div className="approach-card-accent" />
+                <div className="approach-card-top">
+                  <span className="approach-card-num">{stage.num}</span>
+                  <span className="approach-card-phase">PHASE {stage.num}</span>
+                </div>
                 <h3 className="approach-card-title">{stage.title}</h3>
                 <p className="approach-card-desc">{stage.desc}</p>
                 <div className="approach-card-watermark">{stage.num}</div>
@@ -174,6 +196,34 @@ export const AboutApproach: React.FC = () => {
       {/* Scroll-driven stacked pin area */}
       <div ref={wrapperRef} className="approach-wrapper">
         <div ref={stickyRef} className="approach-sticky">
+          <div
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              top: '18%',
+              right: '12%',
+              width: '520px',
+              height: '520px',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(255,106,42,0.09) 0%, transparent 72%)',
+              filter: 'blur(36px)',
+              pointerEvents: 'none',
+            }}
+          />
+          <div
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              backgroundImage:
+                'linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)',
+              backgroundSize: '80px 80px',
+              maskImage: 'radial-gradient(ellipse at center, black 42%, transparent 78%)',
+              WebkitMaskImage: 'radial-gradient(ellipse at center, black 42%, transparent 78%)',
+              pointerEvents: 'none',
+              opacity: 0.5,
+            }}
+          />
           <div className="approach-sticky-inner container" style={{ maxWidth: '1100px' }}>
             {/* Left meta / progress */}
             <div className="approach-progress-col">
@@ -196,19 +246,18 @@ export const AboutApproach: React.FC = () => {
                 <span className="approach-counter-sep">/</span>
                 <span className="approach-counter-total">04</span>
               </div>
+              <div className="approach-progress-hint">Scroll to stack — reverses smoothly</div>
             </div>
 
             {/* Stacked cards */}
-            <div className="approach-stack">
+            <div className="approach-stack" aria-live="polite">
               {STAGES.map((stage, idx) => (
                 <div
                   key={stage.num}
                   ref={(el) => { cardsRef.current[idx] = el; }}
-                  className={`approach-stack-card ${idx === activeIndex ? 'is-active' : ''}`}
+                  className={`approach-stack-card ${idx === activeIndex ? 'is-active' : ''} ${idx < activeIndex ? 'is-behind' : ''}`}
                   style={{ zIndex: idx + 1 } as React.CSSProperties}
-                  aria-hidden={idx !== activeIndex ? undefined : undefined}
                 >
-                  {/* top accent */}
                   <div className="approach-card-accent" />
                   <div className="approach-card-top">
                     <span className="approach-card-num">{stage.num}</span>
@@ -222,15 +271,12 @@ export const AboutApproach: React.FC = () => {
             </div>
           </div>
 
-          {/* scroll hint */}
           <div className="approach-scroll-hint" aria-hidden="true">
             <span>SCROLL</span>
             <span className="approach-scroll-line" />
           </div>
         </div>
       </div>
-
-      {/* Spacer for mobile fallback after pin (hidden on desktop) */}
     </section>
   );
 };
