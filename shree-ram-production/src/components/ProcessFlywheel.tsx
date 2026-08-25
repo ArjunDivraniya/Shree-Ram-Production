@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { PROCESS_STEPS } from '../data/content';
-import { CheckCircle2, Compass, Hammer, Rocket, TrendingUp, Sparkles } from 'lucide-react';
+import { CheckCircle2, Compass, Hammer, Rocket, TrendingUp } from 'lucide-react';
 import SectionMarker from './ui/SectionMarker';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -644,8 +644,7 @@ export const ProcessFlywheel: React.FC = () => {
                         marginBottom: '6px',
                         textTransform: 'uppercase',
                       }}
-                    >
-                      <Sparkles size={12} />
+                      >
                       <span>Key Deliverables & Milestones</span>
                     </div>
 

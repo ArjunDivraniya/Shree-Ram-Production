@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { CALCULATOR_OPTIONS } from '../data/content';
-import { Check, ArrowRight, Sparkles } from 'lucide-react';
+import { Check, ArrowRight } from 'lucide-react';
 import SectionMarker from './ui/SectionMarker';
 
 interface ProjectCalculatorProps {
@@ -205,7 +205,6 @@ export const ProjectCalculator: React.FC<ProjectCalculatorProps> = ({ onSelectSe
                   marginBottom: '20px',
                 }}
               >
-                <Sparkles size={16} />
                 <span>YOUR CUSTOMIZED GROWTH BRIEF</span>
               </div>
 

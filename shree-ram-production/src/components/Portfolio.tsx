@@ -5,7 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import type { PortfolioItem } from '../types';
 import { PORTFOLIO_ITEMS } from '../data/content';
 import { findServiceById } from '../utils/serviceUtils';
-import { ArrowUpRight, X, TrendingUp, Sparkles, Play, Flame } from 'lucide-react';
+import { ArrowUpRight, X, TrendingUp, Play, Flame } from 'lucide-react';
 import SectionMarker from './ui/SectionMarker';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -882,7 +882,6 @@ const FloatingCinematicCard: React.FC<{
             gap: '6px',
           }}
         >
-          <Sparkles size={11} color="var(--accent-orange)" />
           <span>{badgeText}</span>
         </div>
       </div>

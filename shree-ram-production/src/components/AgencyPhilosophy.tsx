@@ -84,10 +84,10 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
 
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: cardsWrapperRef.current,
-          start: 'top 80%',
-          end: 'bottom 28%',
-          toggleActions: 'play reverse play reverse',
+          trigger: sectionRef.current,
+          start: 'top 92%',
+          end: 'bottom 20%',
+          toggleActions: 'play none none reverse',
           invalidateOnRefresh: true,
         },
       });
@@ -181,7 +181,7 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
       className="philosophy-section"
       style={{
         padding: '88px 0 104px',
-        background: 'linear-gradient(180deg, rgba(6, 7, 9, 0.9) 0%, rgba(8, 9, 12, 0.96) 48%, rgba(6, 7, 9, 0.92) 100%)',
+        background: 'transparent',
         color: '#FFFFFF',
         position: 'relative',
         overflow: 'visible',
