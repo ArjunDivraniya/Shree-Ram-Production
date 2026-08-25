@@ -89,7 +89,7 @@ export const AboutCTA: React.FC = () => {
       ref={sectionRef}
       style={{
         padding: '140px 0 120px 0',
-        backgroundColor: '#08090A',
+        background: 'transparent',
         position: 'relative',
         overflow: 'hidden',
         borderTop: '1px solid rgba(255, 255, 255, 0.08)',

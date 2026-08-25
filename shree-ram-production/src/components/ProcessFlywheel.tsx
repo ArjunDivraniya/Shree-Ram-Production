@@ -210,7 +210,7 @@ export const ProcessFlywheel: React.FC = () => {
   // Static reduced-motion layout fallback
   if (isReducedMotion) {
     return (
-      <section id="process" style={{ padding: '100px 0', backgroundColor: '#08090A' }}>
+      <section id="process" style={{ padding: '100px 0', background: 'transparent' }}>
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: '60px' }}>
             <SectionMarker label="HOW WE WORK" align="center" />
@@ -266,7 +266,7 @@ export const ProcessFlywheel: React.FC = () => {
       style={{
         position: 'relative',
         height: '520vh',
-        backgroundColor: '#08090A',
+        background: 'transparent',
         overflow: 'hidden',
       }}
     >
@@ -279,7 +279,7 @@ export const ProcessFlywheel: React.FC = () => {
           height: '100vh',
           width: '100%',
           overflow: 'hidden',
-          backgroundColor: '#08090A',
+          background: 'transparent',
         }}
       >
         {/* Ambient Dark Vignette & Dynamic Grid Pattern */}

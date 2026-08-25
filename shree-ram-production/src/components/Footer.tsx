@@ -18,7 +18,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   return (
     <footer
       style={{
-        backgroundColor: '#08090A',
+        background: 'transparent',
         color: '#FFFFFF',
         position: 'relative',
         borderTop: '1px solid rgba(255, 255, 255, 0.08)',

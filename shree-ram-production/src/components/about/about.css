@@ -14,7 +14,7 @@
   justify-content: center;
   padding: 160px 0 100px 0;
   overflow: hidden;
-  background-color: #08090A;
+  background: transparent;
 }
 
 .about-hero-glow {
@@ -49,7 +49,7 @@
 .who-we-are-section {
   position: relative;
   padding: 140px 0;
-  background-color: #08090A;
+  background: transparent;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
@@ -127,7 +127,7 @@
    -------------------------------------------------------------------------- */
 .capabilities-section {
   position: relative;
-  background-color: #08090A;
+  background: transparent;
 }
 
 .cap-cta {
@@ -445,7 +445,7 @@
 .team-section {
   position: relative;
   padding: 140px 0;
-  background-color: #08090A;
+  background: transparent;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   overflow: hidden;
 }
@@ -728,7 +728,7 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  background: #08090A;
+  background: transparent;
   z-index: 2;
 }
 
@@ -1048,7 +1048,7 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background-color: #08090A;
+  background: transparent;
   border: 3px solid rgba(255, 255, 255, 0.2);
   transition: border-color 0.4s ease, box-shadow 0.4s ease, background-color 0.4s ease;
 }
@@ -1115,7 +1115,7 @@
     top: 0;
     height: 100dvh;
     min-height: 560px;
-    background: #08090A;
+    background: transparent;
   }
   .approach-sticky-inner {
     padding-top: 72px;

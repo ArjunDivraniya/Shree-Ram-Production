@@ -131,8 +131,6 @@ export const AboutTeam: React.FC = () => {
       tl.to(validPillars, { y: 0, autoAlpha: 1, duration: 0.46, stagger: 0.07, ease: 'power3.out' }, 0.54);
       tl.to(validNames, { y: 0, autoAlpha: 1, duration: 0.62, stagger: 0.07, ease: 'power3.out' }, 0.60);
       tl.to(validRoles, { y: 0, autoAlpha: 1, duration: 0.5, stagger: 0.07, ease: 'power3.out' }, 0.66);
-
-      ScrollTrigger.refresh();
     }, root);
 
     return () => ctx.revert();

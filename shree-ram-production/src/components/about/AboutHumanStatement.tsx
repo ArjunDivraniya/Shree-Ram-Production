@@ -44,7 +44,7 @@ export const AboutHumanStatement: React.FC = () => {
       ref={sectionRef}
       style={{
         padding: '120px 0',
-        backgroundColor: '#08090A',
+        background: 'transparent',
         position: 'relative',
         borderTop: '1px solid rgba(255, 255, 255, 0.06)',
       }}

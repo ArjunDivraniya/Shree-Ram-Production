@@ -22,7 +22,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
   }, []);
 
   return (
-    <main id="about-page" style={{ backgroundColor: '#08090A' }}>
+    <main id="about-page" style={{ background: 'transparent' }}>
       {/* 1. ABOUT HERO */}
       <AboutHero />
 

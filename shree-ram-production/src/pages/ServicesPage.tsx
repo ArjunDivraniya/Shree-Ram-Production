@@ -16,7 +16,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate }) => {
   }, []);
 
   return (
-    <main id="services-page" style={{ backgroundColor: '#08090A' }}>
+    <main id="services-page" style={{ background: 'transparent' }}>
       <ServicesHero />
 
       <div className="services-pillars-wrapper">

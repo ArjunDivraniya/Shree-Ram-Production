@@ -6,6 +6,7 @@ import { ServicesPage } from './pages/ServicesPage';
 import { WorkPage } from './pages/WorkPage';
 import { AboutPage } from './pages/AboutPage';
 import { ContactPage } from './pages/ContactPage';
+import { GlobalBackground } from './components/GlobalBackground';
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -61,8 +62,10 @@ export function App() {
         width: '100%',
         minHeight: '100vh',
         backgroundColor: '#08090A',
+        isolation: 'isolate',
       }}
     >
+      <GlobalBackground />
       <BrowserRouter>
         <AppRoutes />
       </BrowserRouter>

@@ -15,7 +15,7 @@ export const ServicesShowcase: React.FC<ServicesShowcaseProps> = ({ onNavigate }
       id="services"
       style={{
         padding: '120px 0',
-        backgroundColor: '#08090A',
+        background: 'transparent',
         position: 'relative',
       }}
     >
@@ -198,21 +198,10 @@ export const ServicesShowcase: React.FC<ServicesShowcaseProps> = ({ onNavigate }
                           e.stopPropagation();
                           onNavigate('calculator');
                         }}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                          padding: '10px 20px',
-                          borderRadius: 'var(--radius-btn)',
-                          background: 'rgba(255, 106, 42, 0.15)',
-                          border: '1px solid rgba(255, 106, 42, 0.3)',
-                          color: 'var(--accent-orange)',
-                          fontSize: '0.85rem',
-                          fontWeight: 600,
-                        }}
+                        className="srp-btn srp-btn--primary srp-btn--sm"
                       >
                         <span>BOOK {service.title.toUpperCase()}</span>
-                        <ArrowUpRight size={16} />
+                        <span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={16} /></span>
                       </button>
                     </div>
                   )}

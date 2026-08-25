@@ -77,6 +77,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
   useEffect(() => {
     if (!isHomepage || isReducedMotion || !sectionRef.current) return;
 
+    let resetTimeout: ReturnType<typeof setTimeout> | undefined;
+
     const ctx = gsap.context(() => {
       // 1. Entrance animation when section enters viewport
       if (headingRef.current) {
@@ -146,6 +148,13 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
       }
 
       // 2. Seamless Infinite Loop Tweens
+      // Guard: rows must be mounted before creating tweens
+      if (!row1Ref.current || !row2Ref.current || !row3Ref.current) return;
+
+      gsap.set(row1Ref.current, { xPercent: -50 });
+      gsap.set(row2Ref.current, { xPercent: 0 });
+      gsap.set(row3Ref.current, { xPercent: -50 });
+
       // Row 01 moves RIGHT (xPercent: -50% to 0%)
       const tween1 = gsap.to(row1Ref.current, {
         xPercent: 0,
@@ -153,7 +162,6 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
         duration: 34,
         ease: 'none',
       });
-      gsap.set(row1Ref.current, { xPercent: -50 });
 
       // Row 02 moves LEFT (xPercent: 0% to -50%)
       const tween2 = gsap.to(row2Ref.current, {
@@ -162,7 +170,6 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
         duration: 38,
         ease: 'none',
       });
-      gsap.set(row2Ref.current, { xPercent: 0 });
 
       // Row 03 moves RIGHT (xPercent: -50% to 0%)
       const tween3 = gsap.to(row3Ref.current, {
@@ -171,16 +178,15 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
         duration: 32,
         ease: 'none',
       });
-      gsap.set(row3Ref.current, { xPercent: -50 });
 
       // 3. Scroll Velocity & Dynamic Skew Physics Engine
-      let resetTimeout: ReturnType<typeof setTimeout>;
-
-      ScrollTrigger.create({
+      const velocityST = ScrollTrigger.create({
         trigger: sectionRef.current,
         start: 'top bottom',
         end: 'bottom top',
         onUpdate: (self) => {
+          // Guard: targets may be null after unmount / route change — GSAP would throw "Cannot read properties of null (reading '_gsap')"
+          if (!row1Ref.current || !row2Ref.current || !row3Ref.current) return;
           const vel = self.getVelocity();
 
           // Speed Acceleration
@@ -196,16 +202,21 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
             overwrite: 'auto',
           });
 
-          gsap.to([row1Ref.current, row2Ref.current, row3Ref.current], {
-            skewX: targetSkew,
-            duration: 0.35,
-            ease: 'power2.out',
-            overwrite: 'auto',
-          });
+          const skewTargets = [row1Ref.current, row2Ref.current, row3Ref.current].filter(Boolean) as HTMLElement[];
+          if (skewTargets.length) {
+            gsap.to(skewTargets, {
+              skewX: targetSkew,
+              duration: 0.35,
+              ease: 'power2.out',
+              overwrite: 'auto',
+            });
+          }
 
           // Smoothly restore normal auto-speed and zero-skew when scroll pauses
           clearTimeout(resetTimeout);
           resetTimeout = setTimeout(() => {
+            // Guard again — timeout fires after unmount
+            if (!row1Ref.current || !row2Ref.current || !row3Ref.current) return;
             gsap.to([tween1, tween2, tween3], {
               timeScale: 1,
               duration: 1.2,
@@ -213,18 +224,26 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
               overwrite: 'auto',
             });
 
-            gsap.to([row1Ref.current, row2Ref.current, row3Ref.current], {
-              skewX: 0,
-              duration: 0.9,
-              ease: 'power3.out',
-              overwrite: 'auto',
-            });
+            const resetTargets = [row1Ref.current, row2Ref.current, row3Ref.current].filter(Boolean) as HTMLElement[];
+            if (resetTargets.length) {
+              gsap.to(resetTargets, {
+                skewX: 0,
+                duration: 0.9,
+                ease: 'power3.out',
+                overwrite: 'auto',
+              });
+            }
           }, 120);
         },
       });
+
+      void velocityST;
     }, sectionRef);
 
-    return () => ctx.revert();
+    return () => {
+      clearTimeout(resetTimeout);
+      ctx.revert();
+    };
   }, [isHomepage, isReducedMotion]);
 
   // Navigate to complete Work / Portfolio page
@@ -266,7 +285,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
         id="portfolio"
         style={{
           padding: '130px 0',
-          backgroundColor: '#08090A',
+          background: 'transparent',
           position: 'relative',
           overflow: 'hidden',
         }}
@@ -356,24 +375,10 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
 
             <button
               onClick={handleViewAllWork}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '12px 26px',
-                borderRadius: 'var(--radius-pill)',
-                backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                color: '#FFFFFF',
-                fontSize: '0.85rem',
-                fontWeight: 800,
-                letterSpacing: '0.06em',
-                transition: 'var(--transition-smooth)',
-                cursor: 'pointer',
-              }}
+              className="srp-btn srp-btn--secondary srp-btn--sm"
             >
               <span>VIEW ALL WORK</span>
-              <ArrowUpRight size={16} color="var(--accent-orange)" />
+              <span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={16} /></span>
             </button>
           </div>
         </div>
@@ -482,25 +487,10 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
         >
           <button
             onClick={handleViewAllWork}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '14px',
-              padding: '18px 42px',
-              borderRadius: 'var(--radius-pill)',
-              backgroundColor: 'rgba(255, 106, 42, 0.16)',
-              border: '1px solid rgba(255, 106, 42, 0.45)',
-              color: '#FFFFFF',
-              fontSize: '0.95rem',
-              fontWeight: 800,
-              letterSpacing: '0.08em',
-              transition: 'var(--transition-smooth)',
-              boxShadow: '0 0 35px rgba(255, 106, 42, 0.2)',
-              cursor: 'pointer',
-            }}
+            className="srp-btn srp-btn--primary"
           >
             <span>VIEW COMPLETE WORK GALLERY</span>
-            <ArrowUpRight size={18} color="var(--accent-orange)" />
+            <span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={18} /></span>
           </button>
         </div>
 
@@ -520,7 +510,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
       id="portfolio"
       style={{
         padding: '120px 0',
-        backgroundColor: '#08090A',
+        background: 'transparent',
         position: 'relative',
       }}
     >
@@ -544,16 +534,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
               </span>
               <button
                 onClick={clearServiceFilter}
-                style={{
-                  padding: '6px 14px',
-                  borderRadius: 'var(--radius-pill)',
-                  backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  color: 'var(--text-muted)',
-                  fontSize: '0.8rem',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                }}
+                className="srp-btn srp-btn--ghost srp-btn--sm"
               >
                 Clear filter
               </button>
@@ -596,17 +577,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                   <button
                     key={cat.id}
                     onClick={() => setActiveCategory(cat.id)}
-                    style={{
-                      padding: '8px 18px',
-                      borderRadius: 'var(--radius-pill)',
-                      backgroundColor: isActive ? 'var(--accent-orange)' : 'rgba(255, 255, 255, 0.06)',
-                      color: isActive ? '#FFFFFF' : 'var(--text-muted)',
-                      border: `1px solid ${isActive ? 'var(--accent-orange)' : 'rgba(255, 255, 255, 0.08)'}`,
-                      fontSize: '0.85rem',
-                      fontWeight: 600,
-                      transition: 'var(--transition-smooth)',
-                      cursor: 'pointer',
-                    }}
+                    className={isActive ? 'srp-btn srp-btn--primary srp-btn--sm' : 'srp-btn srp-btn--secondary srp-btn--sm'}
                   >
                     {cat.label}
                   </button>
@@ -1031,23 +1002,11 @@ const CaseStudyModal: React.FC<{ project: PortfolioItem; onClose: () => void }> 
           />
           <button
             onClick={onClose}
-            style={{
-              position: 'absolute',
-              top: '20px',
-              right: '20px',
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              backgroundColor: 'rgba(8, 9, 10, 0.8)',
-              color: '#FFFFFF',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              cursor: 'pointer',
-            }}
+            className="srp-btn srp-btn--icon"
+            aria-label="Close case study"
+            style={{ position: 'absolute', top: '20px', right: '20px', width: '40px', height: '40px' }}
           >
-            <X size={20} />
+            <X size={18} />
           </button>
         </div>
 

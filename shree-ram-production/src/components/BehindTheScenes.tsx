@@ -11,7 +11,7 @@ export const BehindTheScenes: React.FC = () => {
       id="behind-scenes"
       style={{
         padding: '120px 0',
-        backgroundColor: '#0E0F12',
+        background: 'transparent',
         position: 'relative',
       }}
     >
@@ -109,22 +109,10 @@ export const BehindTheScenes: React.FC = () => {
               <button
                 onClick={() => setIsPlayingReel(!isPlayingReel)}
                 data-cursor="PLAY"
-                style={{
-                  width: '80px',
-                  height: '80px',
-                  borderRadius: '50%',
-                  backgroundColor: 'var(--accent-orange)',
-                  color: '#FFFFFF',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 0 32px var(--accent-orange-glow)',
-                  transition: 'var(--transition-smooth)',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
-                onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+                className="srp-btn srp-btn--primary"
+                style={{ width: '80px', height: '80px', borderRadius: '50%', padding: 0 }}
               >
-                <Play size={32} fill="#FFFFFF" style={{ marginLeft: '4px' }} />
+                <Play size={32} fill="currentColor" style={{ marginLeft: '4px' }} />
               </button>
               <div style={{ marginTop: '14px', fontSize: '0.9rem', fontWeight: 600, color: '#FFFFFF' }}>
                 {isPlayingReel ? 'CLICK TO PAUSE PREVIEW' : 'WATCH THE CREATIVE SHOWREEL'}

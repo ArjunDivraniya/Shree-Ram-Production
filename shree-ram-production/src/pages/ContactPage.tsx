@@ -68,7 +68,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
   }, []);
 
   return (
-    <main id="contact-page" style={{ backgroundColor: '#08090A' }}>
+    <main id="contact-page" style={{ background: 'transparent' }}>
       {/* Spacer for fixed navbar */}
       <div style={{ height: '88px' }} aria-hidden="true" />
 

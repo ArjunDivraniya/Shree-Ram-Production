@@ -35,7 +35,7 @@ export const ProjectCalculator: React.FC<ProjectCalculatorProps> = ({ onSelectSe
       id="calculator"
       style={{
         padding: '120px 0',
-        backgroundColor: '#08090A',
+        background: 'transparent',
         position: 'relative',
       }}
     >
@@ -258,23 +258,11 @@ export const ProjectCalculator: React.FC<ProjectCalculatorProps> = ({ onSelectSe
               <button
                 disabled={selectedObjects.length === 0}
                 onClick={handleApplyToForm}
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '10px',
-                  padding: '16px',
-                  borderRadius: 'var(--radius-btn)',
-                  backgroundColor: selectedObjects.length === 0 ? 'rgba(255, 255, 255, 0.1)' : 'var(--accent-orange)',
-                  color: '#FFFFFF',
-                  fontSize: '1rem',
-                  fontWeight: 600,
-                  transition: 'var(--transition-smooth)',
-                }}
+                className={selectedObjects.length === 0 ? 'srp-btn srp-btn--secondary' : 'srp-btn srp-btn--primary'}
+                style={{ width: '100%' }}
               >
                 <span>REQUEST PROPOSAL WITH THIS BRIEF</span>
-                <ArrowRight size={18} />
+                <span className="srp-btn__arrow" aria-hidden="true"><ArrowRight size={18} /></span>
               </button>
 
             </div>

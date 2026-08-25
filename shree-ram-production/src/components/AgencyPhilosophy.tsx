@@ -840,47 +840,18 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px' }}>
             <button
               onClick={() => onNavigate('calculator')}
-              className="philosophy-cta-primary"
-              style={{
-                padding: '14px 24px',
-                borderRadius: '12px',
-                backgroundColor: '#FF6A2A',
-                color: '#08090A',
-                fontSize: '0.88rem',
-                fontWeight: 700,
-                border: 'none',
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                boxShadow: '0 6px 20px rgba(255, 106, 42, 0.35)',
-                transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-              }}
+              className="srp-btn srp-btn--primary"
             >
               <span>START WITH ONE SERVICE</span>
-              <ArrowUpRight size={17} />
+              <span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={17} /></span>
             </button>
 
             <button
               onClick={() => onNavigate('contact')}
-              className="philosophy-cta-secondary"
-              style={{
-                padding: '14px 24px',
-                borderRadius: '12px',
-                backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                color: '#FFFFFF',
-                fontSize: '0.88rem',
-                fontWeight: 600,
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-              }}
+              className="srp-btn srp-btn--secondary"
             >
               <span>TALK TO OUR TEAM</span>
-              <ArrowUpRight size={17} />
+              <span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={17} /></span>
             </button>
           </div>
         </div>
@@ -891,8 +862,7 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
       <style>{`
         .philosophy-section {
           isolation: isolate;
-          background:
-            linear-gradient(180deg, #060709 0%, #090b10 46%, #060709 100%);
+          background: transparent;
         }
 
         .philosophy-shell {

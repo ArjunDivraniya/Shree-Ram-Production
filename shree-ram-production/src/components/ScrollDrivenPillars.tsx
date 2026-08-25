@@ -174,7 +174,7 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
   // Reduced motion fallback view
   if (isReducedMotion) {
     return (
-      <section id="four-pillars-static" style={{ padding: '80px 0', backgroundColor: 'var(--bg-dark)' }}>
+      <section id="four-pillars-static" style={{ padding: '80px 0', background: 'transparent' }}>
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: '48px' }}>
             <SectionMarker label="THE FOUR PILLARS" align="center" />
@@ -221,7 +221,7 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
       style={{
         position: 'relative',
         height: '380vh',
-        backgroundColor: '#08090A',
+        background: 'transparent',
       }}
     >
       {/* Sticky Viewport Container */}
@@ -237,7 +237,7 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: '#08090A',
+          background: 'transparent',
         }}
       >
         {/* Ambient Subtle Grid Pattern Overlay */}
@@ -691,23 +691,10 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
           <button
             onClick={() => onNavigate('calculator')}
             data-cursor="CALCULATE"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '9px 20px',
-              borderRadius: 'var(--radius-pill)',
-              background: 'rgba(255, 106, 42, 0.15)',
-              border: '1px solid rgba(255, 106, 42, 0.35)',
-              color: 'var(--accent-orange)',
-              fontSize: '0.82rem',
-              fontWeight: 700,
-              letterSpacing: '0.04em',
-              transition: 'var(--transition-smooth)',
-            }}
+            className="srp-btn srp-btn--primary srp-btn--sm"
           >
             <span>BUILD CUSTOM PACKAGE</span>
-            <ArrowUpRight size={15} />
+            <span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={15} /></span>
           </button>
         </div>
       </div>

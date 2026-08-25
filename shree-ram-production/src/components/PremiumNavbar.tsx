@@ -264,46 +264,18 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
             <a
               href="/contact"
               onClick={(event) => handleLinkClick(event, 'contact', 'contact', '/contact')}
-              className="apple-glass-cta"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '5px',
-                padding: '8px 15px',
-                borderRadius: '11px',
-                background: '#FF6A2A',
-                color: '#08090A',
-                fontSize: '0.82rem',
-                fontWeight: 700,
-                letterSpacing: '0.01em',
-                textDecoration: 'none',
-                transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                boxShadow: '0 4px 16px rgba(255, 106, 42, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.4)',
-                whiteSpace: 'nowrap',
-              }}
+              className="srp-btn srp-btn--primary srp-btn--nav"
             >
               <span>Let's Talk</span>
-              <ArrowUpRight size={14} className="apple-cta-arrow" style={{ transition: 'transform 0.3s ease' }} />
+              <span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={14} /></span>
             </a>
 
             {/* Mobile Menu Toggle Button */}
             <button
               onClick={() => setMobileMenuOpen((curr) => !curr)}
               aria-label="Toggle Menu"
-              className="apple-mobile-toggle"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '36px',
-                height: '36px',
-                borderRadius: '10px',
-                background: 'rgba(255, 255, 255, 0.08)',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                color: '#FFFFFF',
-                cursor: 'pointer',
-                transition: 'all 0.25s ease',
-              }}
+              className="srp-btn srp-btn--icon apple-mobile-toggle"
+              style={{ width: '36px', height: '36px', borderRadius: '10px' }}
             >
               {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
@@ -367,24 +339,11 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
           <a
             href="/contact"
             onClick={(event) => handleLinkClick(event, 'contact', 'contact', '/contact')}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px',
-              padding: '15px',
-              borderRadius: '14px',
-              background: '#FF6A2A',
-              color: '#08090A',
-              fontSize: '0.95rem',
-              fontWeight: 700,
-              textDecoration: 'none',
-              boxShadow: '0 8px 24px rgba(255, 106, 42, 0.3)',
-              marginTop: '24px',
-            }}
+            className="srp-btn srp-btn--primary srp-btn--lg"
+            style={{ width: '100%', marginTop: '24px' }}
           >
             <span>Let's Talk</span>
-            <ArrowUpRight size={18} />
+            <span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={18} /></span>
           </a>
         </div>
       )}
@@ -414,15 +373,7 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
           border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .apple-glass-cta:hover {
-          background-color: #FF8249 !important;
-          transform: translateY(-1px) scale(1.02);
-          boxShadow: 0 8px 25px rgba(255, 106, 42, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.5) !important;
-        }
-
-        .apple-glass-cta:hover .apple-cta-arrow {
-          transform: translate(3px, -3px);
-        }
+        /* srp-btn glass system handles CTA hover — legacy apple-glass-cta kept for back-compat */
 
         /* Desktop Breakpoint (1024px+) */
         @media (min-width: 1024px) {

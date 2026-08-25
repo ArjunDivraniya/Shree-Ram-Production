@@ -107,7 +107,7 @@ export const AboutCapabilities: React.FC = () => {
       className="capabilities-section"
       style={{
         padding: '110px 0',
-        backgroundColor: '#08090A',
+        background: 'transparent',
         position: 'relative',
         borderTop: '1px solid rgba(255, 255, 255, 0.06)',
       }}
@@ -149,24 +149,10 @@ export const AboutCapabilities: React.FC = () => {
           <button
             ref={ctaRef}
             onClick={() => navigate('/services')}
-            className="cap-cta"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '14px 28px',
-              borderRadius: '999px',
-              background: '#FF6A2A',
-              color: '#08090A',
-              fontSize: '0.88rem',
-              fontWeight: 800,
-              letterSpacing: '0.04em',
-              border: 'none',
-              cursor: 'pointer',
-            }}
+            className="srp-btn srp-btn--primary"
           >
             <span>EXPLORE SERVICES</span>
-            <ArrowUpRight size={18} />
+            <span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={18} /></span>
           </button>
         </div>
 

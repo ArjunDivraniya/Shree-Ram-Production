@@ -91,7 +91,7 @@ export const AboutProcess: React.FC = () => {
       ref={sectionRef}
       style={{
         padding: '120px 0',
-        backgroundColor: '#08090A',
+        background: 'transparent',
         position: 'relative',
         borderTop: '1px solid rgba(255, 255, 255, 0.06)',
       }}
@@ -170,7 +170,7 @@ export const AboutProcess: React.FC = () => {
                     width: '18px',
                     height: '18px',
                     borderRadius: '50%',
-                    backgroundColor: '#08090A',
+                    background: 'transparent',
                     border: '3px solid #FF6A2A',
                     boxShadow: '0 0 10px rgba(255, 106, 42, 0.5)',
                   }}

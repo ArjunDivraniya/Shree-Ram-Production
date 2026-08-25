@@ -233,7 +233,7 @@ export const ContactEnquiry: React.FC = () => {
             <p className="srp-success__copy">A copy has been prepared for <strong style={{ color: '#FFFFFF' }}>{TEAM_EMAIL}</strong> and WhatsApp <strong style={{ color: '#FFFFFF' }}>{TEAM_WHATSAPP_DISPLAY}</strong> so we never miss your request. Whether you need one service or a complete growth solution, we’ll figure out the right way forward together. If it’s urgent, reach us via WhatsApp or Call.</p>
             <div className="srp-success__actions">
               <a href={CONTACT_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" className="srp-btn srp-btn--primary"><span>Message on WhatsApp</span><span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={16} /></span></a>
-              <a href={CONTACT_LINKS.email} className="srp-btn srp-btn--ghost"><span>Send an email</span><ArrowUpRight size={16} aria-hidden="true" /></a>
+              <a href={CONTACT_LINKS.email} className="srp-btn srp-btn--ghost"><span>Send an email</span><span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={16} /></span></a>
             </div>
             <div className="srp-arrow" aria-hidden="true" style={{ marginTop: 8 }}>
               <div ref={successArrowFillRef} className="srp-arrow__fill" /><div ref={successArrowHeadRef} className="srp-arrow__head"><ArrowUpRight size={14} style={{ transform: 'rotate(45deg)' }} /></div>

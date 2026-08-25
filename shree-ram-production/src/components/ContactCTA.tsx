@@ -179,7 +179,7 @@ export const ContactCTA: React.FC = () => {
       onMouseLeave={handleMouseLeave}
       style={{
         padding: '140px 0 120px 0',
-        backgroundColor: '#08090A',
+        background: 'transparent',
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -295,29 +295,14 @@ export const ContactCTA: React.FC = () => {
             </div>
           </div>
 
-          {/* Optional Primary CTA Button above contact links */}
+          {/* Primary CTA */}
           <button
             ref={primaryCtaRef}
             onClick={scrollToContactOptions}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '10px',
-              padding: '14px 28px',
-              borderRadius: 'var(--radius-pill)',
-              backgroundColor: 'var(--accent-orange)',
-              color: '#FFFFFF',
-              fontSize: '0.9rem',
-              fontWeight: 800,
-              letterSpacing: '0.06em',
-              border: 'none',
-              cursor: 'pointer',
-              boxShadow: '0 8px 30px var(--accent-orange-glow)',
-              transition: 'var(--transition-smooth)',
-            }}
+            className="srp-btn srp-btn--primary"
           >
             <span>START A CONVERSATION</span>
-            <ArrowUpRight size={18} />
+            <span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={18} /></span>
           </button>
 
         </div>

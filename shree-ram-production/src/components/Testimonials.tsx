@@ -201,7 +201,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
   // Static Fallback for Reduced Motion
   if (isReducedMotion) {
     return (
-      <section id="testimonials-static" style={{ padding: '80px 0', backgroundColor: '#070708' }}>
+      <section id="testimonials-static" style={{ padding: '80px 0', background: 'transparent' }}>
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: '40px' }}>
             <SectionMarker label="CLIENT TESTIMONIALS" align="center" />
@@ -238,7 +238,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
       style={{
         position: 'relative',
         height: '200vh',
-        backgroundColor: '#070708',
+        background: 'transparent',
         overflow: 'hidden',
       }}
     >
@@ -251,7 +251,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
           height: '100vh',
           width: '100%',
           overflow: 'hidden',
-          backgroundColor: '#070708',
+          background: 'transparent',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',

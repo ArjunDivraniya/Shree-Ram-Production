@@ -20,7 +20,7 @@ export const ServicesHero: React.FC = () => {
         textAlign: 'center',
         padding: '140px 24px 80px',
         position: 'relative',
-        backgroundColor: '#08090A',
+        background: 'transparent',
         overflow: 'hidden',
       }}
     >
