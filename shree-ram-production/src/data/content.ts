@@ -1,10 +1,13 @@
 import type { ServicePillar, PortfolioItem, ProcessStep, Testimonial, BehindTheScenesItem, CalculatorOption } from '../types';
+import { SERVICES_PILLARS } from './servicesData';
+
+const _heroServiceCount = SERVICES_PILLARS.reduce((acc, p) => acc + p.services.length, 0);
 
 export const HERO_STATS = [
-  { label: 'Client Value Generated', value: '₹400Cr+' },
-  { label: 'Global Campaigns Executed', value: '250+' },
-  { label: 'Avg ROI Growth', value: '4.8x' },
-  { label: 'Creative Excellence Rate', value: '99.4%' },
+  { label: 'CORE PILLARS', value: '04' },
+  { label: 'CREATIVE & DIGITAL SERVICES', value: `${_heroServiceCount}+` },
+  { label: 'FLEXIBLE GROWTH PARTNER', value: '01' },
+  { label: 'WAYS TO BUILD & GROW', value: '∞' },
 ];
 
 export const SERVICE_PILLARS: ServicePillar[] = [

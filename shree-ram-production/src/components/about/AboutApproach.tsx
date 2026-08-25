@@ -225,9 +225,9 @@ export const AboutApproach: React.FC = () => {
             }}
           />
           <div className="approach-sticky-inner container" style={{ maxWidth: '1100px' }}>
-            {/* Left meta / progress */}
-            <div className="approach-progress-col">
-              <div className="approach-progress-line">
+            {/* Left meta / progress — desktop timeline */}
+            <div className="approach-progress-col approach-timeline">
+              <div className="approach-progress-line approach-path">
                 <div
                   className="approach-progress-fill"
                   style={{ height: `${((activeIndex + 1) / STAGES.length) * 100}%` }}
