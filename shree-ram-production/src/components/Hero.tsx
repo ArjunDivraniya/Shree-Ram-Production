@@ -73,27 +73,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
       <div className="container" style={{ position: 'relative', zIndex: 10 }}>
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
 
-          {/* Studio Brand Pill */}
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '10px',
-              padding: '8px 18px',
-              borderRadius: 'var(--radius-pill)',
-              background: 'rgba(255, 106, 42, 0.08)',
-              border: '1px solid rgba(255, 106, 42, 0.25)',
-              color: 'var(--accent-orange)',
-              fontSize: '0.8rem',
-              fontWeight: 700,
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              marginBottom: '28px',
-            }}
-          >
-            <span className="badge-pill-dot" />
-            <span>SHREE RAM PRODUCTION — CREATIVE & GROWTH AGENCY</span>
-          </div>
+          {/* Studio intro — hero uses clean typography without section marker */}
 
           {/* Main Statement Heading */}
           <h1

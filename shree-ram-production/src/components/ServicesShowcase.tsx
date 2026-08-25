@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { SERVICE_PILLARS } from '../data/content';
 import { ArrowUpRight, CheckCircle2 } from 'lucide-react';
+import SectionMarker from './ui/SectionMarker';
 
 interface ServicesShowcaseProps {
   onNavigate: (sectionId: string) => void;
@@ -29,10 +30,7 @@ export const ServicesShowcase: React.FC<ServicesShowcaseProps> = ({ onNavigate }
             marginBottom: '64px',
           }}
         >
-          <div className="badge-pill">
-            <span className="badge-pill-dot" />
-            <span>FOUR CORE PILLARS</span>
-          </div>
+          <SectionMarker label="FOUR CORE PILLARS" align="left" />
 
           <h2
             style={{

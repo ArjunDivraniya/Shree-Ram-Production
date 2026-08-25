@@ -88,15 +88,7 @@ export const AboutHero: React.FC = () => {
 
       <div className="container" style={{ position: 'relative', zIndex: 5, maxWidth: '1100px', textAlign: 'center' }}>
         
-        {/* Small Label */}
-        <div
-          ref={labelRef}
-          className="badge-pill"
-          style={{ marginBottom: '28px', display: 'inline-flex' }}
-        >
-          <span className="badge-pill-dot" />
-          <span>ABOUT SHREE RAM PRODUCTION</span>
-        </div>
+        {/* Hero — clean typography without section marker per editorial system */}
 
         {/* Large Heading */}
         <h1

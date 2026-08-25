@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 import { useInView } from '../../hooks/useInView';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
+import SectionMarker from '../ui/SectionMarker';
 
 export const ServicesViewAllWork: React.FC = () => {
   const { ref, isInView } = useInView<HTMLElement>();
@@ -24,10 +25,7 @@ export const ServicesViewAllWork: React.FC = () => {
       >
         <div className="services-view-all-inner">
           <div>
-            <div className="badge-pill" style={{ marginBottom: '16px' }}>
-              <span className="badge-pill-dot" />
-              <span>Portfolio</span>
-            </div>
+            <SectionMarker label="PORTFOLIO" align="left" />
             <h2 id="view-all-work-heading" className="services-view-all-title">
               Explore our complete body of work
             </h2>

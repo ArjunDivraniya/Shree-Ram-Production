@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { PROCESS_STEPS } from '../data/content';
 import { CheckCircle2, Compass, Hammer, Rocket, TrendingUp, Sparkles } from 'lucide-react';
+import SectionMarker from './ui/SectionMarker';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -212,10 +213,7 @@ export const ProcessFlywheel: React.FC = () => {
       <section id="process" style={{ padding: '100px 0', backgroundColor: '#08090A' }}>
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-            <div className="badge-pill" style={{ marginBottom: '16px' }}>
-              <span className="badge-pill-dot" />
-              <span>HOW WE WORK</span>
-            </div>
+            <SectionMarker label="HOW WE WORK" align="center" />
             <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 800, textTransform: 'uppercase', color: '#FFF' }}>
               The Growth Flywheel Methodology
             </h2>
@@ -316,10 +314,7 @@ export const ProcessFlywheel: React.FC = () => {
             pointerEvents: 'none',
           }}
         >
-          <div className="badge-pill" style={{ marginBottom: '6px' }}>
-            <span className="badge-pill-dot" />
-            <span>HOW WE WORK</span>
-          </div>
+          <SectionMarker label="HOW WE WORK" align="center" />
 
           <h2
             style={{

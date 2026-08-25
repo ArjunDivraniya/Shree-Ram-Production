@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TESTIMONIALS } from '../data/content';
 import { Check, ArrowDown, Quote } from 'lucide-react';
+import SectionMarker from './ui/SectionMarker';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -203,10 +204,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
       <section id="testimonials-static" style={{ padding: '80px 0', backgroundColor: '#070708' }}>
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-            <div className="badge-pill" style={{ marginBottom: '16px' }}>
-              <span className="badge-pill-dot" />
-              <span>CLIENT TESTIMONIALS</span>
-            </div>
+            <SectionMarker label="CLIENT TESTIMONIALS" align="center" />
             <h2 style={{ fontFamily: "'Bebas Neue', 'Space Grotesk', sans-serif", fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', letterSpacing: '0.03em' }}>
               CLIENT'S <span style={{ color: '#FF6A2A' }}>TESTIMONIAL</span>
             </h2>

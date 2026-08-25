@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BEHIND_THE_SCENES } from '../data/content';
 import { Play, Film, Sliders, Volume2, Maximize2 } from 'lucide-react';
+import SectionMarker from './ui/SectionMarker';
 
 export const BehindTheScenes: React.FC = () => {
   const [isPlayingReel, setIsPlayingReel] = useState(false);
@@ -26,10 +27,7 @@ export const BehindTheScenes: React.FC = () => {
             marginBottom: '64px',
           }}
         >
-          <div className="badge-pill">
-            <span className="badge-pill-dot" />
-            <span>PRODUCTION CRAFT & INFRASTRUCTURE</span>
-          </div>
+          <SectionMarker label="PRODUCTION CRAFT & INFRASTRUCTURE" align="left" />
 
           <h2
             style={{

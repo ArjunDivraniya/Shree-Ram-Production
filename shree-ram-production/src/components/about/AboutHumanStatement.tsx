@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import SectionMarker from '../ui/SectionMarker';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -65,10 +66,7 @@ export const AboutHumanStatement: React.FC = () => {
             }}
           />
 
-          <div className="badge-pill" style={{ marginBottom: '24px', display: 'inline-flex' }}>
-            <span className="badge-pill-dot" />
-            <span>HUMAN COLLABORATION</span>
-          </div>
+          <SectionMarker label="HUMAN COLLABORATION" align="left" />
 
           <h2
             style={{

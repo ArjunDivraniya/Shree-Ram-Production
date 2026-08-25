@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import SectionMarker from '../ui/SectionMarker';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -88,10 +89,7 @@ export const AboutDifferentiation: React.FC = () => {
       <div className="container" style={{ maxWidth: '1140px', textAlign: 'center' }}>
         
         {/* Label */}
-        <div className="badge-pill" style={{ marginBottom: '28px', display: 'inline-flex' }}>
-          <span className="badge-pill-dot" />
-          <span>WHAT MAKES US DIFFERENT</span>
-        </div>
+        <SectionMarker label="WHAT MAKES US DIFFERENT" align="center" />
 
         {/* Large Typography Heading */}
         <h2

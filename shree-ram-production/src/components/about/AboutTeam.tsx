@@ -2,6 +2,7 @@ import React, { useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ArjunImg from '../../assets/out team/Arjun-2.png';
+import SectionMarker from '../ui/SectionMarker';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -56,7 +57,6 @@ const TEAM_MEMBERS: TeamMember[] = [
 
 export const AboutTeam: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const badgeRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const imagesRef = useRef<(HTMLImageElement | null)[]>([]);
@@ -91,7 +91,6 @@ export const AboutTeam: React.FC = () => {
       const validRoles = (roleRefs.current.filter(Boolean) as HTMLParagraphElement[]).length ? (roleRefs.current.filter(Boolean) as HTMLParagraphElement[]) : qRoles;
 
       const headingEl = headingRef.current || (root.querySelector('h2') as HTMLElement | null);
-      const badgeEl = badgeRef.current || (root.querySelector('.badge-pill') as HTMLElement | null);
 
       if (prefersReducedMotion) {
         gsap.set(validCards, { autoAlpha: 1, y: 0, scale: 1, clipPath: 'inset(0% 0% 0% 0%)', clearProps: 'clipPath,transform' });
@@ -99,7 +98,6 @@ export const AboutTeam: React.FC = () => {
         gsap.set(validGradients, { autoAlpha: 1 });
         gsap.set([...validAccents, ...validPillars, ...validNames, ...validRoles], { y: 0, autoAlpha: 1, clearProps: 'transform' });
         if (headingEl) gsap.set(headingEl, { y: 0, autoAlpha: 1, clipPath: 'inset(0% 0% 0% 0%)', clearProps: 'clipPath' });
-        if (badgeEl) gsap.set(badgeEl, { y: 0, autoAlpha: 1 });
         return;
       }
 
@@ -112,7 +110,6 @@ export const AboutTeam: React.FC = () => {
       gsap.set(validNames, { y: 36, autoAlpha: 0 });
       gsap.set(validRoles, { y: 28, autoAlpha: 0 });
       if (headingEl) gsap.set(headingEl, { y: 24, autoAlpha: 0, clipPath: 'inset(0 100% 0 0)' });
-      if (badgeEl) gsap.set(badgeEl, { y: 12, autoAlpha: 0 });
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -123,8 +120,7 @@ export const AboutTeam: React.FC = () => {
         },
       });
 
-      if (badgeEl) tl.to(badgeEl, { y: 0, autoAlpha: 1, duration: 0.45, ease: 'power3.out' }, 0);
-      if (headingEl) tl.to(headingEl, { y: 0, autoAlpha: 1, clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power3.out' }, 0.06);
+      if (headingEl) tl.to(headingEl, { y: 0, autoAlpha: 1, clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power3.out' }, 0);
 
       // Cards reveal with clip + scale — stagger keeps equal weight
       tl.to(validCards, { autoAlpha: 1, y: 0, scale: 1, clipPath: 'inset(0% 0% 0% 0%)', duration: 0.85, stagger: 0.1, ease: 'power3.out' }, 0.14);
@@ -145,11 +141,8 @@ export const AboutTeam: React.FC = () => {
   return (
     <section ref={sectionRef} className="team-section" aria-labelledby="team-heading">
       <div className="container" style={{ maxWidth: '1280px' }}>
-        <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 60px auto' }}>
-          <div ref={badgeRef} className="badge-pill" style={{ marginBottom: '20px', display: 'inline-flex' }}>
-            <span className="badge-pill-dot" />
-            <span>OUR TEAM</span>
-          </div>
+        <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 60px auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <SectionMarker number="03" label="THE PEOPLE BEHIND THE WORK" align="center" />
           <h2
             ref={headingRef}
             id="team-heading"

@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { PILLARS_DATA } from '../data/pillarsData';
 import { ArrowUpRight } from 'lucide-react';
+import SectionMarker from './ui/SectionMarker';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -176,10 +177,7 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
       <section id="four-pillars-static" style={{ padding: '80px 0', backgroundColor: 'var(--bg-dark)' }}>
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-            <div className="badge-pill" style={{ marginBottom: '16px' }}>
-              <span className="badge-pill-dot" />
-              <span>THE FOUR PILLARS</span>
-            </div>
+            <SectionMarker label="THE FOUR PILLARS" align="center" />
             <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 3.2rem)', fontWeight: 700 }}>
               End-to-End Creative & Digital Excellence
             </h2>

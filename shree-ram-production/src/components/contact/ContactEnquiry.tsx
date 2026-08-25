@@ -4,6 +4,7 @@ import { ArrowUpRight, Check, ArrowLeft, CheckCircle2, ChevronDown } from 'lucid
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { contactIntroAnimation, progressAnimation, serviceSelectionAnimation, successAnimation } from './animations';
 import { triggerDualTeamNotification, TEAM_EMAIL, TEAM_WHATSAPP_DISPLAY } from '../../utils/notify';
+import SectionMarker from '../ui/SectionMarker';
 import './contact.css';
 
 const SERVICE_OPTIONS = [
@@ -251,7 +252,7 @@ export const ContactEnquiry: React.FC = () => {
     <section ref={sectionRef} id="contact-enquiry" className="srp-contact srp-contact--page" aria-labelledby="contact-heading">
       <div className="srp-contact__ambient" aria-hidden="true"><div className="srp-contact__ambient--radial" /><div className="srp-contact__ambient--grid" /><div className="srp-contact__ambient--noise" /></div>
       <div className="container srp-contact__inner">
-        <div ref={eyebrowRef} className="srp-contact__eyebrow"><span className="badge-pill"><span className="badge-pill-dot" aria-hidden="true" /><span>Let’s work together</span></span></div>
+        <div ref={eyebrowRef} className="srp-contact__eyebrow" style={{ display: 'flex', justifyContent: 'center' }}><SectionMarker number="05" label="LET'S TALK" align="center" /></div>
         <h2 id="contact-heading" className="srp-contact__heading">
           <span ref={line1Ref} className="srp-contact__heading-line">Let’s create</span>
           <span ref={line2Ref} className="srp-contact__heading-line">something</span>

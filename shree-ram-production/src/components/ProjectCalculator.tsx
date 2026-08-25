@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { CALCULATOR_OPTIONS } from '../data/content';
 import { Check, ArrowRight, Sparkles } from 'lucide-react';
+import SectionMarker from './ui/SectionMarker';
 
 interface ProjectCalculatorProps {
   onSelectServices: (selectedTitles: string[]) => void;
@@ -50,10 +51,7 @@ export const ProjectCalculator: React.FC<ProjectCalculatorProps> = ({ onSelectSe
             marginBottom: '64px',
           }}
         >
-          <div className="badge-pill">
-            <span className="badge-pill-dot" />
-            <span>INTERACTIVE GROWTH SOLUTION BUILDER</span>
-          </div>
+          <SectionMarker label="INTERACTIVE GROWTH SOLUTION BUILDER" align="left" />
 
           <h2
             style={{

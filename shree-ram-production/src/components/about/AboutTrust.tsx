@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { MessageSquare, Users2, ShieldCheck, Target } from 'lucide-react';
+import SectionMarker from '../ui/SectionMarker';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -82,10 +83,7 @@ export const AboutTrust: React.FC = () => {
         
         {/* Section Header */}
         <div style={{ marginBottom: '56px' }}>
-          <div className="badge-pill" style={{ marginBottom: '20px' }}>
-            <span className="badge-pill-dot" />
-            <span>TRUST & WORKING STYLE</span>
-          </div>
+          <SectionMarker label="TRUST & WORKING STYLE" align="left" />
 
           <h2
             style={{

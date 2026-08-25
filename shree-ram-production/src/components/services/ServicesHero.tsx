@@ -50,17 +50,7 @@ export const ServicesHero: React.FC = () => {
           gap: '24px',
         }}
       >
-        <div
-          className="badge-pill"
-          style={{
-            opacity: reducedMotion || isInView ? 1 : 0,
-            transform: reducedMotion || isInView ? 'translateY(0)' : 'translateY(16px)',
-            transition: 'opacity 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo)',
-          }}
-        >
-          <span className="badge-pill-dot" />
-          <span>OUR SERVICES</span>
-        </div>
+        {/* Hero — clean typography without section marker */}
 
         <h1
           id="services-hero-heading"

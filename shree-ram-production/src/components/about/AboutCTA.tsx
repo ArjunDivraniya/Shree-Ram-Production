@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowUpRight, MessageSquare, Phone, Mail } from 'lucide-react';
+import SectionMarker from '../ui/SectionMarker';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -113,10 +114,7 @@ export const AboutCTA: React.FC = () => {
       <div className="container" style={{ position: 'relative', zIndex: 5, maxWidth: '1100px' }}>
         
         {/* Label */}
-        <div className="badge-pill" style={{ marginBottom: '24px', display: 'inline-flex' }}>
-          <span className="badge-pill-dot" />
-          <span>LET'S TALK</span>
-        </div>
+        <SectionMarker label="LET'S TALK" align="left" />
 
         {/* Main Heading */}
         <h2

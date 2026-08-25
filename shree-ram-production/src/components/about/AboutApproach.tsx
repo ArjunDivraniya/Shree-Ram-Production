@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import SectionMarker from '../ui/SectionMarker';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,202 +15,222 @@ const STAGES: Stage[] = [
   {
     num: '01',
     title: 'UNDERSTAND',
-    desc: 'Understand the business and objective.',
+    desc: 'Understand the business and objective. We listen, research and define what success looks like before anything else.',
   },
   {
     num: '02',
     title: 'CREATE',
-    desc: 'Develop the right creative direction.',
+    desc: 'Develop the right creative direction. Strategy and ideas shaped around your audience and goals.',
   },
   {
     num: '03',
     title: 'EXECUTE',
-    desc: 'Produce and build with attention to detail.',
+    desc: 'Produce and build with attention to detail. Cinematic craft meets disciplined delivery.',
   },
   {
     num: '04',
     title: 'GROW',
-    desc: 'Launch, learn and improve.',
+    desc: 'Launch, measure, optimize and scale. We stay to turn results into sustained growth.',
   },
 ];
 
 export const AboutApproach: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const pathLineRef = useRef<HTMLDivElement>(null);
-  const stageCardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isReducedMotion, setIsReducedMotion] = useState(false);
 
   useEffect(() => {
-    if (!sectionRef.current || !pathLineRef.current) return;
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setIsReducedMotion(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsReducedMotion(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  useEffect(() => {
+    if (isReducedMotion) return;
+    if (!wrapperRef.current || !stickyRef.current) return;
+
+    const cards = cardsRef.current.filter(Boolean) as HTMLDivElement[];
+    if (cards.length !== STAGES.length) return;
 
     const ctx = gsap.context(() => {
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (prefersReducedMotion) return;
+      // initial positions: first card in place, others below viewport
+      gsap.set(cards[0], { yPercent: 0, scale: 1, rotation: 0 });
+      gsap.set(cards.slice(1), { yPercent: 108, scale: 0.96, rotation: 0 });
 
-      // Draw connected line with scroll
-      gsap.fromTo(
-        pathLineRef.current,
-        { scaleY: 0, transformOrigin: 'top center' },
-        {
-          scaleY: 1,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 65%',
-            end: 'bottom 50%',
-            scrub: true,
+      // subtle offset stack hint: each card slightly offset when active (handled via timeline tweens)
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: wrapperRef.current,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 0.85,
+          pin: stickyRef.current,
+          anticipatePin: 1,
+          onUpdate: (self) => {
+            const p = self.progress;
+            let idx = 0;
+            if (p < 0.25) idx = 0;
+            else if (p < 0.52) idx = 1;
+            else if (p < 0.78) idx = 2;
+            else idx = 3;
+            setActiveIndex(idx);
           },
-        }
-      );
-
-      // Activate stages as scroll reaches them
-      const validCards = stageCardsRef.current.filter(Boolean);
-      validCards.forEach((card) => {
-        if (!card) return;
-        gsap.fromTo(
-          card,
-          { opacity: 0.3, y: 18 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.5,
-            scrollTrigger: {
-              trigger: card,
-              start: 'top 78%',
-              toggleActions: 'play none none reverse',
-              onEnter: () => card.classList.add('active'),
-              onLeaveBack: () => card.classList.remove('active'),
-            },
-          }
-        );
+        },
       });
-    }, sectionRef);
+
+      // Card 2 slides over Card 1
+      tl.to(cards[1], { yPercent: 0, scale: 1, duration: 1, ease: 'none' }, 0.2)
+        .to(cards[0], { scale: 0.94, yPercent: -4, duration: 1, ease: 'none' }, 0.2)
+        .to({}, { duration: 0.6 });
+
+      // Card 3 over Card 2
+      tl.to(cards[2], { yPercent: 0, scale: 1, duration: 1, ease: 'none' }, 1.8)
+        .to(cards[1], { scale: 0.94, yPercent: -4, duration: 1, ease: 'none' }, 1.8)
+        .to({}, { duration: 0.6 });
+
+      // Card 4 over Card 3
+      tl.to(cards[3], { yPercent: 0, scale: 1, duration: 1, ease: 'none' }, 3.4)
+        .to(cards[2], { scale: 0.94, yPercent: -4, duration: 1, ease: 'none' }, 3.4)
+        .to({}, { duration: 0.8 });
+    }, wrapperRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [isReducedMotion]);
+
+  // Reduced motion: static vertical stack without pin
+  if (isReducedMotion) {
+    return (
+      <section
+        ref={sectionRef}
+        style={{
+          padding: '130px 0',
+          backgroundColor: '#08090A',
+          position: 'relative',
+          borderTop: '1px solid rgba(255, 255, 255, 0.06)',
+        }}
+      >
+        <div className="container" style={{ maxWidth: '1100px' }}>
+          <div style={{ marginBottom: '56px' }}>
+            <SectionMarker label="OUR APPROACH" align="left" />
+            <h2
+              style={{
+                fontFamily: 'var(--font-heading)',
+                fontSize: 'clamp(2.2rem, 4.5vw, 3.8rem)',
+                fontWeight: 800,
+                lineHeight: 1.08,
+                letterSpacing: '-0.02em',
+                color: '#FFFFFF',
+                textTransform: 'uppercase',
+              }}
+            >
+              HOW WE APPROACH EVERY PROJECT
+            </h2>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', maxWidth: '760px' }}>
+            {STAGES.map((stage) => (
+              <div
+                key={stage.num}
+                className="approach-stack-card"
+                style={{ position: 'relative' } as React.CSSProperties}
+              >
+                <div className="approach-card-num">{stage.num}</div>
+                <h3 className="approach-card-title">{stage.title}</h3>
+                <p className="approach-card-desc">{stage.desc}</p>
+                <div className="approach-card-watermark">{stage.num}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section
       ref={sectionRef}
+      className="approach-section"
       style={{
-        padding: '130px 0',
         backgroundColor: '#08090A',
         position: 'relative',
         borderTop: '1px solid rgba(255, 255, 255, 0.06)',
       }}
     >
-      <div className="container" style={{ maxWidth: '1100px' }}>
-        
-        {/* Section Header */}
-        <div style={{ marginBottom: '64px' }}>
-          <div className="badge-pill" style={{ marginBottom: '20px', display: 'inline-flex' }}>
-            <span className="badge-pill-dot" />
-            <span>OUR APPROACH</span>
-          </div>
-
-          <h2
-            style={{
-              fontFamily: 'var(--font-heading)',
-              fontSize: 'clamp(2.2rem, 4.5vw, 3.8rem)',
-              fontWeight: 800,
-              lineHeight: 1.08,
-              letterSpacing: '-0.02em',
-              color: '#FFFFFF',
-              textTransform: 'uppercase',
-            }}
-          >
-            HOW WE APPROACH EVERY PROJECT
-          </h2>
+      {/* Header – scrolls normally */}
+      <div className="container" style={{ maxWidth: '1100px', paddingTop: '130px' }}>
+        <div className="approach-header">
+          <SectionMarker label="OUR APPROACH" align="left" />
+          <h2 className="approach-heading">HOW WE APPROACH EVERY PROJECT</h2>
+          <p className="approach-subtext">
+            A focused four-phase flow — designed to keep clarity high and quality consistent from brief to growth.
+          </p>
         </div>
-
-        {/* Timeline with Connected Scroll Line */}
-        <div style={{ position: 'relative', paddingLeft: '56px' }}>
-          
-          {/* Rail Line */}
-          <div
-            style={{
-              position: 'absolute',
-              top: '30px',
-              bottom: '30px',
-              left: '16px',
-              width: '2px',
-              backgroundColor: 'rgba(255, 255, 255, 0.08)',
-            }}
-          />
-
-          {/* Active Orange Scroll Line */}
-          <div
-            ref={pathLineRef}
-            style={{
-              position: 'absolute',
-              top: '30px',
-              bottom: '30px',
-              left: '16px',
-              width: '2px',
-              backgroundColor: '#FF6A2A',
-              boxShadow: '0 0 12px rgba(255, 106, 42, 0.8)',
-              willChange: 'transform',
-            }}
-          />
-
-          {/* 4 Connected Stages */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
-            {STAGES.map((stage, idx) => (
-              <div
-                key={stage.num}
-                ref={(el) => { stageCardsRef.current[idx] = el; }}
-                className="approach-stage-card"
-              >
-                {/* Node Bullet Dot */}
-                <div className="approach-node-dot" />
-
-                {/* Stage Number */}
-                <span
-                  style={{
-                    fontFamily: 'var(--font-heading)',
-                    fontSize: '1.35rem',
-                    fontWeight: 800,
-                    color: '#FF6A2A',
-                    letterSpacing: '0.04em',
-                  }}
-                >
-                  {stage.num}
-                </span>
-
-                {/* Stage Content */}
-                <div>
-                  <h3
-                    style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: 'clamp(1.5rem, 3vw, 2.2rem)',
-                      fontWeight: 800,
-                      color: '#FFFFFF',
-                      letterSpacing: '-0.01em',
-                      marginBottom: '8px',
-                      textTransform: 'uppercase',
-                    }}
-                  >
-                    {stage.title}
-                  </h3>
-
-                  <p
-                    style={{
-                      fontSize: 'clamp(1.05rem, 1.6vw, 1.25rem)',
-                      color: '#A5A5A8',
-                      lineHeight: 1.55,
-                      margin: 0,
-                      maxWidth: '620px',
-                    }}
-                  >
-                    {stage.desc}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-        </div>
-
       </div>
+
+      {/* Scroll-driven stacked pin area */}
+      <div ref={wrapperRef} className="approach-wrapper">
+        <div ref={stickyRef} className="approach-sticky">
+          <div className="approach-sticky-inner container" style={{ maxWidth: '1100px' }}>
+            {/* Left meta / progress */}
+            <div className="approach-progress-col">
+              <div className="approach-progress-line">
+                <div
+                  className="approach-progress-fill"
+                  style={{ height: `${((activeIndex + 1) / STAGES.length) * 100}%` }}
+                />
+              </div>
+              <div className="approach-progress-steps">
+                {STAGES.map((s, i) => (
+                  <div key={s.num} className={`approach-step ${i === activeIndex ? 'is-active' : ''} ${i < activeIndex ? 'is-past' : ''}`}>
+                    <span className="approach-step-dot" />
+                    <span className="approach-step-label">{s.num} — {s.title}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="approach-counter">
+                <span className="approach-counter-current">0{activeIndex + 1}</span>
+                <span className="approach-counter-sep">/</span>
+                <span className="approach-counter-total">04</span>
+              </div>
+            </div>
+
+            {/* Stacked cards */}
+            <div className="approach-stack">
+              {STAGES.map((stage, idx) => (
+                <div
+                  key={stage.num}
+                  ref={(el) => { cardsRef.current[idx] = el; }}
+                  className={`approach-stack-card ${idx === activeIndex ? 'is-active' : ''}`}
+                  style={{ zIndex: idx + 1 } as React.CSSProperties}
+                  aria-hidden={idx !== activeIndex ? undefined : undefined}
+                >
+                  {/* top accent */}
+                  <div className="approach-card-accent" />
+                  <div className="approach-card-top">
+                    <span className="approach-card-num">{stage.num}</span>
+                    <span className="approach-card-phase">PHASE {stage.num}</span>
+                  </div>
+                  <h3 className="approach-card-title">{stage.title}</h3>
+                  <p className="approach-card-desc">{stage.desc}</p>
+                  <div className="approach-card-watermark" aria-hidden="true">{stage.num}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* scroll hint */}
+          <div className="approach-scroll-hint" aria-hidden="true">
+            <span>SCROLL</span>
+            <span className="approach-scroll-line" />
+          </div>
+        </div>
+      </div>
+
+      {/* Spacer for mobile fallback after pin (hidden on desktop) */}
     </section>
   );
 };

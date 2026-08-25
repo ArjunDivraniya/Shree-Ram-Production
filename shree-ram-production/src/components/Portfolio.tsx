@@ -6,6 +6,7 @@ import type { PortfolioItem } from '../types';
 import { PORTFOLIO_ITEMS } from '../data/content';
 import { findServiceById } from '../utils/serviceUtils';
 import { ArrowUpRight, X, TrendingUp, Sparkles, Play, Flame } from 'lucide-react';
+import SectionMarker from './ui/SectionMarker';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -304,10 +305,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
           }}
         >
           <div>
-            <div className="badge-pill" style={{ marginBottom: '16px' }}>
-              <span className="badge-pill-dot" />
-              <span>CINEMATIC PORTFOLIO REEL</span>
-            </div>
+            <SectionMarker number="04" label="OUR WORK" align="left" />
             <h2
               style={{
                 fontSize: 'clamp(2.2rem, 4.5vw, 4.0rem)',
@@ -537,10 +535,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
             marginBottom: '48px',
           }}
         >
-          <div className="badge-pill">
-            <span className="badge-pill-dot" />
-            <span>{serviceMatch ? `${serviceMatch.service.name.toUpperCase()} WORK` : 'SELECTED WORK & CASE STUDIES'}</span>
-          </div>
+          <SectionMarker label={serviceMatch ? `${serviceMatch.service.name.toUpperCase()} WORK` : 'SELECTED WORK & CASE STUDIES'} align="left" />
 
           {serviceMatch && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>

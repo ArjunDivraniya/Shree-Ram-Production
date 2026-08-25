@@ -79,9 +79,6 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
           <div className="srp-contact-hero__grid" />
         </div>
         <div className="container srp-contact-hero__inner">
-          <div className="ch-eyebrow badge-pill" style={{ width: 'fit-content' }}>
-            <span className="badge-pill-dot" /><span>Contact Shree Ram Production</span>
-          </div>
           <h1 className="srp-contact-hero__title">
             <span className="ch-line">Let’s create</span>
             <span className="ch-line">something</span>

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import SectionMarker from '../ui/SectionMarker';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -76,10 +77,7 @@ export const AboutStory: React.FC = () => {
           {/* Left Column: Editorial Story Text */}
           <div ref={textColRef}>
             
-            <div className="badge-pill story-reveal" style={{ marginBottom: '20px' }}>
-              <span className="badge-pill-dot" />
-              <span>OUR STORY</span>
-            </div>
+            <SectionMarker label="OUR STORY" align="left" />
 
             <h2
               className="story-reveal"

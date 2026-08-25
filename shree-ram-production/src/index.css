@@ -206,6 +206,82 @@ video {
   animation: pulse-dot 2s infinite ease-in-out;
 }
 
+/* Editorial Section Marker — premium navigation marker, no border/bg/glow */
+.section-marker {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.section-marker--left {
+  align-items: flex-start;
+}
+
+.section-marker--center {
+  align-items: center;
+  text-align: center;
+}
+
+.section-marker__top {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-heading);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.section-marker__num {
+  color: var(--accent-orange);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.section-marker__divider {
+  color: var(--accent-orange);
+  font-weight: 400;
+  opacity: 0.95;
+}
+
+.section-marker__label {
+  color: #D6D6D8;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.section-marker__line {
+  height: 1px;
+  background: var(--accent-orange);
+  transform-origin: left center;
+  opacity: 0.9;
+}
+
+.section-marker--left .section-marker__line {
+  width: 72px;
+}
+
+.section-marker--center .section-marker__line {
+  width: 120px;
+}
+
+@media (max-width: 768px) {
+  .section-marker__top {
+    font-size: 0.70rem;
+    letter-spacing: 0.12em;
+    gap: 8px;
+  }
+  .section-marker--left .section-marker__line {
+    width: 56px;
+  }
+  .section-marker--center .section-marker__line {
+    width: 88px;
+  }
+}
+
 @keyframes pulse-dot {
 
   0%,

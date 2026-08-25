@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowUpRight } from 'lucide-react';
+import SectionMarker from '../ui/SectionMarker';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -38,7 +39,6 @@ const CAPABILITIES: Capability[] = [
 export const AboutCapabilities: React.FC = () => {
   const navigate = useNavigate();
   const sectionRef = useRef<HTMLElement>(null);
-  const labelRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const ctaRef = useRef<HTMLButtonElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -48,12 +48,11 @@ export const AboutCapabilities: React.FC = () => {
     if (!sectionRef.current) return;
     const ctx = gsap.context(() => {
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const label = labelRef.current;
       const heading = headingRef.current;
       const cta = ctaRef.current;
       const cards = cardsRef.current.filter(Boolean) as HTMLDivElement[];
       if (reduce) {
-        gsap.set([label, heading, cta].filter(Boolean), { opacity: 1, y: 0, clipPath: 'none' });
+        gsap.set([heading, cta].filter(Boolean), { opacity: 1, y: 0, clipPath: 'none' });
         gsap.set(cards, { opacity: 1, y: 0, scale: 1 });
         return;
       }
@@ -66,9 +65,7 @@ export const AboutCapabilities: React.FC = () => {
         },
       });
 
-      if (label) {
-        tl.fromTo(label, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' });
-      }
+
       if (heading) {
         const lines = heading.querySelectorAll<HTMLElement>('.cap-heading-line');
         if (lines.length) {
@@ -127,10 +124,7 @@ export const AboutCapabilities: React.FC = () => {
           }}
         >
           <div>
-            <div ref={labelRef} className="badge-pill" style={{ marginBottom: '16px', display: 'inline-flex' }}>
-              <span className="badge-pill-dot" />
-              <span>OUR CAPABILITIES</span>
-            </div>
+            <SectionMarker number="02" label="OUR CAPABILITIES" align="left" />
             <h2
               ref={headingRef}
               style={{

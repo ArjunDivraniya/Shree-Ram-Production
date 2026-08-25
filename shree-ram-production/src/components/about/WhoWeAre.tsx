@@ -2,12 +2,12 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import mainLogo from '../../assets/logo/shreeramproduction-logo.png';
+import SectionMarker from '../ui/SectionMarker';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export const WhoWeAre: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const labelRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const descRef = useRef<HTMLDivElement>(null);
   const wordsRef = useRef<(HTMLSpanElement | null)[]>([]);
@@ -29,15 +29,6 @@ export const WhoWeAre: React.FC = () => {
           toggleActions: 'play none none reverse',
         },
       });
-
-      // 1. Label reveal
-      if (labelRef.current) {
-        tl.fromTo(
-          labelRef.current,
-          { opacity: 0, y: 18 },
-          { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }
-        );
-      }
 
       // 2. Heading reveal
       if (headingRef.current) {
@@ -111,14 +102,7 @@ export const WhoWeAre: React.FC = () => {
           
           {/* Left Column: Strong Editorial Text */}
           <div style={{ maxWidth: '620px' }}>
-            <div
-              ref={labelRef}
-              className="badge-pill"
-              style={{ marginBottom: '28px', display: 'inline-flex' }}
-            >
-              <span className="badge-pill-dot" />
-              <span>WHO WE ARE</span>
-            </div>
+            <SectionMarker number="01" label="WHO WE ARE" align="left" />
 
             <h2
               ref={headingRef}
