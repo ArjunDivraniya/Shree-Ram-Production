@@ -39,11 +39,23 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
     }
     if (whyRef.current && !isReduced) {
       const ctx = gsap.context(() => {
-        gsap.set('.why-reveal', { opacity: 0, y: 18 });
-        ScrollTrigger.batch('.why-reveal', {
-          onEnter: batch => gsap.to(batch, { opacity: 1, y: 0, duration: 0.6, stagger: 0.08, ease: 'power3.out', overwrite: true }),
-          once: true,
-        });
+        const els = whyRef.current!.querySelectorAll<HTMLElement>('.why-reveal');
+        if (els.length) {
+          gsap.set(els, { opacity: 0, y: 18 });
+          gsap.to(els, {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            stagger: 0.08,
+            ease: 'power3.out',
+            overwrite: true,
+            scrollTrigger: {
+              trigger: whyRef.current,
+              start: 'top 82%',
+              once: true,
+            },
+          });
+        }
         const fill = whyRef.current?.querySelector('.srp-arrow__fill') as HTMLElement | null;
         const head = whyRef.current?.querySelector('.srp-arrow__head') as HTMLElement | null;
         if (fill) gsap.fromTo(fill, { scaleX: 0 }, { scaleX: 1, duration: 0.9, ease: 'power3.inOut', scrollTrigger: { trigger: whyRef.current, start: 'top 82%', once: true } });

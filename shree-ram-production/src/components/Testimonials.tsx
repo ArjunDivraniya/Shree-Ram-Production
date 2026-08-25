@@ -258,22 +258,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
           alignItems: 'center',
         }}
       >
-        {/* Subtle Background Radial Glow */}
-        <div
-          aria-hidden="true"
-          style={{
-            position: 'absolute',
-            top: '15%',
-            left: '25%',
-            width: '650px',
-            height: '650px',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(255, 106, 42, 0.05) 0%, transparent 70%)',
-            filter: 'blur(140px)',
-            pointerEvents: 'none',
-            zIndex: 1,
-          }}
-        />
+        {/* Continuous global canvas — per-section glow removed */}
 
         {/* Dynamic Circular Arc Line in Background */}
         <svg

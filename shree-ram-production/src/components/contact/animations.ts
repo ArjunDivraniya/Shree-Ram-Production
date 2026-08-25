@@ -89,9 +89,19 @@ export function revealOnScroll(section: HTMLElement, prefersReducedMotion: boole
     const revealEls = section.querySelectorAll<HTMLElement>('.reveal');
     if (revealEls.length) {
       gsap.set(revealEls, { opacity: 0, y: 18 });
-      ScrollTrigger.batch(revealEls, {
-        onEnter: batch => gsap.to(batch, { opacity: 1, y: 0, duration: 0.6, stagger: 0.08, ease: 'power3.out', overwrite: true }),
-        once: true,
+      const els = Array.from(revealEls);
+      gsap.to(els, {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        stagger: 0.08,
+        ease: 'power3.out',
+        overwrite: true,
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 82%',
+          once: true,
+        },
       });
     }
     const arrowFill = section.querySelector<HTMLElement>('.srp-arrow__fill');

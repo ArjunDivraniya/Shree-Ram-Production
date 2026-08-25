@@ -290,23 +290,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
           overflow: 'hidden',
         }}
       >
-        {/* Subtle Ambient Radial Lighting & Grid Vignette */}
-        <div
-          aria-hidden="true"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            backgroundImage: `
-              radial-gradient(circle at 15% 25%, rgba(255, 106, 42, 0.07) 0%, transparent 45%),
-              radial-gradient(circle at 85% 75%, rgba(255, 106, 42, 0.05) 0%, transparent 50%),
-              linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px)
-            `,
-            backgroundSize: '100% 100%, 100% 100%, 80px 80px, 80px 80px',
-            pointerEvents: 'none',
-            zIndex: 1,
-          }}
-        />
+        {/* Continuous global canvas — section uses transparent background */}
 
         {/* Section Header */}
         <div

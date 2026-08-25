@@ -240,56 +240,7 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
           background: 'transparent',
         }}
       >
-        {/* Ambient Subtle Grid Pattern Overlay */}
-        <div
-          aria-hidden="true"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            backgroundImage: `
-              linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px)
-            `,
-            backgroundSize: '80px 80px',
-            pointerEvents: 'none',
-            zIndex: 1,
-            opacity: 0.5,
-          }}
-        />
-
-        {/* Dynamic Top-Left Subtle Halo */}
-        <div
-          aria-hidden="true"
-          style={{
-            position: 'absolute',
-            top: '-15%',
-            left: '-5%',
-            width: '450px',
-            height: '450px',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(255, 106, 42, 0.06) 0%, transparent 70%)',
-            filter: 'blur(90px)',
-            pointerEvents: 'none',
-            zIndex: 1,
-          }}
-        />
-
-        {/* Dynamic Bottom-Right Subtle Halo */}
-        <div
-          aria-hidden="true"
-          style={{
-            position: 'absolute',
-            bottom: '-15%',
-            right: '-5%',
-            width: '500px',
-            height: '500px',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, transparent 70%)',
-            filter: 'blur(100px)',
-            pointerEvents: 'none',
-            zIndex: 1,
-          }}
-        />
+        {/* Continuous global canvas — per-section halos removed */}
 
         {/* ====================================================================
             THREE OVERSIZED LAYERED PARALLAX BACKGROUND TYPOGRAPHY LINES

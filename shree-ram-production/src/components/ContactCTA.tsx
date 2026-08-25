@@ -184,22 +184,7 @@ export const ContactCTA: React.FC = () => {
         overflow: 'hidden',
       }}
     >
-      {/* Subtle Radial Orange Ambient Light Behind Heading */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          top: '20%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '600px',
-          height: '400px',
-          background: 'radial-gradient(circle, rgba(255, 106, 42, 0.12) 0%, transparent 70%)',
-          pointerEvents: 'none',
-          zIndex: 1,
-          filter: 'blur(50px)',
-        }}
-      />
+      {/* Continuous global canvas — static radial removed, global provides ambient */}
 
       {/* Subtle Cursor Follower Light Halo */}
       <div

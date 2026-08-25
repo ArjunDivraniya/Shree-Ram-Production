@@ -14,7 +14,7 @@ interface PremiumHomepageProps {
 
 export const PremiumHomepage: React.FC<PremiumHomepageProps> = ({ onNavigate }) => {
   return (
-    <>
+    <div style={{ position: 'relative', background: 'transparent', isolation: 'isolate', overflow: 'clip' }}>
       <Hero onNavigate={onNavigate} />
       <BrandStatement onNavigate={onNavigate} />
       <ScrollDrivenPillars onNavigate={onNavigate} />
@@ -23,7 +23,7 @@ export const PremiumHomepage: React.FC<PremiumHomepageProps> = ({ onNavigate }) 
       <Testimonials onNavigate={onNavigate} />
       <ContactCTA />
       <Footer onNavigate={onNavigate} />
-    </>
+    </div>
   );
 };
 

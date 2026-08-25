@@ -270,49 +270,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
         background: 'transparent',
       }}
     >
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: 'url("https://images.unsplash.com/photo-1579165466741-7f35e4755660?auto=format&fit=crop&w=2000&q=80")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          opacity: 0.22,
-          filter: 'contrast(1.1) brightness(0.8)',
-          zIndex: 1,
-        }}
-      />
-
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'radial-gradient(circle at 50% 40%, rgba(255, 106, 42, 0.08) 0%, rgba(8, 9, 10, 0.7) 50%, rgba(8, 9, 10, 0.98) 100%)',
-          zIndex: 2,
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: '240px',
-          background: 'linear-gradient(to top, #08090A 0%, transparent 100%)',
-          zIndex: 3,
-        }}
-      />
-
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: `radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px)`,
-          backgroundSize: '48px 48px',
-          zIndex: 2,
-          pointerEvents: 'none',
-        }}
-      />
+      {/* GlobalBackground provides continuous base; hero keeps transparent for uniform home */}
 
       <div className="container" style={{ position: 'relative', zIndex: 10, maxWidth: '1280px' }}>
         <div className="hero-layout">

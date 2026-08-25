@@ -282,22 +282,7 @@ export const ProcessFlywheel: React.FC = () => {
           background: 'transparent',
         }}
       >
-        {/* Ambient Dark Vignette & Dynamic Grid Pattern */}
-        <div
-          aria-hidden="true"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            backgroundImage: `
-              radial-gradient(circle at 50% 30%, rgba(255, 106, 42, 0.07) 0%, transparent 65%),
-              linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px)
-            `,
-            backgroundSize: '100% 100%, 80px 80px, 80px 80px',
-            pointerEvents: 'none',
-            zIndex: 1,
-          }}
-        />
+        {/* Continuous global canvas — section grid removed */}
 
         {/* Section Header (Absolute Top Bar) */}
         <div
@@ -310,7 +295,7 @@ export const ProcessFlywheel: React.FC = () => {
             paddingTop: '18px',
             paddingBottom: '12px',
             textAlign: 'center',
-            background: 'linear-gradient(to bottom, rgba(8,9,10,0.96) 60%, transparent 100%)',
+            background: 'transparent',
             pointerEvents: 'none',
           }}
         >

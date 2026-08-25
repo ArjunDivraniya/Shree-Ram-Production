@@ -5,9 +5,10 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 /**
- * GlobalBackground — ONE continuous cinematic environment
- * Base #08090A + 2-3 soft orange ambient lights (20-40s drift) + grain + grid + vignette
- * Fixed behind all content, respects prefers-reduced-motion
+ * GlobalBackground — ONE premium continuous cinematic canvas for ENTIRE site (especially Home)
+ * Deep black #08090A + warm charcoal/brown undertones + extremely subtle orange/amber ambient
+ * + soft radial atmospheric lighting + vignette + grain + micro-grid. Fixed behind content.
+ * Respects prefers-reduced-motion, lightweight CSS gradients only.
  */
 export const GlobalBackground: React.FC = () => {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -101,16 +102,33 @@ export const GlobalBackground: React.FC = () => {
         backgroundColor: '#08090A',
       }}
     >
-      {/* Base — already via bg color, keep for layering */}
+      {/* Base — premium deep black with warm charcoal depth */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
-          backgroundColor: '#08090A',
+          background: `
+            radial-gradient(1200px 700px at 50% -8%, rgba(48, 36, 26, 0.18) 0%, transparent 62%),
+            radial-gradient(900px 600px at 18% 22%, rgba(38, 30, 22, 0.10) 0%, transparent 58%),
+            linear-gradient(180deg, #08090A 0%, #08090A 40%, #07080A 78%, #08090A 100%)
+          `,
         }}
       />
 
-      {/* Ambient Light Layer — 2-3 large radial orange lights */}
+      {/* Warm charcoal/brown undertone — gives expensive cinematic depth without orange */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: `
+            radial-gradient(1100px 520px at 50% 28%, rgba(58, 42, 28, 0.10) 0%, transparent 64%),
+            radial-gradient(700px 480px at 82% 62%, rgba(45, 34, 24, 0.06) 0%, transparent 66%)
+          `,
+          opacity: 0.9,
+        }}
+      />
+
+      {/* Ambient Light Layer — extremely subtle orange/amber atmospheric glow */}
       <div
         ref={light1Ref}
         className="srp-global-bg__light srp-global-bg__light--1"

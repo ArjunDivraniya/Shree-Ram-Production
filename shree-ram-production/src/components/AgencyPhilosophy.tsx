@@ -187,29 +187,7 @@ export const AgencyPhilosophy: React.FC<AgencyPhilosophyProps> = ({ onNavigate }
         overflow: 'visible',
       }}
     >
-      <div aria-hidden="true" className="philosophy-bg-shell" />
-      <div aria-hidden="true" className="philosophy-bg-spotlight" />
-      <div aria-hidden="true" className="philosophy-bg-ambient philosophy-bg-ambient-left" />
-      <div aria-hidden="true" className="philosophy-bg-ambient philosophy-bg-ambient-right" />
-      <div aria-hidden="true" className="philosophy-bg-grid" />
-      <div aria-hidden="true" className="philosophy-bg-vignette" />
-
-      {/* Subtle Ambient Radial Glow in Background */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          top: '30%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '800px',
-          height: '500px',
-          borderRadius: '50%',
-          background: 'radial-gradient(ellipse, rgba(255, 106, 42, 0.07) 0%, transparent 70%)',
-          filter: 'blur(130px)',
-          pointerEvents: 'none',
-        }}
-      />
+      {/* Home uses one continuous GlobalBackground — per-section gradients removed for seamless canvas */}
 
       <div
         className="container philosophy-shell"
