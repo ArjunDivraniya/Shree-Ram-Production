@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { SEO } from '../components/SEO';
 import { ServicesHero } from '../components/services/ServicesHero';
 import { PillarShowcase } from '../components/services/PillarShowcase';
 import { ServicesCTA } from '../components/services/ServicesCTA';
@@ -11,12 +12,61 @@ interface ServicesPageProps {
 }
 
 export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate }) => {
-  useEffect(() => {
-    document.title = 'Our Services — Shree Ram Production | Content, Branding, Growth & Digital';
-  }, []);
+  const servicesJsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: 'https://www.shreeramproduction.in/',
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Services',
+          item: 'https://www.shreeramproduction.in/services',
+        },
+      ],
+    },
+    ...SERVICES_PILLARS.map((pillar) => ({
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      name: pillar.title,
+      description: pillar.description,
+      provider: {
+        '@type': 'ProfessionalService',
+        name: 'Shree Ram Production',
+        url: 'https://www.shreeramproduction.in/',
+      },
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: pillar.title,
+        itemListElement: pillar.services.map((s) => ({
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: s.name,
+            description: s.description,
+          },
+        })),
+      },
+    })),
+  ];
 
   return (
     <main id="services-page" style={{ background: 'transparent' }}>
+      <SEO
+        title="Digital Marketing, Branding & Creative Production Services | Shree Ram Production"
+        description="Explore 30+ creative, marketing & tech capabilities by Shree Ram Production. From cinematic video shoots & brand identity to SEO, Meta Ads & React web apps."
+        canonical="https://www.shreeramproduction.in/services"
+        ogTitle="Digital Marketing, Branding & Creative Production Services | Shree Ram Production"
+        ogDescription="Discover our 4 core pillars: Content & Production, Brand & Creative, Marketing & Growth, and Technology & Digital. Scalable agency solutions built for growth."
+        ogImage="https://www.shreeramproduction.in/shreeramproduction-logo.png"
+        jsonLd={servicesJsonLd}
+      />
       <ServicesHero />
 
       <div className="services-pillars-wrapper">
@@ -35,4 +85,5 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate }) => {
     </main>
   );
 };
+
 

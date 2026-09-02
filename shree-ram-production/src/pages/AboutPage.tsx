@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { SEO } from '../components/SEO';
 import { AboutHero } from '../components/about/AboutHero';
 import { WhoWeAre } from '../components/about/WhoWeAre';
 import { AboutPhilosophy } from '../components/about/AboutPhilosophy';
@@ -17,12 +18,55 @@ interface AboutPageProps {
 
 export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
   useEffect(() => {
-    document.title = 'About Us — Shree Ram Production | Cinematic Agency';
     window.scrollTo(0, 0);
   }, []);
 
+  const aboutJsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: 'https://www.shreeramproduction.in/',
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'About Us',
+          item: 'https://www.shreeramproduction.in/about',
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'AboutPage',
+      name: 'About Shree Ram Production',
+      url: 'https://www.shreeramproduction.in/about',
+      description:
+        'Learn about Shree Ram Production’s story, agency philosophy, team, capabilities, and strategic approach.',
+      publisher: {
+        '@type': 'Organization',
+        name: 'Shree Ram Production',
+        logo: 'https://www.shreeramproduction.in/shreeramproduction-logo.png',
+      },
+    },
+  ];
+
   return (
     <main id="about-page" style={{ background: 'transparent' }}>
+      <SEO
+        title="About Shree Ram Production | Creative Growth & Production Agency"
+        description="Learn about Shree Ram Production's story, creative philosophy, team, and approach. We bridge cinematic storytelling and data-driven performance."
+        canonical="https://www.shreeramproduction.in/about"
+        ogTitle="About Shree Ram Production | Creative Growth & Production Agency"
+        ogDescription="Discover who we are, our core beliefs, team, and approach. We combine cinematic production craft with strategic business growth."
+        ogImage="https://www.shreeramproduction.in/shreeramproduction-logo.png"
+        jsonLd={aboutJsonLd}
+      />
+
       {/* 1. ABOUT HERO */}
       <AboutHero />
 
@@ -57,3 +101,4 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
 };
 
 export default AboutPage;
+

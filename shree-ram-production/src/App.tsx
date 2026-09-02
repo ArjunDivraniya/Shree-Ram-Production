@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { PremiumNavbar } from './components/PremiumNavbar';
 import { PremiumHomepage } from './components/PremiumHomepage';
 import { ServicesPage } from './pages/ServicesPage';
@@ -56,21 +57,24 @@ function AppRoutes() {
 
 export function App() {
   return (
-    <div
-      style={{
-        position: 'relative',
-        width: '100%',
-        minHeight: '100vh',
-        backgroundColor: '#08090A',
-        isolation: 'isolate',
-      }}
-    >
-      <GlobalBackground />
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
-    </div>
+    <HelmetProvider>
+      <div
+        style={{
+          position: 'relative',
+          width: '100%',
+          minHeight: '100vh',
+          backgroundColor: '#08090A',
+          isolation: 'isolate',
+        }}
+      >
+        <GlobalBackground />
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </div>
+    </HelmetProvider>
   );
 }
 
 export default App;
+

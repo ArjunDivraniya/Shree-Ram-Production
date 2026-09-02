@@ -534,18 +534,33 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
               gap: '24px',
             }}
           >
-            <h2
-              style={{
-                fontSize: 'clamp(2.2rem, 4.5vw, 3.8rem)',
-                fontWeight: 800,
-                lineHeight: 1.05,
-                textTransform: 'uppercase',
-                maxWidth: '680px',
-                color: '#FFFFFF',
-              }}
-            >
-              Crafted For High-Growth Brands
-            </h2>
+            {isHomepage ? (
+              <h2
+                style={{
+                  fontSize: 'clamp(2.2rem, 4.5vw, 3.8rem)',
+                  fontWeight: 800,
+                  lineHeight: 1.05,
+                  textTransform: 'uppercase',
+                  maxWidth: '680px',
+                  color: '#FFFFFF',
+                }}
+              >
+                Crafted For High-Growth Brands
+              </h2>
+            ) : (
+              <h1
+                style={{
+                  fontSize: 'clamp(2.2rem, 4.5vw, 3.8rem)',
+                  fontWeight: 800,
+                  lineHeight: 1.05,
+                  textTransform: 'uppercase',
+                  maxWidth: '680px',
+                  color: '#FFFFFF',
+                }}
+              >
+                Crafted For High-Growth Brands
+              </h1>
+            )}
 
             {/* Filter Pills */}
             <div
@@ -612,7 +627,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
               >
                 <img
                   src={project.thumbnail}
-                  alt={project.title}
+                  alt={`${project.title} — Shree Ram Production ${project.categoryLabel || 'Case Study'}`}
                   loading="lazy"
                   style={{
                     width: '100%',
@@ -776,7 +791,7 @@ const FloatingCinematicCard: React.FC<{
       >
         <img
           src={project.thumbnail}
-          alt={project.title}
+          alt={`${project.title} — Shree Ram Production ${project.categoryLabel || 'Case Study'}`}
           loading="lazy"
           style={{
             width: '100%',
@@ -980,7 +995,7 @@ const CaseStudyModal: React.FC<{ project: PortfolioItem; onClose: () => void }> 
         <div style={{ position: 'relative', aspectRatio: '21/9', overflow: 'hidden' }}>
           <img
             src={project.thumbnail}
-            alt={project.title}
+            alt={`${project.title} — Shree Ram Production ${project.categoryLabel || 'Case Study'}`}
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
           <button

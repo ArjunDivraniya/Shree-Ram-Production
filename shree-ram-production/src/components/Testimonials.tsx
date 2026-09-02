@@ -307,7 +307,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
           }}
         >
           {/* Word 1: "CLIENT'S" (Animates to TOP-LEFT corner on scroll) */}
-          <h1
+          <h2
             ref={word1Ref}
             className="testimonial-split-word1"
             style={{
@@ -324,7 +324,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
             }}
           >
             CLIENT'S
-          </h1>
+          </h2>
 
           {/* Orange Accent Glowing Dot sitting right above TESTIMONIAL */}
           <div
@@ -343,7 +343,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
           />
 
           {/* Word 2: "TESTIMONIAL" (Animates to BOTTOM-RIGHT corner on scroll) */}
-          <h1
+          <h2
             ref={word2Ref}
             className="testimonial-split-word2"
             style={{
@@ -360,7 +360,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
             }}
           >
             TESTIMONIAL
-          </h1>
+          </h2>
         </div>
 
         {/* Initial Hero Preview Author Name */}

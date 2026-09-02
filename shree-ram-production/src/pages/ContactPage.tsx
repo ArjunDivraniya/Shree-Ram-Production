@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowUpRight } from 'lucide-react';
+import { SEO } from '../components/SEO';
 import { ContactCTA } from '../components/ContactCTA';
 import { ContactEnquiry } from '../components/contact/ContactEnquiry';
 import { Footer } from '../components/Footer';
@@ -20,9 +21,49 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
   const [hoveredCap, setHoveredCap] = useState<number | null>(null);
 
   useEffect(() => {
-    document.title = 'Contact — Shree Ram Production | Let’s Create Something That Grows';
     window.scrollTo(0, 0);
   }, []);
+
+  const contactJsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: 'https://www.shreeramproduction.in/',
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Contact Us',
+          item: 'https://www.shreeramproduction.in/contact',
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'ContactPage',
+      name: 'Contact Shree Ram Production',
+      url: 'https://www.shreeramproduction.in/contact',
+      description:
+        'Contact page for Shree Ram Production for project inquiries, custom growth plans, video production, branding, and web development.',
+      mainEntity: {
+        '@type': 'ProfessionalService',
+        name: 'Shree Ram Production',
+        url: 'https://www.shreeramproduction.in/',
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Ahmedabad',
+          addressRegion: 'Gujarat',
+          addressCountry: 'IN',
+        },
+      },
+    },
+  ];
+
 
   useEffect(() => {
     const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -90,8 +131,18 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
 
   return (
     <main id="contact-page" style={{ background: 'transparent' }}>
+      <SEO
+        title="Contact Shree Ram Production | Start Your Growth & Production Project"
+        description="Get in touch with Shree Ram Production in Ahmedabad, India. Start a project, request a customized growth plan, or message us directly via WhatsApp/Email."
+        canonical="https://www.shreeramproduction.in/contact"
+        ogTitle="Contact Shree Ram Production | Start Your Growth & Production Project"
+        ogDescription="Tell us what you're working on. Connect with our creative, brand, marketing & tech teams in Ahmedabad, India for custom project inquiries."
+        ogImage="https://www.shreeramproduction.in/shreeramproduction-logo.png"
+        jsonLd={contactJsonLd}
+      />
       {/* Spacer for fixed navbar */}
       <div style={{ height: '88px' }} aria-hidden="true" />
+
 
       {/* 1. CONTACT HERO */}
       <section ref={heroRef} className="srp-contact-hero">
