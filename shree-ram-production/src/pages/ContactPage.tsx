@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowUpRight } from 'lucide-react';
@@ -17,6 +17,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
   const heroRef = useRef<HTMLElement>(null);
   const whyRef = useRef<HTMLElement>(null);
   const finalRef = useRef<HTMLElement>(null);
+  const [hoveredCap, setHoveredCap] = useState<number | null>(null);
 
   useEffect(() => {
     document.title = 'Contact — Shree Ram Production | Let’s Create Something That Grows';
@@ -39,27 +40,35 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
     }
     if (whyRef.current && !isReduced) {
       const ctx = gsap.context(() => {
-        const els = whyRef.current!.querySelectorAll<HTMLElement>('.why-reveal');
-        if (els.length) {
-          gsap.set(els, { opacity: 0, y: 18 });
-          gsap.to(els, {
-            opacity: 1,
-            y: 0,
-            duration: 0.6,
-            stagger: 0.08,
-            ease: 'power3.out',
-            overwrite: true,
-            scrollTrigger: {
-              trigger: whyRef.current,
-              start: 'top 82%',
-              once: true,
-            },
-          });
-        }
-        const fill = whyRef.current?.querySelector('.srp-arrow__fill') as HTMLElement | null;
-        const head = whyRef.current?.querySelector('.srp-arrow__head') as HTMLElement | null;
-        if (fill) gsap.fromTo(fill, { scaleX: 0 }, { scaleX: 1, duration: 0.9, ease: 'power3.inOut', scrollTrigger: { trigger: whyRef.current, start: 'top 82%', once: true } });
-        if (head) gsap.fromTo(head, { opacity: 0, x: -10 }, { opacity: 1, x: 0, duration: 0.45, ease: 'power2.out', scrollTrigger: { trigger: whyRef.current, start: 'top 82%', once: true } });
+        const leftEls = whyRef.current!.querySelectorAll<HTMLElement>('.why-left-reveal');
+        const nodes = whyRef.current!.querySelectorAll<HTMLElement>('.cap-node');
+        const lines = whyRef.current!.querySelectorAll<HTMLElement>('.cap-line');
+        const progFill = whyRef.current!.querySelector<HTMLElement>('.prog-line__fill');
+        const progSteps = whyRef.current!.querySelectorAll<HTMLElement>('.prog-step');
+        const arrowFill = whyRef.current!.querySelector<HTMLElement>('.why-arrow-fill');
+        const arrowHead = whyRef.current!.querySelector<HTMLElement>('.why-arrow-head');
+        gsap.set(leftEls, { opacity: 0, y: 16 });
+        gsap.set(nodes, { opacity: 0, y: 18, scale: 0.97 });
+        gsap.set(lines, { scaleX: 0, opacity: 0.6, transformOrigin: 'left center' });
+        gsap.set(progSteps, { opacity: 0, y: 10 });
+        if (progFill) gsap.set(progFill, { scaleX: 0, transformOrigin: 'left center' });
+        if (arrowFill) gsap.set(arrowFill, { scaleX: 0 });
+        if (arrowHead) gsap.set(arrowHead, { opacity: 0, x: -8 });
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: whyRef.current,
+            start: 'top 85%',
+            once: true,
+          },
+        });
+        tl.to(leftEls, { opacity: 1, y: 0, duration: 0.55, stagger: 0.06, ease: 'power3.out' }, 0);
+        tl.to(nodes, { opacity: 1, y: 0, scale: 1, duration: 0.52, stagger: 0.07, ease: 'power3.out' }, 0.12);
+        tl.to(lines, { scaleX: 1, opacity: 1, duration: 0.6, stagger: 0.05, ease: 'power2.out' }, 0.18);
+        if (arrowFill) tl.to(arrowFill, { scaleX: 1, duration: 0.7, ease: 'power3.inOut' }, 0.22);
+        if (arrowHead) tl.to(arrowHead, { opacity: 1, x: 0, duration: 0.38, ease: 'power2.out' }, 0.4);
+        if (progFill) tl.to(progFill, { scaleX: 1, duration: 0.75, ease: 'power3.inOut' }, 0.35);
+        tl.to(progSteps, { opacity: 1, y: 0, duration: 0.45, stagger: 0.08, ease: 'power3.out' }, 0.48);
       }, whyRef);
       ctxs.push(ctx);
     }
@@ -112,31 +121,88 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
       {/* 3. PREMIUM ENQUIRY — detailed project form */}
       <ContactEnquiry />
 
-      {/* 4. WHY WORK WITH US */}
-      <section ref={whyRef} className="srp-why">
+      {/* 4. WHY WORK WITH US — Premium Connected Capability System */}
+      <section ref={whyRef} className="srp-why srp-why--premium">
         <div className="container srp-why__inner">
-          <div className="srp-why__grid">
-            <div>
-              <div className="srp-why__eyebrow why-reveal">Why Work With Us</div>
-              <h2 className="srp-why__title why-reveal">One partner.<br />Multiple capabilities.</h2>
-              <p className="srp-why__text why-reveal">
+          {/* Top: editorial heading + connected system */}
+          <div className="why-premium__grid">
+            {/* Left — editorial cinematic */}
+            <div className="why-premium__left">
+              <div className="srp-why__eyebrow why-left-reveal">Why Work With Us</div>
+              <h2 className="why-premium__title why-left-reveal">
+                <span className="why-premium__title-line">One partner.</span>
+                <span className="why-premium__title-line why-premium__title-line--accent">Multiple capabilities.</span>
+              </h2>
+              <p className="why-premium__text why-left-reveal">
                 Work with Shree Ram Production for a single service, combine what you need, or let us run the complete growth engine. One team, one timeline, one accountable partner.
               </p>
-              <div className="srp-arrow" aria-hidden="true" style={{ marginBottom: 24 }}>
-                <div className="srp-arrow__fill" /><div className="srp-arrow__head"><ArrowUpRight size={14} style={{ transform: 'rotate(45deg)' }} /></div>
+              <div className="srp-arrow why-left-reveal" aria-hidden="true" style={{ marginTop: 4 }}>
+                <div className="srp-arrow__fill why-arrow-fill" />
+                <div className="srp-arrow__head why-arrow-head"><ArrowUpRight size={14} style={{ transform: 'rotate(45deg)' }} /></div>
               </div>
             </div>
-            <div>
-              <div className="srp-why__cards">
-                <div className="srp-why__card why-reveal"><h4>Content & Production</h4><p>Cinematic commercials, brand films, photography, social content and post.</p></div>
-                <div className="srp-why__card why-reveal"><h4>Brand & Creative</h4><p>Identity, strategy, art direction and systems that make you unmistakable.</p></div>
-                <div className="srp-why__card why-reveal"><h4>Marketing & Growth</h4><p>Performance, organic and lifecycle — creative that turns into revenue.</p></div>
-                <div className="srp-why__card why-reveal"><h4>Technology & Digital</h4><p>Ultra-fast, high-converting web apps, e-commerce and AI tools.</p></div>
+
+            {/* Right — connected capability system */}
+            <div className="why-premium__system">
+              <div className={`cap-system ${hoveredCap !== null ? 'cap-system--has-hover' : ''}`}>
+                {/* Connection lines — thin system */}
+                <div className="cap-system__lines" aria-hidden="true">
+                  <div className={`cap-line cap-line--h cap-line--top ${hoveredCap === 0 || hoveredCap === 1 ? 'is-lit' : ''}`} />
+                  <div className={`cap-line cap-line--h cap-line--bottom ${hoveredCap === 2 || hoveredCap === 3 ? 'is-lit' : ''}`} />
+                  <div className={`cap-line cap-line--v cap-line--left ${hoveredCap === 0 || hoveredCap === 2 ? 'is-lit' : ''}`} />
+                  <div className={`cap-line cap-line--v cap-line--right ${hoveredCap === 1 || hoveredCap === 3 ? 'is-lit' : ''}`} />
+                  <div className={`cap-line cap-line--center-h ${hoveredCap !== null ? 'is-lit' : ''}`} />
+                  <div className={`cap-line cap-line--center-v ${hoveredCap !== null ? 'is-lit' : ''}`} />
+                  <div className="cap-system__center-dot" />
+                </div>
+
+                {[
+                  { num: '01', title: 'Content & Production', desc: 'Cinematic commercials, brand films, photography, social content and post.' },
+                  { num: '02', title: 'Brand & Creative', desc: 'Identity, strategy, art direction and systems that make you unmistakable.' },
+                  { num: '03', title: 'Marketing & Growth', desc: 'Performance, organic and lifecycle — creative that turns into revenue.' },
+                  { num: '04', title: 'Technology & Digital', desc: 'Ultra-fast, high-converting web apps, e-commerce and AI tools.' },
+                ].map((cap, idx) => (
+                  <div
+                    key={cap.num}
+                    className={`cap-node ${hoveredCap === idx ? 'is-hovered' : ''} ${hoveredCap !== null && hoveredCap !== idx ? 'is-dimmed' : ''}`}
+                    onMouseEnter={() => setHoveredCap(idx)}
+                    onMouseLeave={() => setHoveredCap(null)}
+                    onFocus={() => setHoveredCap(idx)}
+                    onBlur={() => setHoveredCap(null)}
+                    tabIndex={0}
+                  >
+                    <div className="cap-node__num">{cap.num}</div>
+                    <h3 className="cap-node__title">{cap.title}</h3>
+                    <p className="cap-node__desc">{cap.desc}</p>
+                    <span className="cap-node__accent" aria-hidden="true" />
+                  </div>
+                ))}
               </div>
-              <div className="srp-why__modes">
-                <div className="srp-why__mode why-reveal"><strong>One service</strong><span>Start where you need us.</span></div>
-                <div className="srp-why__mode why-reveal"><strong>Multiple services</strong><span>Combine capabilities painlessly.</span></div>
-                <div className="srp-why__mode why-reveal"><strong>Complete growth solution</strong><span>End-to-end growth partner.</span></div>
+            </div>
+          </div>
+
+          {/* Bottom — visual progression ONE → MULTIPLE → COMPLETE */}
+          <div className="cap-progression">
+            <div className="cap-progression__track" aria-hidden="true">
+              <div className="prog-line__fill cap-line" />
+              <span className="prog-dot prog-dot--1" />
+              <span className="prog-dot prog-dot--2" />
+              <span className="prog-dot prog-dot--3" />
+            </div>
+            <div className="cap-progression__steps">
+              <div className="prog-step">
+                <div className="prog-step__label">One service</div>
+                <div className="prog-step__desc">Start where you need us.</div>
+              </div>
+              <div className="prog-step prog-step--arrow" aria-hidden="true">→</div>
+              <div className="prog-step">
+                <div className="prog-step__label">Multiple services</div>
+                <div className="prog-step__desc">Combine capabilities seamlessly.</div>
+              </div>
+              <div className="prog-step prog-step--arrow" aria-hidden="true">→</div>
+              <div className="prog-step">
+                <div className="prog-step__label">Complete growth</div>
+                <div className="prog-step__desc">End-to-end growth partner.</div>
               </div>
             </div>
           </div>
