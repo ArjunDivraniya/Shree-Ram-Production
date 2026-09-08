@@ -96,7 +96,7 @@ export const GlobalBackground: React.FC = () => {
       style={{
         position: 'fixed',
         inset: 0,
-        zIndex: -10,
+        zIndex: 0,
         pointerEvents: 'none',
         overflow: 'hidden',
         backgroundColor: '#08090A',

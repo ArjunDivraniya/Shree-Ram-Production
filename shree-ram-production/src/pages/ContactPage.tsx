@@ -20,10 +20,6 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
   const finalRef = useRef<HTMLElement>(null);
   const [hoveredCap, setHoveredCap] = useState<number | null>(null);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   const contactJsonLd = [
     {
       '@context': 'https://schema.org',

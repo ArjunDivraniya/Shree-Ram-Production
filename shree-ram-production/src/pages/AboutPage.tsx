@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { SEO } from '../components/SEO';
 import { AboutHero } from '../components/about/AboutHero';
 import { WhoWeAre } from '../components/about/WhoWeAre';
@@ -17,9 +17,6 @@ interface AboutPageProps {
 }
 
 export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
 
   const aboutJsonLd = [
     {
