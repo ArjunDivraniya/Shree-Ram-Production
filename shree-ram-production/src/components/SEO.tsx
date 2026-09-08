@@ -10,6 +10,7 @@ export interface SEOProps {
   ogImage?: string;
   ogType?: 'website' | 'article' | 'profile';
   ogSiteName?: string;
+  ogLocale?: string;
   twitterCard?: 'summary' | 'summary_large_image' | 'app' | 'player';
   twitterTitle?: string;
   twitterDescription?: string;
@@ -21,6 +22,7 @@ export interface SEOProps {
 const DEFAULT_SITE_NAME = 'Shree Ram Production';
 const DEFAULT_DOMAIN = 'https://www.shreeramproduction.in';
 const DEFAULT_OG_IMAGE = 'https://www.shreeramproduction.in/shreeramproduction-logo.png';
+const DEFAULT_OG_LOCALE = 'en_IN';
 
 export const SEO: React.FC<SEOProps> = ({
   title,
@@ -31,6 +33,7 @@ export const SEO: React.FC<SEOProps> = ({
   ogImage = DEFAULT_OG_IMAGE,
   ogType = 'website',
   ogSiteName = DEFAULT_SITE_NAME,
+  ogLocale = DEFAULT_OG_LOCALE,
   twitterCard = 'summary_large_image',
   twitterTitle,
   twitterDescription,
@@ -68,6 +71,7 @@ export const SEO: React.FC<SEOProps> = ({
 
       {/* Open Graph / Facebook */}
       <meta property="og:site_name" content={ogSiteName} />
+      <meta property="og:locale" content={ogLocale} />
       <meta property="og:type" content={ogType} />
       <meta property="og:title" content={finalOgTitle} />
       <meta property="og:description" content={finalOgDescription} />

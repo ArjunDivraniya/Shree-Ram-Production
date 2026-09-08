@@ -59,11 +59,11 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate }) => {
   return (
     <main id="services-page" style={{ background: 'transparent' }}>
       <SEO
-        title="Digital Marketing, Branding & Creative Production Services | Shree Ram Production"
-        description="Explore 30+ creative, marketing & tech capabilities by Shree Ram Production. From cinematic video shoots & brand identity to SEO, Meta Ads & React web apps."
+        title="Services — Content, Brand, Marketing & Technology | Shree Ram Production"
+        description="Explore services across Content & Production, Brand & Creative, Marketing & Growth and Technology & Digital — video, branding, SEO, Meta Ads, Google Ads and web apps."
         canonical="https://www.shreeramproduction.in/services"
-        ogTitle="Digital Marketing, Branding & Creative Production Services | Shree Ram Production"
-        ogDescription="Discover our 4 core pillars: Content & Production, Brand & Creative, Marketing & Growth, and Technology & Digital. Scalable agency solutions built for growth."
+        ogTitle="Services — Content, Brand, Marketing & Technology | Shree Ram Production"
+        ogDescription="Discover 4 core pillars — Content & Production, Brand & Creative, Marketing & Growth and Technology & Digital. From video, branding and SEO to Meta Ads and web apps."
         ogImage="https://www.shreeramproduction.in/shreeramproduction-logo.png"
         jsonLd={servicesJsonLd}
       />

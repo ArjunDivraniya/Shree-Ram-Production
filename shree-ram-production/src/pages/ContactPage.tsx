@@ -128,11 +128,11 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
   return (
     <main id="contact-page" style={{ background: 'transparent' }}>
       <SEO
-        title="Contact Shree Ram Production | Start Your Growth & Production Project"
-        description="Get in touch with Shree Ram Production in Ahmedabad, India. Start a project, request a customized growth plan, or message us directly via WhatsApp/Email."
+        title="Contact Shree Ram Production — Start Your Project"
+        description="Contact Shree Ram Production in Ahmedabad, India. Start a project, request a growth plan or talk to our creative, marketing & technology teams today."
         canonical="https://www.shreeramproduction.in/contact"
-        ogTitle="Contact Shree Ram Production | Start Your Growth & Production Project"
-        ogDescription="Tell us what you're working on. Connect with our creative, brand, marketing & tech teams in Ahmedabad, India for custom project inquiries."
+        ogTitle="Contact Shree Ram Production — Start Your Project"
+        ogDescription="Contact Shree Ram Production in Ahmedabad, India. Start a project or talk to our creative, marketing & technology teams today."
         ogImage="https://www.shreeramproduction.in/shreeramproduction-logo.png"
         jsonLd={contactJsonLd}
       />

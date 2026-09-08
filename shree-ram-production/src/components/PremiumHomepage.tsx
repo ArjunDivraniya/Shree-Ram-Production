@@ -23,19 +23,38 @@ export const PremiumHomepage: React.FC<PremiumHomepageProps> = ({ onNavigate }) 
       logo: 'https://www.shreeramproduction.in/shreeramproduction-logo.png',
       image: 'https://www.shreeramproduction.in/shreeramproduction-logo.png',
       description:
-        'Shree Ram Production is a premier Creative Production & Digital Growth Agency combining cinematic commercial production, brand identity systems, performance marketing, and custom web applications.',
+        'Shree Ram Production — creative production, marketing & growth agency in Ahmedabad helping brands build visibility, acquire customers and scale digitally through Content & Production, Brand & Creative, Marketing & Growth and Technology & Digital services.',
       address: {
         '@type': 'PostalAddress',
         addressLocality: 'Ahmedabad',
         addressRegion: 'Gujarat',
         addressCountry: 'IN',
       },
+      areaServed: {
+        '@type': 'Country',
+        name: 'India',
+      },
       knowsAbout: [
-        'Commercial Video Production',
-        'Brand Identity & Strategy',
-        'Performance Marketing & Paid Ads',
-        'Search Engine Optimization (SEO)',
-        'Custom Web & App Engineering',
+        'Content & Production',
+        'Brand & Creative',
+        'Marketing & Growth',
+        'Technology & Digital',
+        'Photography',
+        'Videography',
+        'Brand Identity',
+        'Logo Design',
+        'Graphic Design',
+        'Social Media Marketing',
+        'SEO',
+        'Meta Ads',
+        'Google Ads',
+        'Content Marketing',
+        'Lead Generation',
+        'Influencer Marketing',
+        'Website Development',
+        'E-commerce',
+        'Web Applications',
+        'UI/UX Design',
       ],
     },
     {
@@ -43,17 +62,18 @@ export const PremiumHomepage: React.FC<PremiumHomepageProps> = ({ onNavigate }) 
       '@type': 'WebSite',
       name: 'Shree Ram Production',
       url: 'https://www.shreeramproduction.in/',
+      inLanguage: 'en-IN',
     },
   ];
 
   return (
     <div style={{ position: 'relative', background: 'transparent', isolation: 'isolate', overflow: 'clip' }}>
       <SEO
-        title="Creative Production & Digital Growth Agency | Shree Ram Production"
-        description="Shree Ram Production is a full-service creative production & growth agency in Ahmedabad, India. We combine cinematic production, brand strategy, paid marketing & tech."
+        title="Shree Ram Production — Creative Production, Marketing & Growth Agency"
+        description="Shree Ram Production — creative production, marketing & growth agency in Ahmedabad helping brands build visibility, acquire customers and scale digitally."
         canonical="https://www.shreeramproduction.in/"
-        ogTitle="Creative Production & Digital Growth Agency | Shree Ram Production"
-        ogDescription="High-end commercial films, brand architecture, paid acquisition & high-performance web development. Everything your business needs to grow."
+        ogTitle="Shree Ram Production — Creative Production, Marketing & Growth Agency"
+        ogDescription="Shree Ram Production — creative production, marketing & growth agency in Ahmedabad helping brands build visibility, acquire customers and scale digitally."
         ogImage="https://www.shreeramproduction.in/shreeramproduction-logo.png"
         jsonLd={homepageJsonLd}
       />
