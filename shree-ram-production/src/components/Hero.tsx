@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowUpRight, ArrowDown } from 'lucide-react';
 import { gsap } from 'gsap';
 import { HERO_STATS, PORTFOLIO_ITEMS } from '../data/content';
@@ -10,7 +11,8 @@ interface HeroProps {
 // Use 6 real projects for infinite orbit 01→06 → 01
 const ORBIT_PROJECTS = PORTFOLIO_ITEMS.slice(0, 6);
 
-export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
+export const Hero: React.FC<HeroProps> = ({ onNavigate: _onNavigate }) => {
+  void _onNavigate;
   const [displayValues, setDisplayValues] = useState<string[]>(() =>
     HERO_STATS.map((s) => s.value)
   );
@@ -321,23 +323,33 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
                 marginBottom: '56px',
               }}
             >
-              <button
-                onClick={() => onNavigate('contact')}
+              <Link
+                to="/contact"
                 data-cursor="START ↗"
                 className="srp-btn srp-btn--primary srp-btn--lg"
+                aria-label="Start a project — Contact Shree Ram Production"
               >
                 <span>START A PROJECT</span>
                 <span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={20} /></span>
-              </button>
+              </Link>
 
-              <button
-                onClick={() => onNavigate('portfolio')}
+              <Link
+                to="/work"
                 data-cursor="WORK ↓"
                 className="srp-btn srp-btn--secondary srp-btn--lg"
+                aria-label="Explore our work — portfolio and case studies"
               >
                 <span>EXPLORE OUR WORK</span>
                 <span className="srp-btn__arrow" aria-hidden="true"><ArrowDown size={18} /></span>
-              </button>
+              </Link>
+              <Link
+                to="/services"
+                className="srp-btn srp-btn--ghost srp-btn--lg"
+                aria-label="Explore services — content, brand, marketing and technology"
+              >
+                <span>EXPLORE SERVICES</span>
+                <span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={18} /></span>
+              </Link>
             </div>
 
             <div

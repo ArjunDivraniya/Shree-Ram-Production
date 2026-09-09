@@ -90,8 +90,9 @@ export const AboutHero: React.FC = () => {
         
         {/* Hero — clean typography without section marker per editorial system */}
 
-        {/* Large Heading */}
+        {/* Large Heading — descriptive About H1 for sitelinks hierarchy */}
         <h1
+          id="about-heading"
           style={{
             fontFamily: 'var(--font-heading)',
             fontSize: 'clamp(2.8rem, 6.5vw, 5.8rem)',
@@ -103,6 +104,9 @@ export const AboutHero: React.FC = () => {
             marginBottom: '32px',
           }}
         >
+          <span style={{ display: 'block', fontSize: 'clamp(0.9rem, 1.8vw, 1.1rem)', letterSpacing: '0.14em', color: 'var(--accent-orange)', fontWeight: 700, marginBottom: '12px' }}>
+            ABOUT SHREE RAM PRODUCTION
+          </span>
           <div ref={line1Ref} style={{ willChange: 'transform, opacity, clip-path' }}>
             WE CREATE.
           </div>

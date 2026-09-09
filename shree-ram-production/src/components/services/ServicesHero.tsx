@@ -65,7 +65,7 @@ export const ServicesHero: React.FC = () => {
             transition: 'opacity 0.7s var(--ease-out-expo) 0.08s, transform 0.7s var(--ease-out-expo) 0.08s',
           }}
         >
-          Everything you need to build, grow and scale your business.
+          Services — Everything you need to build, grow and scale your business.
         </h1>
 
         <p

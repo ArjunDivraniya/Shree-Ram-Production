@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowUpRight } from 'lucide-react';
@@ -147,7 +148,10 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
           <div className="srp-contact-hero__grid" />
         </div>
         <div className="container srp-contact-hero__inner">
-          <h1 className="srp-contact-hero__title">
+          <h1 id="contact-hero-heading" className="srp-contact-hero__title">
+            <span style={{ display: 'block', fontSize: '0.85rem', letterSpacing: '0.14em', color: 'var(--accent-orange)', fontWeight: 700, marginBottom: '12px', fontFamily: 'var(--font-heading)', textTransform: 'uppercase' }}>
+              CONTACT SHREE RAM PRODUCTION
+            </span>
             <span className="ch-line">Let’s create</span>
             <span className="ch-line">something</span>
             <span className="ch-line srp-contact-hero__title--accent">that grows.</span>
@@ -277,6 +281,13 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
         </div>
       </section>
 
+      <nav aria-label="Related pages" style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '32px 24px 48px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexWrap: 'wrap', gap: '16px', fontSize: '0.9rem' }}>
+        <Link to="/services" style={{ color: 'var(--accent-orange)', textDecoration: 'none', fontWeight: 600 }}>Explore Services — Content, Brand, Marketing & Technology</Link>
+        <span style={{ color: 'var(--text-dim)' }} aria-hidden="true">•</span>
+        <Link to="/work" style={{ color: 'var(--accent-orange)', textDecoration: 'none', fontWeight: 600 }}>View Work — projects & case studies</Link>
+        <span style={{ color: 'var(--text-dim)' }} aria-hidden="true">•</span>
+        <Link to="/about" style={{ color: 'var(--accent-orange)', textDecoration: 'none', fontWeight: 600 }}>About — company information</Link>
+      </nav>
       <Footer onNavigate={onNavigate} />
     </main>
   );

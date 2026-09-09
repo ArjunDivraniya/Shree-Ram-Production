@@ -34,8 +34,8 @@ export const ServicesViewAllWork: React.FC = () => {
               platforms — filter by capability to find work relevant to your project.
             </p>
           </div>
-          <Link to="/work" className="srp-btn srp-btn--secondary">
-            <span>View All Work</span>
+          <Link to="/work" className="srp-btn srp-btn--secondary" aria-label="View all work — portfolio and case studies">
+            <span>View All Work — portfolio & case studies</span>
             <span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={18} /></span>
           </Link>
         </div>
@@ -72,7 +72,7 @@ export const ServicesCTA: React.FC = () => {
             Start with one service, combine capabilities, or let us build the complete solution
             around your business.
           </p>
-          <Link to="/#contact" className="srp-btn srp-btn--primary srp-btn--lg">
+          <Link to="/contact" className="srp-btn srp-btn--primary srp-btn--lg" aria-label="Contact Shree Ram Production — start your project">
             <span>LET&apos;S TALK</span>
             <span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={18} /></span>
           </Link>

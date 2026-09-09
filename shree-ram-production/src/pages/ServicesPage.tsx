@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { SEO } from '../components/SEO';
 import { ServicesHero } from '../components/services/ServicesHero';
 import { PillarShowcase } from '../components/services/PillarShowcase';
@@ -81,6 +82,15 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate }) => {
       </div>
 
       <ServicesCTA />
+
+      {/* Cross-linking for sitelinks hierarchy — natural links to related canonical routes */}
+      <nav aria-label="Related pages" style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '32px 24px 48px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexWrap: 'wrap', gap: '16px', fontSize: '0.9rem' }}>
+        <Link to="/work" style={{ color: 'var(--accent-orange)', textDecoration: 'none', fontWeight: 600 }}>View Work — portfolio & case studies</Link>
+        <span style={{ color: 'var(--text-dim)' }} aria-hidden="true">•</span>
+        <Link to="/about" style={{ color: 'var(--accent-orange)', textDecoration: 'none', fontWeight: 600 }}>About Shree Ram Production — company information</Link>
+        <span style={{ color: 'var(--text-dim)' }} aria-hidden="true">•</span>
+        <Link to="/contact" style={{ color: 'var(--accent-orange)', textDecoration: 'none', fontWeight: 600 }}>Contact — start your project</Link>
+      </nav>
       <Footer onNavigate={onNavigate} />
     </main>
   );

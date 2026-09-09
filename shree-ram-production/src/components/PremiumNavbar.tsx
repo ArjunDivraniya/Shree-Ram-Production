@@ -27,6 +27,7 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
   const navItems = [
     { label: 'Home', sectionId: 'hero', key: 'home', route: '/' },
     { label: 'Services', sectionId: 'four-pillars', key: 'services', route: '/services' },
+    { label: 'Work', sectionId: 'portfolio', key: 'work', route: '/work' },
     { label: 'About', sectionId: 'brand-statement', key: 'about', route: '/about' },
     { label: 'Contact', sectionId: 'contact', key: 'contact', route: '/contact' },
   ];
@@ -34,6 +35,9 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
   const checkIsActive = (itemKey: string): boolean => {
     if (location.pathname === '/services') {
       return itemKey === 'services';
+    }
+    if (location.pathname === '/work') {
+      return itemKey === 'work';
     }
     if (location.pathname === '/about') {
       return itemKey === 'about';
@@ -88,6 +92,15 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         navigate('/contact');
+      }
+      return;
+    }
+
+    if (route === '/work') {
+      if (location.pathname === '/work') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        navigate('/work');
       }
       return;
     }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { MapPin, Globe } from 'lucide-react';
 import mainLogo from '../assets/logo/shreeramproduction-logo.png';
 
@@ -103,31 +104,32 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div style={{ gridColumn: 'span 6' }} className="footer-links-col">
-            <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#FFFFFF', letterSpacing: '0.08em', marginBottom: '20px', textTransform: 'uppercase' }}>
+          {/* Quick Links — semantic pillar navigation to /services */}
+          <nav aria-label="Services" style={{ gridColumn: 'span 6' }} className="footer-links-col">
+            <h3 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#FFFFFF', letterSpacing: '0.08em', marginBottom: '20px', textTransform: 'uppercase' }}>
               Pillar Solutions
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-              <a href="#four-pillars" onClick={(e) => handleLinkClick(e, '#four-pillars')}>Content & Production</a>
-              <a href="#four-pillars" onClick={(e) => handleLinkClick(e, '#four-pillars')}>Brand & Creative</a>
-              <a href="#four-pillars" onClick={(e) => handleLinkClick(e, '#four-pillars')}>Marketing & Growth</a>
-              <a href="#four-pillars" onClick={(e) => handleLinkClick(e, '#four-pillars')}>Technology & Digital</a>
-            </div>
-          </div>
+            </h3>
+            <ul style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.9rem', color: 'var(--text-muted)', listStyle: 'none', padding: 0, margin: 0 }}>
+              <li><Link to="/services" style={{ color: 'inherit', textDecoration: 'none' }}>Content & Production services</Link></li>
+              <li><Link to="/services" style={{ color: 'inherit', textDecoration: 'none' }}>Brand & Creative services</Link></li>
+              <li><Link to="/services" style={{ color: 'inherit', textDecoration: 'none' }}>Marketing & Growth services</Link></li>
+              <li><Link to="/services" style={{ color: 'inherit', textDecoration: 'none' }}>Technology & Digital services</Link></li>
+            </ul>
+          </nav>
 
-          {/* Navigation & Tools */}
-          <div style={{ gridColumn: 'span 6' }} className="footer-nav-col">
-            <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#FFFFFF', letterSpacing: '0.08em', marginBottom: '20px', textTransform: 'uppercase' }}>
+          {/* Site Navigation — semantic links to canonical routes for sitelinks hierarchy */}
+          <nav aria-label="Footer navigation" style={{ gridColumn: 'span 6' }} className="footer-nav-col">
+            <h3 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#FFFFFF', letterSpacing: '0.08em', marginBottom: '20px', textTransform: 'uppercase' }}>
               Navigation
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-              <a href="#portfolio" onClick={(e) => handleLinkClick(e, '#portfolio')}>Selected Work</a>
-              <a href="#brand-statement" onClick={(e) => handleLinkClick(e, '#brand-statement')}>Agency Philosophy</a>
-              <a href="#process" onClick={(e) => handleLinkClick(e, '#process')}>Growth Methodology</a>
-              <a href="#contact" onClick={(e) => handleLinkClick(e, '#contact')}>Let's Talk</a>
-            </div>
-          </div>
+            </h3>
+            <ul style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.9rem', color: 'var(--text-muted)', listStyle: 'none', padding: 0, margin: 0 }}>
+              <li><Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>Home — Shree Ram Production</Link></li>
+              <li><Link to="/services" style={{ color: 'inherit', textDecoration: 'none' }}>Services — growth solutions & capabilities</Link></li>
+              <li><Link to="/work" style={{ color: 'inherit', textDecoration: 'none' }}>Work — projects & case studies</Link></li>
+              <li><Link to="/about" style={{ color: 'inherit', textDecoration: 'none' }}>About — company information</Link></li>
+              <li><Link to="/contact" style={{ color: 'inherit', textDecoration: 'none' }}>Contact — contact Shree Ram Production</Link></li>
+            </ul>
+          </nav>
 
           {/* Studio Locations */}
           <div style={{ gridColumn: 'span 12' }} className="footer-location-col">

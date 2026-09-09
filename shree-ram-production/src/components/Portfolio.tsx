@@ -549,6 +549,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
               </h2>
             ) : (
               <h1
+                id="work-heading"
                 style={{
                   fontSize: 'clamp(2.2rem, 4.5vw, 3.8rem)',
                   fontWeight: 800,
@@ -558,7 +559,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                   color: '#FFFFFF',
                 }}
               >
-                Crafted For High-Growth Brands
+                Work — Portfolio & Case Studies — Crafted For High-Growth Brands
               </h1>
             )}
 
