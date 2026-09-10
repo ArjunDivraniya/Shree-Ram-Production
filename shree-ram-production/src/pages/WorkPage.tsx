@@ -58,11 +58,11 @@ export const WorkPage: React.FC<WorkPageProps> = ({ onNavigate }) => {
   return (
     <main style={{ background: 'transparent', paddingTop: '100px' }}>
       <SEO
-        title="Work — Portfolio & Case Studies | Shree Ram Production"
-        description="Browse Shree Ram Production work — cinematic production, brand identities, performance funnels and web platforms delivering measurable growth for real clients."
+        title="Our Work & Projects | Shree Ram Production"
+        description="Explore selected creative work and case studies from Shree Ram Production across production, branding, marketing and digital experiences."
         canonical="https://www.shreeramproduction.in/work"
-        ogTitle="Work — Portfolio & Case Studies | Shree Ram Production"
-        ogDescription="Browse Shree Ram Production work — cinematic production, brand identities, performance funnels and web platforms delivering measurable growth."
+        ogTitle="Our Work & Projects | Shree Ram Production"
+        ogDescription="Explore selected creative work and case studies from Shree Ram Production across production, branding, marketing and digital experiences."
         ogImage="https://www.shreeramproduction.in/shreeramproduction-logo.png"
         jsonLd={workJsonLd}
       />

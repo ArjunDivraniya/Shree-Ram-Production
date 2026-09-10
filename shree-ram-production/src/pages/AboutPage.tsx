@@ -56,11 +56,11 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
   return (
     <main id="about-page" style={{ background: 'transparent' }}>
       <SEO
-        title="About Shree Ram Production — Creative Production & Growth Agency"
-        description="Learn about Shree Ram Production — our story, philosophy, capabilities and approach to blending cinematic craft with data-driven growth for brands."
+        title="About Shree Ram Production | Creative Growth Agency"
+        description="Learn about Shree Ram Production, its story, philosophy, capabilities and approach to creative production, marketing and growth."
         canonical="https://www.shreeramproduction.in/about"
-        ogTitle="About Shree Ram Production — Creative Production & Growth Agency"
-        ogDescription="Learn about Shree Ram Production — story, philosophy, capabilities and approach to blending cinematic craft with data-driven growth."
+        ogTitle="About Shree Ram Production | Creative Growth Agency"
+        ogDescription="Learn about Shree Ram Production, its story, philosophy, capabilities and approach to creative production, marketing and growth."
         ogImage="https://www.shreeramproduction.in/shreeramproduction-logo.png"
         jsonLd={aboutJsonLd}
       />

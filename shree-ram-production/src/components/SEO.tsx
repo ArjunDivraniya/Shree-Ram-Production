@@ -60,28 +60,28 @@ export const SEO: React.FC<SEOProps> = ({
   return (
     <Helmet>
       {/* Primary Meta Tags */}
-      <title>{title}</title>
-      <meta name="description" content={description} />
+      <title key="title">{title}</title>
+      <meta key="description" name="description" content={description} />
       {noindex ? (
-        <meta name="robots" content="noindex, nofollow" />
+        <meta key="robots" name="robots" content="noindex, nofollow" />
       ) : (
-        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta key="robots" name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
       )}
-      <link rel="canonical" href={absoluteCanonical} />
+      <link key="canonical" rel="canonical" href={absoluteCanonical} />
 
       {/* Open Graph / Facebook */}
-      <meta property="og:site_name" content={ogSiteName} />
-      <meta property="og:locale" content={ogLocale} />
-      <meta property="og:type" content={ogType} />
-      <meta property="og:title" content={finalOgTitle} />
-      <meta property="og:description" content={finalOgDescription} />
-      <meta property="og:url" content={absoluteCanonical} />
+      <meta key="og-site-name" property="og:site_name" content={ogSiteName} />
+      <meta key="og-locale" property="og:locale" content={ogLocale} />
+      <meta key="og-type" property="og:type" content={ogType} />
+      <meta key="og-title" property="og:title" content={finalOgTitle} />
+      <meta key="og-description" property="og:description" content={finalOgDescription} />
+      <meta key="og-url" property="og:url" content={absoluteCanonical} />
       {ogImage && <meta property="og:image" content={ogImage} />}
 
       {/* Twitter / X */}
-      <meta name="twitter:card" content={twitterCard} />
-      <meta name="twitter:title" content={finalTwitterTitle} />
-      <meta name="twitter:description" content={finalTwitterDescription} />
+      <meta key="twitter-card" name="twitter:card" content={twitterCard} />
+      <meta key="twitter-title" name="twitter:title" content={finalTwitterTitle} />
+      <meta key="twitter-description" name="twitter:description" content={finalTwitterDescription} />
       {finalTwitterImage && <meta name="twitter:image" content={finalTwitterImage} />}
 
       {/* Structured Data (JSON-LD) */}

@@ -71,10 +71,10 @@ export const PremiumHomepage: React.FC<PremiumHomepageProps> = ({ onNavigate }) 
   return (
     <main id="homepage" style={{ position: 'relative', background: 'transparent', isolation: 'isolate', overflow: 'clip' }}>
       <SEO
-        title="Shree Ram Production — Creative Production, Marketing & Growth Agency"
+        title="Shree Ram Production | Creative Production & Growth Agency"
         description="Shree Ram Production — creative production, marketing & growth agency in Ahmedabad helping brands build visibility, acquire customers and scale digitally."
         canonical="https://www.shreeramproduction.in/"
-        ogTitle="Shree Ram Production — Creative Production, Marketing & Growth Agency"
+        ogTitle="Shree Ram Production | Creative Production & Growth Agency"
         ogDescription="Shree Ram Production — creative production, marketing & growth agency in Ahmedabad helping brands build visibility, acquire customers and scale digitally."
         ogImage="https://www.shreeramproduction.in/shreeramproduction-logo.png"
         jsonLd={homepageJsonLd}
