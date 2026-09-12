@@ -403,9 +403,6 @@ export const ProcessFlywheel: React.FC = () => {
                   <g transform="translate(600, 60)">
                     <circle r="18" fill="#141518" stroke="rgba(255,106,42,0.4)" strokeWidth="2" />
                     <circle r="6" fill="#FF6A2A" />
-                    <text y="-26" textAnchor="middle" fill="rgba(255,255,255,0.6)" fontSize="12" fontWeight="700" letterSpacing="0.1em">
-                      START
-                    </text>
                   </g>
                   {[
                     { x: 280, y: 440, num: '01' },

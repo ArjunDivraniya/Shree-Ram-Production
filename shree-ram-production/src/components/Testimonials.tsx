@@ -364,24 +364,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
         </div>
 
         {/* Initial Hero Preview Author Name */}
-        <div
-          ref={previewAuthorRef}
-          className="testimonial-preview-author"
-          style={{
-            position: 'absolute',
-            top: '80px',
-            right: '18%',
-            zIndex: 6,
-            fontFamily: "'Oswald', sans-serif",
-            fontSize: '1rem',
-            color: '#FFFFFF',
-            fontWeight: 500,
-            letterSpacing: '0.05em',
-            pointerEvents: 'none',
-          }}
-        >
-          Charlie Heaton
-        </div>
+        
 
         {/* Initial Hero Scroll Down Button */}
         <div
