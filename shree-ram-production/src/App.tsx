@@ -136,7 +136,7 @@ function ScrollToTop() {
   return null;
 }
 
-function AppRoutes() {
+export function AppRoutes() {
   const navigate = useNavigate();
 
   const handleNavigate = (sectionId: string) => {
@@ -165,9 +165,9 @@ function AppRoutes() {
   );
 }
 
-export function App() {
+export function AppFrame() {
   return (
-    <HelmetProvider>
+    <>
       {/* GlobalBackground is fixed viewport layer outside any isolated stacking context
           so its subtle gradients are always visible behind transparent page content.
           html/body already have #08090A so there is no white/black flash during route swap. */}
@@ -185,10 +185,18 @@ export function App() {
           zIndex: 1,
         }}
       >
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
+        <AppRoutes />
       </div>
+    </>
+  );
+}
+
+export function App() {
+  return (
+    <HelmetProvider>
+      <BrowserRouter>
+        <AppFrame />
+      </BrowserRouter>
     </HelmetProvider>
   );
 }

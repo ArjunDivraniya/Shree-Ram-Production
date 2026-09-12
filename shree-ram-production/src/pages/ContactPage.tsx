@@ -7,6 +7,7 @@ import { SEO } from '../components/SEO';
 import { ContactCTA } from '../components/ContactCTA';
 import { ContactEnquiry } from '../components/contact/ContactEnquiry';
 import { Footer } from '../components/Footer';
+import { CONTACT_SEO, CONTACT_JSON_LD } from '../data/seo';
 import '../components/contact/contact.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -20,47 +21,6 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
   const whyRef = useRef<HTMLElement>(null);
   const finalRef = useRef<HTMLElement>(null);
   const [hoveredCap, setHoveredCap] = useState<number | null>(null);
-
-  const contactJsonLd = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        {
-          '@type': 'ListItem',
-          position: 1,
-          name: 'Home',
-          item: 'https://www.shreeramproduction.in/',
-        },
-        {
-          '@type': 'ListItem',
-          position: 2,
-          name: 'Contact Us',
-          item: 'https://www.shreeramproduction.in/contact',
-        },
-      ],
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'ContactPage',
-      name: 'Contact Shree Ram Production',
-      url: 'https://www.shreeramproduction.in/contact',
-      description:
-        'Contact page for Shree Ram Production for project inquiries, custom growth plans, video production, branding, and web development.',
-      mainEntity: {
-        '@type': 'ProfessionalService',
-        name: 'Shree Ram Production',
-        url: 'https://www.shreeramproduction.in/',
-        address: {
-          '@type': 'PostalAddress',
-          addressLocality: 'Ahmedabad',
-          addressRegion: 'Gujarat',
-          addressCountry: 'IN',
-        },
-      },
-    },
-  ];
-
 
   useEffect(() => {
     const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -129,13 +89,13 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
   return (
     <main id="contact-page" style={{ background: 'transparent' }}>
       <SEO
-        title="Contact Shree Ram Production | Let's Work Together"
-        description="Contact Shree Ram Production to discuss a project, request a growth plan or ask about creative, marketing and technology services."
-        canonical="https://www.shreeramproduction.in/contact"
-        ogTitle="Contact Shree Ram Production | Let's Work Together"
-        ogDescription="Contact Shree Ram Production to discuss a project, request a growth plan or ask about creative, marketing and technology services."
+        title={CONTACT_SEO.title}
+        description={CONTACT_SEO.description}
+        canonical={CONTACT_SEO.canonical}
+        ogTitle={CONTACT_SEO.ogTitle}
+        ogDescription={CONTACT_SEO.ogDescription}
         ogImage="https://www.shreeramproduction.in/shreeramproduction-logo.png"
-        jsonLd={contactJsonLd}
+        jsonLd={CONTACT_JSON_LD}
       />
       {/* Spacer for fixed navbar */}
       <div style={{ height: '88px' }} aria-hidden="true" />

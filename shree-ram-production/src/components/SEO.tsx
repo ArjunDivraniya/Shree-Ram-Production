@@ -41,6 +41,10 @@ export const SEO: React.FC<SEOProps> = ({
   noindex = false,
   jsonLd,
 }) => {
+  if (import.meta.env.SSR) {
+    return null;
+  }
+
   const finalOgTitle = ogTitle || title;
   const finalOgDescription = ogDescription || description;
   const finalTwitterTitle = twitterTitle || finalOgTitle;

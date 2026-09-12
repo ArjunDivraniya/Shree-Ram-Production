@@ -11,6 +11,7 @@ import { AboutDifferentiation } from '../components/about/AboutDifferentiation';
 import { AboutHumanStatement } from '../components/about/AboutHumanStatement';
 import { AboutCTA } from '../components/about/AboutCTA';
 import { Footer } from '../components/Footer';
+import { ABOUT_SEO, ABOUT_JSON_LD } from '../data/seo';
 import '../components/about/about.css';
 
 interface AboutPageProps {
@@ -18,51 +19,16 @@ interface AboutPageProps {
 }
 
 export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
-
-  const aboutJsonLd = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        {
-          '@type': 'ListItem',
-          position: 1,
-          name: 'Home',
-          item: 'https://www.shreeramproduction.in/',
-        },
-        {
-          '@type': 'ListItem',
-          position: 2,
-          name: 'About Us',
-          item: 'https://www.shreeramproduction.in/about',
-        },
-      ],
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'AboutPage',
-      name: 'About Shree Ram Production',
-      url: 'https://www.shreeramproduction.in/about',
-      description:
-        'Learn about Shree Ram Production’s story, agency philosophy, team, capabilities, and strategic approach.',
-      publisher: {
-        '@type': 'Organization',
-        name: 'Shree Ram Production',
-        logo: 'https://www.shreeramproduction.in/shreeramproduction-logo.png',
-      },
-    },
-  ];
-
   return (
     <main id="about-page" style={{ background: 'transparent' }}>
       <SEO
-        title="About Shree Ram Production | Creative Growth Agency"
-        description="Learn about Shree Ram Production, its story, philosophy, capabilities and approach to creative production, marketing and growth."
-        canonical="https://www.shreeramproduction.in/about"
-        ogTitle="About Shree Ram Production | Creative Growth Agency"
-        ogDescription="Learn about Shree Ram Production, its story, philosophy, capabilities and approach to creative production, marketing and growth."
+        title={ABOUT_SEO.title}
+        description={ABOUT_SEO.description}
+        canonical={ABOUT_SEO.canonical}
+        ogTitle={ABOUT_SEO.ogTitle}
+        ogDescription={ABOUT_SEO.ogDescription}
         ogImage="https://www.shreeramproduction.in/shreeramproduction-logo.png"
-        jsonLd={aboutJsonLd}
+        jsonLd={ABOUT_JSON_LD}
       />
 
       {/* 1. ABOUT HERO */}
