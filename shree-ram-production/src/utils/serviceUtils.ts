@@ -10,5 +10,5 @@ export function findServiceById(serviceId: string) {
 
 export function getServiceProjectIds(serviceId: string): string[] | null {
   const match = findServiceById(serviceId);
-  return match ? match.service.projectIds : null;
+  return match?.service.projectIds ?? null;
 }

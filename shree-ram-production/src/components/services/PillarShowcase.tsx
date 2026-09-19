@@ -31,9 +31,9 @@ export const PillarShowcase: React.FC<PillarShowcaseProps> = ({
     };
     const targetCategory = categoryMap[pillar.id];
 
-    // Collect all projects referenced in this pillar's services
+    // Collect any projects optionally referenced in this pillar's services
     const referenced = pillar.services
-      .flatMap((s) => s.projectIds)
+      .flatMap((s) => s.projectIds ?? [])
       .map((id) => PORTFOLIO_ITEMS.find((p) => p.id === id))
       .filter((p): p is PortfolioItem => Boolean(p));
 

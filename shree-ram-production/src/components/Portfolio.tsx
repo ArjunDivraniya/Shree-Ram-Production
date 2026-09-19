@@ -265,7 +265,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
     ? PORTFOLIO_ITEMS
     : PORTFOLIO_ITEMS.filter((item) => item.category === activeCategory);
 
-  if (serviceMatch) {
+  if (serviceMatch?.service.projectIds && serviceMatch.service.projectIds.length > 0) {
     const serviceProjectIds = new Set(serviceMatch.service.projectIds);
     filteredProjects = filteredProjects.filter((item) => serviceProjectIds.has(item.id));
   }

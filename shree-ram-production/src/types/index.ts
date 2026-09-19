@@ -84,7 +84,7 @@ export interface ServiceDetail {
   number: string;
   name: string;
   description: string;
-  projectIds: string[];
+  projectIds?: string[];
 }
 
 export interface PillarWithServices {
