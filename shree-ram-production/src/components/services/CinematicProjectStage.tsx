@@ -42,7 +42,6 @@ export const CinematicProjectStage: React.FC<CinematicProjectStageProps> = ({
   const dragStartXRef = useRef<number>(0);
   const dragStartOffsetRef = useRef<number>(0);
   const animFrameIdRef = useRef<number | null>(null);
-  const prevServiceIdRef = useRef<string>(service.id);
 
   // Repeat projects 4 times to build an endless seamless marquee track
   const galleryProjects = useMemo(() => {
@@ -55,10 +54,10 @@ export const CinematicProjectStage: React.FC<CinematicProjectStageProps> = ({
     if (project.categoryLabel) {
       return project.categoryLabel.toUpperCase();
     }
-    return service.name.toUpperCase();
-  }, [service.name]);
+    return (project.category || '').toUpperCase();
+  }, []);
 
-  // Smooth continuous right-to-left GPU marquee loop (never stops on cursor hover)
+  // Smooth continuous right-to-left GPU marquee loop (never stops on cursor hover or category hover)
   useEffect(() => {
     if (reducedMotion || !projects || projects.length === 0) return;
 
@@ -109,18 +108,7 @@ export const CinematicProjectStage: React.FC<CinematicProjectStageProps> = ({
         cancelAnimationFrame(animFrameIdRef.current);
       }
     };
-  }, [reducedMotion, projects, service.id]);
-
-  // Reset scroll offset when switching services
-  useEffect(() => {
-    if (prevServiceIdRef.current !== service.id) {
-      prevServiceIdRef.current = service.id;
-      offsetRef.current = 0;
-      if (trackRef.current) {
-        trackRef.current.style.transform = 'translate3d(0, 0, 0)';
-      }
-    }
-  }, [service.id]);
+  }, [reducedMotion, projects]);
 
   // Touch & Mouse Drag Handlers for Smooth Interactive Control
   const handleMouseDown = (e: React.MouseEvent | React.TouchEvent) => {
@@ -161,39 +149,41 @@ export const CinematicProjectStage: React.FC<CinematicProjectStageProps> = ({
     offsetRef.current += shift;
   };
 
-  // GSAP Entrance Animations
+  const descRef = useRef<HTMLParagraphElement>(null);
+
+  // Smooth GSAP transition for service title and description change on category hover
   useEffect(() => {
-    if (reducedMotion || !stageRef.current) return;
+    if (reducedMotion) return;
+
+    if (titleMaskRef.current && descRef.current) {
+      const enterY = direction === 'down' ? 12 : -12;
+      gsap.fromTo(
+        [titleMaskRef.current, descRef.current],
+        { opacity: 0, y: enterY },
+        { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out', stagger: 0.04 }
+      );
+    }
+  }, [service.id, direction, reducedMotion]);
+
+  // Initial entrance animation for project cards when entering viewport
+  const hasAnimatedCardsRef = useRef<boolean>(false);
+  useEffect(() => {
+    if (reducedMotion || !stageRef.current || !isInView || hasAnimatedCardsRef.current) return;
+    hasAnimatedCardsRef.current = true;
 
     const ctx = gsap.context(() => {
       const cardItems = gsap.utils.toArray<HTMLElement>('.cinematic-gallery-item');
-      const enterY = direction === 'down' ? 45 : -45;
-
-      const tl = gsap.timeline({
-        defaults: { ease: 'power3.out', duration: 0.8 },
-      });
-
-      if (titleMaskRef.current) {
-        tl.fromTo(
-          titleMaskRef.current,
-          { clipPath: 'polygon(0 100%, 100% 100%, 100% 100%, 0 100%)', y: 20, opacity: 0 },
-          { clipPath: 'polygon(0 0%, 100% 0%, 100% 100%, 0 100%)', y: 0, opacity: 1, duration: 0.7 },
-          0,
-        );
-      }
-
       if (cardItems.length > 0) {
-        tl.fromTo(
+        gsap.fromTo(
           cardItems,
-          { opacity: 0, y: enterY, scale: 0.94 },
-          { opacity: 1, y: 0, scale: 1, stagger: 0.05, duration: 0.8, ease: 'power3.out' },
-          0.1,
+          { opacity: 0, y: 40, scale: 0.95 },
+          { opacity: 1, y: 0, scale: 1, stagger: 0.04, duration: 0.8, ease: 'power3.out' },
         );
       }
     }, stageRef);
 
     return () => ctx.revert();
-  }, [service.id, direction, reducedMotion, isInView, stageRef]);
+  }, [isInView, reducedMotion, stageRef]);
 
   if (!projects || projects.length === 0) return null;
 
@@ -217,7 +207,7 @@ export const CinematicProjectStage: React.FC<CinematicProjectStageProps> = ({
           <h3 ref={titleMaskRef} className="cinematic-gallery-service-title">
             {service.name}
           </h3>
-          <p className="cinematic-gallery-service-desc">{service.description}</p>
+          <p ref={descRef} className="cinematic-gallery-service-desc">{service.description}</p>
         </div>
 
         {/* Gallery Controls & Counter */}
@@ -276,7 +266,7 @@ export const CinematicProjectStage: React.FC<CinematicProjectStageProps> = ({
 
             return (
               <div
-                key={`${service.id}-${project.id}-${idx}`}
+                key={`${project.id}-${idx}`}
                 className={`cinematic-gallery-item ${isHovered ? 'is-hovered' : ''}`}
                 style={{
                   marginTop: profile.marginTop,
