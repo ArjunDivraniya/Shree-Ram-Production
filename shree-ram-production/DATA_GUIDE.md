@@ -103,31 +103,61 @@ To edit or add a service capability in any pillar, edit its object:
 
 The Work page is your full portfolio showcase featuring category filters and interactive case study modals.
 
-### 3.1 All Portfolio Projects
+### 3.1 All Portfolio Projects & Real Video Reels
 * **File:** [`src/data/content.ts`](file:///Users/mayank/Shree-Ram-Production/shree-ram-production/src/data/content.ts)
   Look for `export const PORTFOLIO_ITEMS: PortfolioItem[] = [...]` (starts at line ~84).
 
+The Production section now features your **9 Real Video Reels** located in `src/assets/reels/` (and served via `public/reels/`):
+1. **Royal Enfield** (`/reels/Royal-Enfeild.mp4`) — Cinematic Commercial Shoot
+2. **Philips Healthcare** (`/reels/Phillips-Event.mp4`) — Global Summit & Event Highlights
+3. **Kaya Kalp** (`/reels/Kaya-Kalp.mp4`) — Luxury Wellness & Brand Storytelling
+4. **Autonomous Mobility** (`/reels/Self-Driving-Car-1.mp4`) — Self-Driving Car Tech
+5. **Brand Elevation** (`/reels/Pramotion-reel.mp4`) — High-Velocity Commercial Reel
+6. **Shree Ram Production** (`/reels/Intro.mp4`) — Agency Showreel & Manifesto
+7. **The Royal Heritage Wedding** (`/reels/Wedding-Reels.mp4`) — Grand Wedding Film
+8. **Celestial Romance** (`/reels/Wedding-Reel-2.mp4`) — Luxury Destination Wedding
+9. **Eternal Elegance** (`/reels/Wedding-Reel-3.mp4`) — Sangeet & Celebration Highlights
+
+### How Video Reels Play on the Website:
+- **Work Page & Homepage Marquee Cards:** Videos play continuously muted and looped (`autoPlay muted loop playsInline`).
+- **Case Study Modal:** Clicking any project opens the interactive modal where visitors can watch the full video with sound, scrub controls, and full detail.
+- **Services Showcase:** Under the *Content & Production* pillar on `/services`, all 9 video reels loop smoothly in the horizontal marquee.
+
 ### How to Add or Edit a Project:
+
+#### A. Video Reels (Clean Minimalist — Only Title):
+For video reels, no tags, metrics, deliverables, or extra details are needed. You only need:
 ```typescript
 {
-  id: 'my-project-slug',                                              // Unique URL identifier
+  id: 'my-reel-slug',                                                 // Unique identifier
+  title: 'Royal Enfield — The Spirit of Pure Motorcycling',           // Video Title (clean display)
+  category: 'production',                                             // Sets to production pillar
+  thumbnail: '/reels/My-Video.mp4',                                   // Video preview file path
+  videoUrl: '/reels/My-Video.mp4',                                    // Video file path
+}
+```
+
+#### B. Full Case Studies (Branding, Marketing, Technology):
+For non-reel case studies that include metrics, challenges, and deliverables:
+```typescript
+{
+  id: 'my-project-slug',                                              // Unique identifier
   title: 'Project Title — Subtitle',                                  // Card headline
   client: 'Client / Brand Name',                                      // Client name
-  category: 'production',                                             // 'production' | 'branding' | 'marketing' | 'technology'
-  categoryLabel: 'Cinematic Production',                              // Tag badge on top of card
+  category: 'branding',                                               // 'branding' | 'marketing' | 'technology'
+  categoryLabel: 'Brand Architecture',                                // Tag badge on top of card
   year: '2026',                                                       // Completion year
-  thumbnail: 'https://... or /projects/my-image.jpg',                 // Card image
-  videoUrl: 'https://...',                                            // (Optional) Video preview link
-  metrics: { label: 'Video Views', value: '14.2M+' },                 // Highlight result stat
+  thumbnail: 'https://images.unsplash.com/...',                       // Image URL
+  metrics: { label: 'Revenue Lift', value: '+340%' },                 // Highlight result stat
   summary: 'Short overview of what was created for this client.',     // Modal summary
-  deliverables: ['Commercial Film', 'Color Grading', 'Social Cuts'],  // Deliverable list
+  deliverables: ['Visual Identity', 'Brand Guidelines', 'Packaging'], // Deliverable list
   challenge: 'The specific problem or goal the client faced.',        // Modal challenge section
   solution: 'How Shree Ram Production executed the project.'          // Modal solution section
 }
 ```
 
-> 🖼️ **Storing Your Images Locally:**
-> Put your project photos in [`public/projects/`](file:///Users/mayank/Shree-Ram-Production/shree-ram-production/public) (e.g. `public/projects/apex.jpg`) and write `thumbnail: '/projects/apex.jpg'`.
+> 🎬 **Adding New Video Reels:**
+> Put your new `.mp4` video files in [`src/assets/reels/`](file:///Users/mayank/Shree-Ram-Production/shree-ram-production/src/assets/reels) or [`public/reels/`](file:///Users/mayank/Shree-Ram-Production/shree-ram-production/public/reels) and set `videoUrl: '/reels/your-video.mp4'` with only the `title`!
 
 ---
 

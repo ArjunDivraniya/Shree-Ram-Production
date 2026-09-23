@@ -217,7 +217,12 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
                   "{item.quote}"
                 </p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                  <img src={item.avatar} alt={item.author} style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover' }} />
+                  <img
+                    src={item.avatar}
+                    alt={`${item.author} — ${item.role} at ${item.company}`}
+                    title={`${item.author} — Client Review for Shree Ram Production`}
+                    style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover' }}
+                  />
                   <div>
                     <h4 style={{ fontSize: '1.05rem', fontWeight: 600 }}>{item.author}</h4>
                     <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>{item.role} • {item.company}</p>
@@ -585,7 +590,8 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
               >
                 <img
                   src={activeItem.image}
-                  alt={activeItem.author}
+                  alt={`${activeItem.author} — ${activeItem.role} at ${activeItem.company}, Client of Shree Ram Production`}
+                  title={`${activeItem.author} — ${activeItem.company}`}
                   style={{
                     width: '100%',
                     height: '100%',

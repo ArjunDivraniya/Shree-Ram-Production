@@ -168,7 +168,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate }) => {
             >
               <img
                 src={mainLogo}
-                alt="Shree Ram Production Logo"
+                alt="Shree Ram Production — Creative Studio, Video Production, Brand Architecture & Digital Agency"
+                title="Shree Ram Production — Official Logo"
                 style={{
                   width: '100%',
                   height: '100%',

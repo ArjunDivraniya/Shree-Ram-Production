@@ -5,10 +5,12 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import type { PortfolioItem } from '../types';
 import { PORTFOLIO_ITEMS } from '../data/content';
 import { findServiceById } from '../utils/serviceUtils';
-import { ArrowUpRight, X, TrendingUp, Play, Flame } from 'lucide-react';
+import { ArrowUpRight, X, TrendingUp, Play } from 'lucide-react';
 import SectionMarker from './ui/SectionMarker';
 
 gsap.registerPlugin(ScrollTrigger);
+
+const isVideoUrl = (url?: string) => Boolean(url && (url.endsWith('.mp4') || url.includes('/reels/')));
 
 interface PortfolioProps {
   isHomepage?: boolean;
@@ -37,28 +39,35 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
   const [isReducedMotion, setIsReducedMotion] = useState<boolean>(false);
 
   // Categorized items for 3 distinct streams of work
+  // ROW 1: ONLY PRODUCTION REELS (PORTRAIT 9:16 FORMAT)
   const row1Projects = [
-    PORTFOLIO_ITEMS[0], // Apex Velocity Launch Film
-    PORTFOLIO_ITEMS[5], // Aura Living Brand Architecture
-    PORTFOLIO_ITEMS[1], // Chronos Timepiece Film
-    PORTFOLIO_ITEMS[3], // Solace Audio Reels
-    PORTFOLIO_ITEMS[2], // Vanguard 3D Motion
+    PORTFOLIO_ITEMS[0], // Royal Enfield Reel
+    PORTFOLIO_ITEMS[1], // Philips Event Summit Reel
+    PORTFOLIO_ITEMS[2], // Kaya Kalp Wellness Reel
+    PORTFOLIO_ITEMS[3], // Autonomous Car Tech Reel
+    PORTFOLIO_ITEMS[4], // Brand Promotion Commercial Reel
+    PORTFOLIO_ITEMS[5], // Shree Ram Production Showreel
+    PORTFOLIO_ITEMS[6], // Royal Heritage Wedding Reel
   ];
 
+  // ROW 2: BRAND & CREATIVE + MARKETING
   const row2Projects = [
-    PORTFOLIO_ITEMS[9],  // Solaris Energy 8x Scale
-    PORTFOLIO_ITEMS[13], // Lumina Spatial Web3D
-    PORTFOLIO_ITEMS[6],  // Velox Aviation Brand Identity
-    PORTFOLIO_ITEMS[10], // Kuro Fashion Paid Social
-    PORTFOLIO_ITEMS[14], // Nexus Bank Digital Platform
+    PORTFOLIO_ITEMS[9],  // Aura Living Brand Architecture
+    PORTFOLIO_ITEMS[13], // Solaris Energy Performance Marketing
+    PORTFOLIO_ITEMS[10], // Velox Aviation Brand Identity
+    PORTFOLIO_ITEMS[14], // Kuro Fashion Paid Social
+    PORTFOLIO_ITEMS[11], // Elysium Reserve Luxury Packaging
+    PORTFOLIO_ITEMS[12], // Kuro Studio Design & Social Kit
   ];
 
+  // ROW 3: TECHNOLOGY & DIGITAL PLATFORMS
   const row3Projects = [
-    PORTFOLIO_ITEMS[7],  // Elysium Reserve Packaging
-    PORTFOLIO_ITEMS[11], // Titan B2B Organic Search
-    PORTFOLIO_ITEMS[15], // Aether Headless E-Commerce
-    PORTFOLIO_ITEMS[4],  // Apex International Auto Expo
-    PORTFOLIO_ITEMS[8],  // Kuro Studio Creative Direction
+    PORTFOLIO_ITEMS[17], // Lumina Spatial Web3D
+    PORTFOLIO_ITEMS[18], // Nexus Bank Digital Platform
+    PORTFOLIO_ITEMS[15], // Titan Software Enterprise SEO
+    PORTFOLIO_ITEMS[19], // Aether Apparel Headless Commerce
+    PORTFOLIO_ITEMS[20], // Zenith Holdings Enterprise CRM
+    PORTFOLIO_ITEMS[16], // Pulse Fitness Funnel & CRO
   ];
 
   useEffect(() => {
@@ -336,27 +345,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
             </p>
           </div>
 
-          {/* Top Live Ticker Tag & View All Button */}
+          {/* View All Button */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '6px 14px',
-                borderRadius: 'var(--radius-pill)',
-                backgroundColor: 'rgba(255, 106, 42, 0.1)',
-                border: '1px solid rgba(255, 106, 42, 0.25)',
-                color: 'var(--accent-orange)',
-                fontSize: '0.78rem',
-                fontWeight: 800,
-                letterSpacing: '0.08em',
-              }}
-            >
-              <Flame size={14} />
-              <span>15 MASTERPIECES</span>
-            </div>
-
             <button
               onClick={handleViewAllWork}
               className="srp-btn srp-btn--secondary srp-btn--sm"
@@ -398,10 +388,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                 <FloatingCinematicCard
                   key={`r1-${project.id}-${idx}`}
                   project={project}
-                  onSelect={() => setSelectedProject(project)}
-                  aspectRatio="16/9"
-                  width="460px"
-                  badgeText="CINEMA REEL"
+                  aspectRatio="9/16"
+                  width="290px"
                 />
               ))}
             </div>
@@ -424,10 +412,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                 <FloatingCinematicCard
                   key={`r2-${project.id}-${idx}`}
                   project={project}
-                  onSelect={() => setSelectedProject(project)}
                   aspectRatio="4/3"
                   width="400px"
-                  badgeText="BRAND ARCHITECTURE"
                 />
               ))}
             </div>
@@ -449,10 +435,10 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                 <FloatingCinematicCard
                   key={`r3-${project.id}-${idx}`}
                   project={project}
-                  onSelect={() => setSelectedProject(project)}
+                  onSelect={project.category === 'technology' ? () => setSelectedProject(project) : undefined}
                   aspectRatio="16/10"
                   width="480px"
-                  badgeText="GROWTH ENGINE"
+                  badgeText={project.category === 'technology' ? "TECH PLATFORM" : undefined}
                 />
               ))}
             </div>
@@ -479,7 +465,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
         </div>
 
         {/* Modal Window inside Showreel */}
-        {selectedProject && (
+        {selectedProject && selectedProject.category === 'technology' && (
           <CaseStudyModal project={selectedProject} onClose={() => setSelectedProject(null)} />
         )}
       </section>
@@ -591,157 +577,181 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
             gap: '32px',
           }}
         >
-          {filteredProjects.map((project) => (
-            <div
-              key={project.id}
-              onClick={() => setSelectedProject(project)}
-              data-cursor="CASE STUDY"
-              style={{
-                position: 'relative',
-                borderRadius: 'var(--radius-media)',
-                overflow: 'hidden',
-                backgroundColor: 'var(--surface-dark)',
-                border: '1px solid var(--glass-border)',
-                cursor: 'pointer',
-                transition: 'var(--transition-smooth)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = 'var(--glass-border-bright)';
-                e.currentTarget.style.transform = 'translateY(-6px)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'var(--glass-border)';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}
-            >
+          {filteredProjects.map((project) => {
+            const isReel = isVideoUrl(project.videoUrl || project.thumbnail) || project.category === 'production';
+            const isDev = project.category === 'technology';
+
+            return (
               <div
+                key={project.id}
+                onClick={isDev ? () => setSelectedProject(project) : undefined}
+                data-cursor={isDev ? 'CASE STUDY' : undefined}
                 style={{
                   position: 'relative',
-                  aspectRatio: '16/10',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  borderRadius: 'var(--radius-media)',
                   overflow: 'hidden',
-                  backgroundColor: '#000000',
+                  backgroundColor: 'var(--surface-dark)',
+                  border: '1px solid var(--glass-border)',
+                  cursor: isDev ? 'pointer' : 'default',
+                  transition: 'var(--transition-smooth)',
+                }}
+                onMouseEnter={(e) => {
+                  if (isDev) {
+                    e.currentTarget.style.borderColor = 'var(--glass-border-bright)';
+                    e.currentTarget.style.transform = 'translateY(-6px)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (isDev) {
+                    e.currentTarget.style.borderColor = 'var(--glass-border)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }
                 }}
               >
-                <img
-                  src={project.thumbnail}
-                  alt={`${project.title} — Shree Ram Production ${project.categoryLabel || 'Case Study'}`}
-                  loading="lazy"
+                <div
                   style={{
+                    position: 'relative',
                     width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    transition: 'transform 0.6s var(--ease-out-expo)',
-                  }}
-                />
-                <div
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    background: 'linear-gradient(to top, rgba(14, 15, 18, 0.9) 0%, transparent 60%)',
-                  }}
-                />
-
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: '16px',
-                    right: '16px',
-                    padding: '6px 12px',
-                    borderRadius: 'var(--radius-pill)',
-                    backgroundColor: 'rgba(8, 9, 10, 0.8)',
-                    backdropFilter: 'blur(8px)',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
-                    fontSize: '0.75rem',
-                    fontWeight: 700,
-                    color: 'var(--accent-orange)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
+                    aspectRatio: isReel ? '9/16' : '16/10',
+                    overflow: 'hidden',
+                    backgroundColor: '#000000',
                   }}
                 >
-                  <TrendingUp size={12} />
-                  <span>{project.metrics.value} {project.metrics.label}</span>
-                </div>
-              </div>
-
-              <div style={{ padding: '24px' }}>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginBottom: '8px',
-                  }}
-                >
-                  <span
+                  {isVideoUrl(project.videoUrl || project.thumbnail) ? (
+                    <video
+                      src={project.videoUrl || project.thumbnail}
+                      title={`${project.title} — Video Production by Shree Ram Production`}
+                      aria-label={`${project.title} — Video Production Reel by Shree Ram Production`}
+                      muted
+                      loop
+                      playsInline
+                      autoPlay
+                      preload="metadata"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        display: 'block',
+                        transition: 'transform 0.6s var(--ease-out-expo)',
+                      }}
+                    />
+                  ) : (
+                    <img
+                      src={project.thumbnail}
+                      alt={`${project.title} — ${project.categoryLabel || 'Portfolio Project'} | Shree Ram Production`}
+                      title={`${project.title} — Shree Ram Production`}
+                      loading="lazy"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        display: 'block',
+                        transition: 'transform 0.6s var(--ease-out-expo)',
+                      }}
+                    />
+                  )}
+                  <div
                     style={{
-                      fontSize: '0.75rem',
-                      fontWeight: 600,
-                      color: 'var(--accent-orange)',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.08em',
+                      position: 'absolute',
+                      inset: 0,
+                      background: 'linear-gradient(to top, rgba(14, 15, 18, 0.9) 0%, transparent 60%)',
+                    }}
+                  />
+                </div>
+
+                <div style={{ padding: isReel ? '18px 20px 22px' : '24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                  {(project.categoryLabel || project.year) && (
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        marginBottom: '8px',
+                      }}
+                    >
+                      {project.categoryLabel && (
+                        <span
+                          style={{
+                            fontSize: '0.75rem',
+                            fontWeight: 600,
+                            color: 'var(--accent-orange)',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.08em',
+                          }}
+                        >
+                          {project.categoryLabel}
+                        </span>
+                      )}
+                      {project.year && (
+                        <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>
+                          {project.year}
+                        </span>
+                      )}
+                    </div>
+                  )}
+
+                  <h3
+                    style={{
+                      fontSize: isReel ? '1.15rem' : '1.25rem',
+                      fontWeight: 700,
+                      marginBottom: isDev ? '10px' : 0,
+                      color: '#FFFFFF',
+                      lineHeight: 1.35,
                     }}
                   >
-                    {project.categoryLabel}
-                  </span>
-                  <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>
-                    {project.year}
-                  </span>
-                </div>
+                    {project.title}
+                  </h3>
 
-                <h3
-                  style={{
-                    fontSize: '1.25rem',
-                    fontWeight: 700,
-                    marginBottom: '10px',
-                    color: '#FFFFFF',
-                    lineHeight: 1.3,
-                  }}
-                >
-                  {project.title}
-                </h3>
+                  {/* Description ONLY shown for Development Projects (SAAS platform, websites, etc.) */}
+                  {isDev && project.summary && (
+                    <p
+                      style={{
+                        fontSize: '0.9rem',
+                        color: 'var(--text-muted)',
+                        lineHeight: 1.5,
+                        marginBottom: '16px',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                      }}
+                    >
+                      {project.summary}
+                    </p>
+                  )}
 
-                <p
-                  style={{
-                    fontSize: '0.9rem',
-                    color: 'var(--text-muted)',
-                    lineHeight: 1.5,
-                    marginBottom: '16px',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                  }}
-                >
-                  {project.summary}
-                </p>
-
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    fontSize: '0.85rem',
-                    fontWeight: 600,
-                    color: '#FFFFFF',
-                  }}
-                >
-                  <span>Read Case Study</span>
-                  <ArrowUpRight size={16} color="var(--accent-orange)" />
+                  {/* Read Case Study CTA ONLY shown for Development Projects */}
+                  {isDev && (
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        fontSize: '0.85rem',
+                        fontWeight: 600,
+                        color: '#FFFFFF',
+                      }}
+                    >
+                      <span>Read Case Study</span>
+                      <ArrowUpRight size={16} color="var(--accent-orange)" />
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
       </div>
 
       {/* Modal Window */}
-      {selectedProject && (
+      {selectedProject && selectedProject.category === 'technology' && (
         <CaseStudyModal project={selectedProject} onClose={() => setSelectedProject(null)} />
       )}
     </section>
@@ -751,12 +761,13 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
 // Sub-component for Borderless Floating Cinematic Project Card
 const FloatingCinematicCard: React.FC<{
   project: PortfolioItem;
-  onSelect: () => void;
+  onSelect?: () => void;
   aspectRatio: string;
   width: string;
-  badgeText: string;
+  badgeText?: string;
 }> = ({ project, onSelect, aspectRatio, width, badgeText }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const isReel = isVideoUrl(project.videoUrl || project.thumbnail) || project.category === 'production';
 
   return (
     <div
@@ -766,7 +777,7 @@ const FloatingCinematicCard: React.FC<{
       style={{
         width: width,
         flexShrink: 0,
-        cursor: 'pointer',
+        cursor: onSelect ? 'pointer' : 'default',
         display: 'flex',
         flexDirection: 'column',
         gap: '14px',
@@ -790,18 +801,39 @@ const FloatingCinematicCard: React.FC<{
           filter: isHovered ? 'brightness(1.08)' : 'brightness(0.95)',
         }}
       >
-        <img
-          src={project.thumbnail}
-          alt={`${project.title} — Shree Ram Production ${project.categoryLabel || 'Case Study'}`}
-          loading="lazy"
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            transition: 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
-            transform: isHovered ? 'scale(1.08)' : 'scale(1)',
-          }}
-        />
+        {isVideoUrl(project.videoUrl || project.thumbnail) ? (
+          <video
+            src={project.videoUrl || project.thumbnail}
+            title={`${project.title} — Video Production Showcase by Shree Ram Production`}
+            aria-label={`${project.title} — Video Production Showcase by Shree Ram Production`}
+            muted
+            loop
+            playsInline
+            autoPlay
+            preload="metadata"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              transition: 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
+              transform: isHovered ? 'scale(1.08)' : 'scale(1)',
+            }}
+          />
+        ) : (
+          <img
+            src={project.thumbnail}
+            alt={`${project.title} — ${project.categoryLabel || 'Creative Showcase'} | Shree Ram Production`}
+            title={`${project.title} — Shree Ram Production`}
+            loading="lazy"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              transition: 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
+              transform: isHovered ? 'scale(1.08)' : 'scale(1)',
+            }}
+          />
+        )}
 
         {/* Ambient Dark Gradient Vignette Overlay */}
         <div
@@ -813,105 +845,92 @@ const FloatingCinematicCard: React.FC<{
           }}
         />
 
-        {/* Floating Play Indicator Button on Hover */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: `translate(-50%, -50%) scale(${isHovered ? 1 : 0.7})`,
-            opacity: isHovered ? 1 : 0,
-            transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-            width: '56px',
-            height: '56px',
-            borderRadius: '50%',
-            backgroundColor: 'rgba(255, 106, 42, 0.9)',
-            boxShadow: '0 0 30px rgba(255, 106, 42, 0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#FFFFFF',
-            zIndex: 10,
-            pointerEvents: 'none',
-          }}
-        >
-          <Play size={22} style={{ marginLeft: '3px' }} />
-        </div>
-
-        {/* Metric Badge Overlay Top Right */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '14px',
-            right: '14px',
-            padding: '5px 12px',
-            borderRadius: 'var(--radius-pill)',
-            backgroundColor: 'rgba(8, 9, 10, 0.85)',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255, 106, 42, 0.4)',
-            fontSize: '0.74rem',
-            fontWeight: 800,
-            color: 'var(--accent-orange)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '5px',
-          }}
-        >
-          <TrendingUp size={12} />
-          <span>{project.metrics.value}</span>
-        </div>
-
-        {/* Pillar Stream Badge Bottom Left */}
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '14px',
-            left: '14px',
-            padding: '5px 12px',
-            borderRadius: 'var(--radius-pill)',
-            backgroundColor: 'rgba(8, 9, 10, 0.85)',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255, 255, 255, 0.12)',
-            fontSize: '0.7rem',
-            fontWeight: 800,
-            color: 'rgba(255, 255, 255, 0.85)',
-            letterSpacing: '0.08em',
-            textTransform: 'uppercase',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-          }}
-        >
-          <span>{badgeText}</span>
-        </div>
-      </div>
-
-      {/* Editorial Title & Category Specs (No Borders) */}
-      <div style={{ padding: '0 6px' }}>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: '4px',
-          }}
-        >
-          <span
+        {/* Floating Play Indicator Button on Hover - only for clickable development projects */}
+        {onSelect && (
+          <div
             style={{
-              fontSize: '0.74rem',
-              fontWeight: 800,
-              color: isHovered ? 'var(--accent-orange)' : 'rgba(255, 255, 255, 0.55)',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              transition: 'var(--transition-smooth)',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: `translate(-50%, -50%) scale(${isHovered ? 1 : 0.7})`,
+              opacity: isHovered ? 1 : 0,
+              transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+              width: '56px',
+              height: '56px',
+              borderRadius: '50%',
+              backgroundColor: 'rgba(255, 106, 42, 0.9)',
+              boxShadow: '0 0 30px rgba(255, 106, 42, 0.5)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#FFFFFF',
+              zIndex: 10,
+              pointerEvents: 'none',
             }}
           >
-            {project.categoryLabel}
-          </span>
-          <span style={{ fontSize: '0.78rem', color: 'var(--text-dim)' }}>
-            {project.client} • {project.year}
-          </span>
-        </div>
+            <Play size={22} style={{ marginLeft: '3px' }} />
+          </div>
+        )}
+
+        {/* Pillar Stream Badge Bottom Left - only for non-reels */}
+        {!isReel && badgeText && (
+          <div
+            style={{
+              position: 'absolute',
+              bottom: '14px',
+              left: '14px',
+              padding: '5px 12px',
+              borderRadius: 'var(--radius-pill)',
+              backgroundColor: 'rgba(8, 9, 10, 0.85)',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              fontSize: '0.7rem',
+              fontWeight: 800,
+              color: 'rgba(255, 255, 255, 0.85)',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+            }}
+          >
+            <span>{badgeText}</span>
+          </div>
+        )}
+      </div>
+
+      {/* Editorial Title & Specs */}
+      <div style={{ padding: '0 6px' }}>
+        {!isReel && (project.categoryLabel || project.client) && (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '4px',
+            }}
+          >
+            {project.categoryLabel && (
+              <span
+                style={{
+                  fontSize: '0.74rem',
+                  fontWeight: 800,
+                  color: isHovered ? 'var(--accent-orange)' : 'rgba(255, 255, 255, 0.55)',
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  transition: 'var(--transition-smooth)',
+                }}
+              >
+                {project.categoryLabel}
+              </span>
+            )}
+            {(project.client || project.year) && (
+              <span style={{ fontSize: '0.78rem', color: 'var(--text-dim)' }}>
+                {[project.client, project.year].filter(Boolean).join(' • ')}
+              </span>
+            )}
+          </div>
+        )}
 
         <div
           style={{
@@ -927,7 +946,7 @@ const FloatingCinematicCard: React.FC<{
               fontWeight: 800,
               color: isHovered ? '#FFFFFF' : '#E2E8F0',
               lineHeight: 1.25,
-              whiteSpace: 'nowrap',
+              whiteSpace: isReel ? 'normal' : 'nowrap',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               transition: 'var(--transition-smooth)',
@@ -937,31 +956,36 @@ const FloatingCinematicCard: React.FC<{
             {project.title}
           </h3>
 
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '4px',
-              fontSize: '0.8rem',
-              fontWeight: 800,
-              color: 'var(--accent-orange)',
-              opacity: isHovered ? 1 : 0.5,
-              transform: isHovered ? 'translateX(3px)' : 'translateX(0)',
-              transition: 'all 0.3s ease',
-              flexShrink: 0,
-            }}
-          >
-            <span>View</span>
-            <ArrowUpRight size={15} />
-          </div>
+          {onSelect && (
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                fontSize: '0.8rem',
+                fontWeight: 800,
+                color: 'var(--accent-orange)',
+                opacity: isHovered ? 1 : 0.5,
+                transform: isHovered ? 'translateX(3px)' : 'translateX(0)',
+                transition: 'all 0.3s ease',
+                flexShrink: 0,
+              }}
+            >
+              <span>View</span>
+              <ArrowUpRight size={15} />
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-// Sub-component for Case Study Modal Details
+// Sub-component for Case Study Modal Details (Exclusively for Development Projects like SAAS platform, websites, etc.)
 const CaseStudyModal: React.FC<{ project: PortfolioItem; onClose: () => void }> = ({ project, onClose }) => {
+  // Hard guard: ONLY Development Projects are allowed to open the modal
+  if (project.category !== 'technology') return null;
+
   return (
     <div
       style={{
@@ -982,7 +1006,7 @@ const CaseStudyModal: React.FC<{ project: PortfolioItem; onClose: () => void }> 
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          maxWidth: '840px',
+          maxWidth: '860px',
           width: '100%',
           backgroundColor: 'var(--surface-dark)',
           border: '1px solid var(--glass-border-bright)',
@@ -993,42 +1017,72 @@ const CaseStudyModal: React.FC<{ project: PortfolioItem; onClose: () => void }> 
           margin: 'auto',
         }}
       >
-        <div style={{ position: 'relative', aspectRatio: '21/9', overflow: 'hidden' }}>
-          <img
-            src={project.thumbnail}
-            alt={`${project.title} — Shree Ram Production ${project.categoryLabel || 'Case Study'}`}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
+        <div
+          style={{
+            position: 'relative',
+            aspectRatio: '16/9',
+            maxHeight: '440px',
+            overflow: 'hidden',
+            backgroundColor: '#000000',
+          }}
+        >
+          {isVideoUrl(project.videoUrl || project.thumbnail) ? (
+            <video
+              src={project.videoUrl || project.thumbnail}
+              title={`${project.title} — Video Demo by Shree Ram Production`}
+              aria-label={`${project.title} — Digital Platform Video Demo`}
+              controls
+              autoPlay
+              playsInline
+              loop
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          ) : (
+            <img
+              src={project.thumbnail}
+              alt={`${project.title} — Digital Platform & Case Study by Shree Ram Production`}
+              title={`${project.title} — Shree Ram Production Case Study`}
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          )}
           <button
             onClick={onClose}
             className="srp-btn srp-btn--icon"
             aria-label="Close case study"
-            style={{ position: 'absolute', top: '20px', right: '20px', width: '40px', height: '40px' }}
+            style={{ position: 'absolute', top: '20px', right: '20px', width: '40px', height: '40px', zIndex: 10 }}
           >
             <X size={18} />
           </button>
         </div>
 
         <div style={{ padding: '36px' }}>
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              alignItems: 'center',
-              gap: '16px',
-              marginBottom: '16px',
-            }}
-          >
-            <span className="badge-pill">
-              {project.categoryLabel}
-            </span>
-            <span style={{ color: 'var(--text-dim)', fontSize: '0.9rem' }}>
-              Client: <strong style={{ color: '#FFFFFF' }}>{project.client}</strong>
-            </span>
-            <span style={{ color: 'var(--text-dim)', fontSize: '0.9rem' }}>
-              Year: {project.year}
-            </span>
-          </div>
+          {(project.categoryLabel || project.client || project.year) && (
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                gap: '16px',
+                marginBottom: '16px',
+              }}
+            >
+              {project.categoryLabel && (
+                <span className="badge-pill">
+                  {project.categoryLabel}
+                </span>
+              )}
+              {project.client && (
+                <span style={{ color: 'var(--text-dim)', fontSize: '0.9rem' }}>
+                  Client: <strong style={{ color: '#FFFFFF' }}>{project.client}</strong>
+                </span>
+              )}
+              {project.year && (
+                <span style={{ color: 'var(--text-dim)', fontSize: '0.9rem' }}>
+                  Year: {project.year}
+                </span>
+              )}
+            </div>
+          )}
 
           <h2
             style={{
@@ -1041,82 +1095,103 @@ const CaseStudyModal: React.FC<{ project: PortfolioItem; onClose: () => void }> 
             {project.title}
           </h2>
 
-          <div
-            style={{
-              backgroundColor: 'rgba(255, 106, 42, 0.1)',
-              border: '1px solid rgba(255, 106, 42, 0.25)',
-              padding: '16px 24px',
-              borderRadius: 'var(--radius-ui)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '16px',
-              marginBottom: '28px',
-            }}
-          >
-            <TrendingUp size={28} color="var(--accent-orange)" />
+          {project.summary && (
+            <p
+              style={{
+                fontSize: '1.05rem',
+                color: 'var(--text-muted)',
+                lineHeight: 1.6,
+                marginBottom: '24px',
+              }}
+            >
+              {project.summary}
+            </p>
+          )}
+
+          {project.metrics?.value && (
+            <div
+              style={{
+                backgroundColor: 'rgba(255, 106, 42, 0.1)',
+                border: '1px solid rgba(255, 106, 42, 0.25)',
+                padding: '16px 24px',
+                borderRadius: 'var(--radius-ui)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '16px',
+                marginBottom: '28px',
+              }}
+            >
+              <TrendingUp size={28} color="var(--accent-orange)" />
+              <div>
+                <div style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--accent-orange)' }}>
+                  {project.metrics.value}
+                </div>
+                {project.metrics.label && (
+                  <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                    Key Metric Outcome ({project.metrics.label})
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {(project.challenge || project.solution) && (
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                gap: '24px',
+                marginBottom: '28px',
+              }}
+            >
+              {project.challenge && (
+                <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '20px', borderRadius: '12px' }}>
+                  <div style={{ color: 'var(--accent-orange)', fontWeight: 700, fontSize: '0.85rem', marginBottom: '8px' }}>
+                    THE CHALLENGE
+                  </div>
+                  <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)' }}>
+                    {project.challenge}
+                  </p>
+                </div>
+              )}
+
+              {project.solution && (
+                <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '20px', borderRadius: '12px' }}>
+                  <div style={{ color: '#FFFFFF', fontWeight: 700, fontSize: '0.85rem', marginBottom: '8px' }}>
+                    DEVELOPMENT & EXECUTION ARCHITECTURE
+                  </div>
+                  <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)' }}>
+                    {project.solution}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {project.deliverables && project.deliverables.length > 0 && (
             <div>
-              <div style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--accent-orange)' }}>
-                {project.metrics.value}
+              <div style={{ fontWeight: 700, color: '#FFFFFF', marginBottom: '12px', fontSize: '0.9rem' }}>
+                TECHNICAL DELIVERABLES & STACK
               </div>
-              <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                Key Metric Outcome ({project.metrics.label})
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                {project.deliverables.map((del) => (
+                  <span
+                    key={del}
+                    style={{
+                      padding: '6px 14px',
+                      borderRadius: 'var(--radius-pill)',
+                      backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      fontSize: '0.8rem',
+                      color: '#E0E0E0',
+                    }}
+                  >
+                    ✓ {del}
+                  </span>
+                ))}
               </div>
             </div>
-          </div>
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap: '24px',
-              marginBottom: '28px',
-            }}
-          >
-            {project.challenge && (
-              <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '20px', borderRadius: '12px' }}>
-                <div style={{ color: 'var(--accent-orange)', fontWeight: 700, fontSize: '0.85rem', marginBottom: '8px' }}>
-                  THE CHALLENGE
-                </div>
-                <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)' }}>
-                  {project.challenge}
-                </p>
-              </div>
-            )}
-
-            {project.solution && (
-              <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '20px', borderRadius: '12px' }}>
-                <div style={{ color: '#FFFFFF', fontWeight: 700, fontSize: '0.85rem', marginBottom: '8px' }}>
-                  CREATIVE & EXECUTION SOLUTION
-                </div>
-                <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)' }}>
-                  {project.solution}
-                </p>
-              </div>
-            )}
-          </div>
-
-          <div>
-            <div style={{ fontWeight: 700, color: '#FFFFFF', marginBottom: '12px', fontSize: '0.9rem' }}>
-              KEY DELIVERABLES
-            </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-              {project.deliverables.map((del) => (
-                <span
-                  key={del}
-                  style={{
-                    padding: '6px 14px',
-                    borderRadius: 'var(--radius-pill)',
-                    backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    fontSize: '0.8rem',
-                    color: '#E0E0E0',
-                  }}
-                >
-                  ✓ {del}
-                </span>
-              ))}
-            </div>
-          </div>
+          )}
 
         </div>
       </div>

@@ -197,7 +197,8 @@ export const WhoWeAre: React.FC = () => {
             <img
               ref={logoRef}
               src={mainLogo}
-              alt="Shree Ram Production"
+              alt="Shree Ram Production — Creative Studio, Video Production, Marketing and Digital Agency in Ahmedabad"
+              title="Shree Ram Production Official Emblem"
               className="who-we-are-logo"
               style={{
                 position: 'relative',

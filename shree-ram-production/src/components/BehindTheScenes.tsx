@@ -61,7 +61,8 @@ export const BehindTheScenes: React.FC = () => {
         >
           <img
             src="https://images.unsplash.com/photo-1579165466741-7f35e4755660?auto=format&fit=crop&w=1600&q=80"
-            alt="Shree Ram Production Showreel"
+            alt="Shree Ram Production Studio Showreel — Behind the Scenes Cinema Grade Production & Filmmaking"
+            title="Shree Ram Production Studio Showreel"
             style={{
               width: '100%',
               height: '100%',
@@ -152,7 +153,8 @@ export const BehindTheScenes: React.FC = () => {
               <div style={{ aspectRatio: '16/10', overflow: 'hidden' }}>
                 <img
                   src={item.image}
-                  alt={item.title}
+                  alt={`${item.title} — Behind the Scenes at Shree Ram Production Creative Studio`}
+                  title={`${item.title} — Shree Ram Production`}
                   loading="lazy"
                   style={{
                     width: '100%',

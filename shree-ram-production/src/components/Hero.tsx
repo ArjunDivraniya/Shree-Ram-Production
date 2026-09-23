@@ -443,12 +443,31 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate: _onNavigate }) => {
                     style={{ willChange: 'transform, opacity' }}
                   >
                     <div className="hero-orbit-thumb">
-                      <img src={project.thumbnail} alt={project.title} loading="lazy" />
+                      {project.videoUrl || project.thumbnail?.endsWith('.mp4') ? (
+                        <video
+                          src={project.videoUrl || project.thumbnail}
+                          title={`${project.title} — Reel by Shree Ram Production`}
+                          aria-label={`${project.title} — Video Production by Shree Ram Production`}
+                          muted
+                          loop
+                          playsInline
+                          autoPlay
+                          preload="metadata"
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                      ) : (
+                        <img
+                          src={project.thumbnail}
+                          alt={`${project.title} — ${project.categoryLabel || 'Featured Work'} | Shree Ram Production`}
+                          title={`${project.title} — Shree Ram Production`}
+                          loading="lazy"
+                        />
+                      )}
                       <div className="hero-orbit-thumb-overlay" />
                       <div className="hero-orbit-glow" aria-hidden="true" />
                     </div>
                     <div className={`hero-orbit-label ${isActive ? 'is-visible' : ''}`}>
-                      <div className="hero-orbit-category">{project.categoryLabel}</div>
+                      {project.categoryLabel && <div className="hero-orbit-category">{project.categoryLabel}</div>}
                       <div className="hero-orbit-title">{project.title}</div>
                     </div>
                   </div>

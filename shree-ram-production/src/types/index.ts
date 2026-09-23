@@ -13,18 +13,18 @@ export interface ServicePillar {
 export interface PortfolioItem {
   id: string;
   title: string;
-  client: string;
+  client?: string;
   category: 'production' | 'branding' | 'marketing' | 'technology';
-  categoryLabel: string;
-  year: string;
+  categoryLabel?: string;
+  year?: string;
   thumbnail: string;
   videoUrl?: string;
-  metrics: {
-    label: string;
-    value: string;
+  metrics?: {
+    label?: string;
+    value?: string;
   };
-  summary: string;
-  deliverables: string[];
+  summary?: string;
+  deliverables?: string[];
   challenge?: string;
   solution?: string;
 }

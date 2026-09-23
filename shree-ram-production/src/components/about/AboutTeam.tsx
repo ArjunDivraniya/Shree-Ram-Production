@@ -171,7 +171,8 @@ export const AboutTeam: React.FC = () => {
                   <img
                     ref={(el) => { imagesRef.current[idx] = el; }}
                     src={member.image}
-                    alt={`${member.firstName} ${member.surname}`}
+                    alt={`${member.firstName} ${member.surname} — ${member.role} at Shree Ram Production`}
+                    title={`${member.firstName} ${member.surname} — ${member.role}`}
                     className="team-portrait-img"
                     style={member.objectPosition ? { objectPosition: member.objectPosition } : undefined}
                     loading="lazy"

@@ -262,6 +262,7 @@ export const CinematicProjectStage: React.FC<CinematicProjectStageProps> = ({
           {galleryProjects.map((project, idx) => {
             const profile = STAGGER_PROFILES[idx % STAGGER_PROFILES.length];
             const isHovered = hoveredCardId === `${project.id}-${idx}`;
+            const isReel = Boolean(project.videoUrl || project.thumbnail?.endsWith('.mp4') || project.thumbnail?.includes('/reels/') || project.category === 'production');
             const categoryText = getCategoryLabel(project);
 
             return (
@@ -275,10 +276,12 @@ export const CinematicProjectStage: React.FC<CinematicProjectStageProps> = ({
                 onMouseLeave={() => setHoveredCardId(null)}
                 aria-label={`${project.title}`}
               >
-                {/* Uppercase Header directly above each portrait card (matching reference photo) */}
-                <div className="cinematic-gallery-item-header">
-                  <span>{categoryText}</span>
-                </div>
+                {/* Uppercase Header directly above portrait card - hidden for reels */}
+                {!isReel && categoryText && (
+                  <div className="cinematic-gallery-item-header">
+                    <span>{categoryText}</span>
+                  </div>
+                )}
 
                 {/* Staggered Portrait Card Media Container touching bottom */}
                 <div
@@ -288,27 +291,45 @@ export const CinematicProjectStage: React.FC<CinematicProjectStageProps> = ({
                     aspectRatio: profile.aspectRatio,
                   }}
                 >
-                  <img
-                    src={project.thumbnail}
-                    alt={`${project.title} — ${project.client}`}
-                    loading="lazy"
-                    className="cinematic-gallery-card-img"
-                  />
+                  {project.videoUrl || project.thumbnail?.endsWith('.mp4') || project.thumbnail?.includes('/reels/') ? (
+                    <video
+                      src={project.videoUrl || project.thumbnail}
+                      title={`${project.title} — Video Production by Shree Ram Production`}
+                      aria-label={`${project.title} — Video Production Reel by Shree Ram Production`}
+                      muted
+                      loop
+                      playsInline
+                      autoPlay
+                      preload="metadata"
+                      className="cinematic-gallery-card-img"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  ) : (
+                    <img
+                      src={project.thumbnail}
+                      alt={`${project.title} — ${project.categoryLabel || 'Creative Project'} by Shree Ram Production`}
+                      title={`${project.title} — Shree Ram Production`}
+                      loading="lazy"
+                      className="cinematic-gallery-card-img"
+                    />
+                  )}
 
-                  {/* Top-Right Performance Metric Tag */}
-                  {project.metrics?.value && (
+                  {/* Top-Right Performance Metric Tag - hidden for reels */}
+                  {!isReel && project.metrics?.value && (
                     <div className="cinematic-gallery-metric-badge glass-panel">
                       <TrendingUp size={11} color="var(--accent-orange)" />
                       <span>{project.metrics.value}</span>
                     </div>
                   )}
 
-                  {/* Card Hover Dark Vignette & Clean Content Overlay */}
+                  {/* Card Hover Dark Vignette & Clean Content Overlay - only title for reels */}
                   <div className="cinematic-gallery-hover-overlay">
                     <div className="cinematic-gallery-hover-content">
-                      <span className="cinematic-gallery-client-tag">
-                        {project.client} · {project.year}
-                      </span>
+                      {!isReel && (project.client || project.year) && (
+                        <span className="cinematic-gallery-client-tag">
+                          {[project.client, project.year].filter(Boolean).join(' · ')}
+                        </span>
+                      )}
                       <h4 className="cinematic-gallery-project-title">{project.title}</h4>
                     </div>
                   </div>

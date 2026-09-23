@@ -52,7 +52,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
       <div className="services-project-media">
         <img
           src={project.thumbnail}
-          alt={`${project.title} — ${project.client}`}
+          alt={`${project.title} — ${project.client ? project.client + ' | ' : ''}Creative Portfolio by Shree Ram Production`}
+          title={`${project.title} — Shree Ram Production`}
           loading="lazy"
           className="services-project-image"
         />

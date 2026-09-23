@@ -61,7 +61,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             >
               <img
                 src={mainLogo}
-                alt="Shree Ram Production Logo"
+                alt="Shree Ram Production — Creative Production, Brand Architecture & Performance Marketing Agency in Ahmedabad"
+                title="Shree Ram Production"
                 style={{
                   height: '38px',
                   width: 'auto',

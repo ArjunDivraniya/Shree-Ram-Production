@@ -133,8 +133,9 @@ export const AboutStory: React.FC = () => {
           {/* Right Column: Supporting Visual Frame */}
           <div ref={imageFrameRef} className="story-image-frame" style={{ height: '520px' }}>
             <img
-              src="../src/assets/logo/shreeramproduction-logo.png"
-              alt="Shree Ram Production Creative Studio Session"
+              src="/shreeramproduction-logo.png"
+              alt="Shree Ram Production — Creative Studio, Production & Digital Architecture Agency Headquarters"
+              title="Shree Ram Production Creative Studio"
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
             {/* Subtle Gradient Overlay Accent */}
