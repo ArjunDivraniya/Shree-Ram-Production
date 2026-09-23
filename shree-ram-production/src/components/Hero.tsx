@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowUpRight, ArrowDown } from 'lucide-react';
 import { gsap } from 'gsap';
 import { HERO_STATS, PORTFOLIO_ITEMS } from '../data/content';
+import { OptimizedVideo } from './ui/OptimizedVideo';
 
 interface HeroProps {
   onNavigate: (sectionId: string) => void;
@@ -443,17 +444,15 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate: _onNavigate }) => {
                     style={{ willChange: 'transform, opacity' }}
                   >
                     <div className="hero-orbit-thumb">
-                      {project.videoUrl || project.thumbnail?.endsWith('.mp4') ? (
-                        <video
+                      {project.videoUrl || project.thumbnail?.endsWith('.mp4') || project.thumbnail?.includes('/reels/') ? (
+                        <OptimizedVideo
                           src={project.videoUrl || project.thumbnail}
+                          webmSrc={project.webmUrl}
+                          poster={project.posterUrl || (project.thumbnail?.endsWith('.webp') ? project.thumbnail : undefined)}
+                          priority={isActive || idx === 0}
                           title={`${project.title} — Reel by Shree Ram Production`}
-                          aria-label={`${project.title} — Video Production by Shree Ram Production`}
-                          muted
-                          loop
-                          playsInline
-                          autoPlay
-                          preload="metadata"
-                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          ariaLabel={`${project.title} — Video Production by Shree Ram Production`}
+                          videoStyle={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
                       ) : (
                         <img

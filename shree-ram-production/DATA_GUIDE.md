@@ -123,21 +123,47 @@ The Production section now features your **9 Real Video Reels** located in `src/
 - **Case Study Modal:** Clicking any project opens the interactive modal where visitors can watch the full video with sound, scrub controls, and full detail.
 - **Services Showcase:** Under the *Content & Production* pillar on `/services`, all 9 video reels loop smoothly in the horizontal marquee.
 
-### How to Add or Edit a Project:
+### How to Add a New Project:
 
-#### A. Video Reels (Clean Minimalist — Only Title):
-For video reels, no tags, metrics, deliverables, or extra details are needed. You only need:
-```typescript
-{
-  id: 'my-reel-slug',                                                 // Unique identifier
-  title: 'Royal Enfield — The Spirit of Pure Motorcycling',           // Video Title (clean display)
-  category: 'production',                                             // Sets to production pillar
-  thumbnail: '/reels/My-Video.mp4',                                   // Video preview file path
-  videoUrl: '/reels/My-Video.mp4',                                    // Video file path
-}
-```
+#### A. Adding a New Video Reel:
+1. **Drop your video file into `public/reels/`**:
+   Example: `public/reels/My-New-Reel.mp4`
+2. **Run the automatic optimizer command**:
+   ```bash
+   npm run optimize:videos
+   ```
+   *This automatically creates:*
+   - `public/reels/webm/My-New-Reel.webm` (lightweight WebM for mobile)
+   - `public/reels/posters/My-New-Reel.webp` (instant poster image)
+   - `public/reels/My-New-Reel.mp4` (compressed fast-streaming MP4 fallback)
+3. **Add the entry to `src/data/content.ts`** under `PORTFOLIO_ITEMS`:
+   ```typescript
+   {
+     id: 'my-new-reel',
+     title: 'Brand Campaign — Cinematic Commercial',
+     category: 'production',
+     thumbnail: '/reels/posters/My-New-Reel.webp',
+     posterUrl: '/reels/posters/My-New-Reel.webp',
+     webmUrl: '/reels/webm/My-New-Reel.webm',
+     videoUrl: '/reels/My-New-Reel.mp4',
+   },
+   ```
 
-#### B. Full Case Studies (Branding, Marketing, Technology):
+#### B. Adding a New Photo / Image Project (Branding, Marketing, Technology):
+1. Place your image in `public/images/projects/` (or use an Unsplash / hosted CDN image URL).
+2. Add the entry to `src/data/content.ts` under `PORTFOLIO_ITEMS`:
+   ```typescript
+   {
+     id: 'luxury-brand-identity',
+     title: 'Aura Living — Global Brand Architecture',
+     client: 'Aura Lifestyle Co.',
+     category: 'branding',             // 'branding' | 'marketing' | 'technology'
+     categoryLabel: 'Brand & Creative',
+     year: '2025',
+     thumbnail: '/images/projects/aura-living.webp', // or https://images.unsplash.com/...
+     summary: 'Complete brand overhaul and packaging design.',
+   },
+   ```
 For non-reel case studies that include metrics, challenges, and deliverables:
 ```typescript
 {

@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, TrendingUp } from 'lucide-react';
 import type { PortfolioItem, ServiceDetail } from '../../types';
 import { useInView } from '../../hooks/useInView';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { OptimizedVideo } from '../ui/OptimizedVideo';
 
 interface CinematicProjectStageProps {
   service: ServiceDetail;
@@ -292,17 +293,14 @@ export const CinematicProjectStage: React.FC<CinematicProjectStageProps> = ({
                   }}
                 >
                   {project.videoUrl || project.thumbnail?.endsWith('.mp4') || project.thumbnail?.includes('/reels/') ? (
-                    <video
+                    <OptimizedVideo
                       src={project.videoUrl || project.thumbnail}
+                      webmSrc={project.webmUrl}
+                      poster={project.posterUrl || (project.thumbnail?.endsWith('.webp') ? project.thumbnail : undefined)}
                       title={`${project.title} — Video Production by Shree Ram Production`}
-                      aria-label={`${project.title} — Video Production Reel by Shree Ram Production`}
-                      muted
-                      loop
-                      playsInline
-                      autoPlay
-                      preload="metadata"
+                      ariaLabel={`${project.title} — Video Production Reel by Shree Ram Production`}
                       className="cinematic-gallery-card-img"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      videoStyle={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
                   ) : (
                     <img

@@ -7,10 +7,11 @@ import { PORTFOLIO_ITEMS } from '../data/content';
 import { findServiceById } from '../utils/serviceUtils';
 import { ArrowUpRight, X, TrendingUp, Play } from 'lucide-react';
 import SectionMarker from './ui/SectionMarker';
+import { OptimizedVideo } from './ui/OptimizedVideo';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const isVideoUrl = (url?: string) => Boolean(url && (url.endsWith('.mp4') || url.includes('/reels/')));
+const isVideoUrl = (url?: string) => Boolean(url && (url.endsWith('.mp4') || url.endsWith('.webm') || url.includes('/reels/')));
 
 interface PortfolioProps {
   isHomepage?: boolean;
@@ -624,16 +625,13 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                   }}
                 >
                   {isVideoUrl(project.videoUrl || project.thumbnail) ? (
-                    <video
+                    <OptimizedVideo
                       src={project.videoUrl || project.thumbnail}
+                      webmSrc={project.webmUrl}
+                      poster={project.posterUrl || (project.thumbnail?.endsWith('.webp') ? project.thumbnail : undefined)}
                       title={`${project.title} — Video Production by Shree Ram Production`}
-                      aria-label={`${project.title} — Video Production Reel by Shree Ram Production`}
-                      muted
-                      loop
-                      playsInline
-                      autoPlay
-                      preload="metadata"
-                      style={{
+                      ariaLabel={`${project.title} — Video Production Reel by Shree Ram Production`}
+                      videoStyle={{
                         width: '100%',
                         height: '100%',
                         objectFit: 'cover',
@@ -802,16 +800,13 @@ const FloatingCinematicCard: React.FC<{
         }}
       >
         {isVideoUrl(project.videoUrl || project.thumbnail) ? (
-          <video
+          <OptimizedVideo
             src={project.videoUrl || project.thumbnail}
+            webmSrc={project.webmUrl}
+            poster={project.posterUrl || (project.thumbnail?.endsWith('.webp') ? project.thumbnail : undefined)}
             title={`${project.title} — Video Production Showcase by Shree Ram Production`}
-            aria-label={`${project.title} — Video Production Showcase by Shree Ram Production`}
-            muted
-            loop
-            playsInline
-            autoPlay
-            preload="metadata"
-            style={{
+            ariaLabel={`${project.title} — Video Production Showcase by Shree Ram Production`}
+            videoStyle={{
               width: '100%',
               height: '100%',
               objectFit: 'cover',
@@ -1027,15 +1022,16 @@ const CaseStudyModal: React.FC<{ project: PortfolioItem; onClose: () => void }> 
           }}
         >
           {isVideoUrl(project.videoUrl || project.thumbnail) ? (
-            <video
+            <OptimizedVideo
               src={project.videoUrl || project.thumbnail}
+              webmSrc={project.webmUrl}
+              poster={project.posterUrl || (project.thumbnail?.endsWith('.webp') ? project.thumbnail : undefined)}
+              priority={true}
+              controls={true}
+              muted={false}
               title={`${project.title} — Video Demo by Shree Ram Production`}
-              aria-label={`${project.title} — Digital Platform Video Demo`}
-              controls
-              autoPlay
-              playsInline
-              loop
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              ariaLabel={`${project.title} — Digital Platform Video Demo`}
+              videoStyle={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           ) : (
             <img

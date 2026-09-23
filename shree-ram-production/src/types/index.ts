@@ -19,6 +19,8 @@ export interface PortfolioItem {
   year?: string;
   thumbnail: string;
   videoUrl?: string;
+  webmUrl?: string;
+  posterUrl?: string;
   metrics?: {
     label?: string;
     value?: string;
