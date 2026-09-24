@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build && node scripts/prerender.mjs",
     "prerender": "node scripts/prerender.mjs",
     "optimize:videos": "node scripts/optimize-videos.cjs",
+    "optimize:images": "node scripts/optimize-images.cjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },

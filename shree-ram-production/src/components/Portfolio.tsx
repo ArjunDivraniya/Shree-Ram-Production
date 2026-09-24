@@ -5,9 +5,10 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import type { PortfolioItem } from '../types';
 import { PORTFOLIO_ITEMS } from '../data/content';
 import { findServiceById } from '../utils/serviceUtils';
-import { ArrowUpRight, X, TrendingUp, Play } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import SectionMarker from './ui/SectionMarker';
 import { OptimizedVideo } from './ui/OptimizedVideo';
+import { AnimatedPhotoGrid } from './ui/AnimatedPhotoGrid';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -24,8 +25,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
   const serviceParam = searchParams.get('service');
   const serviceMatch = serviceParam ? findServiceById(serviceParam) : null;
 
-  // Selected project for case study modal
-  const [selectedProject, setSelectedProject] = useState<PortfolioItem | null>(null);
+  const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null);
 
   // Standalone page category filter
   const [activeCategory, setActiveCategory] = useState<string>('all');
@@ -46,15 +46,15 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
     []
   );
 
-  // ROW 2: BRAND & CREATIVE + MARKETING
+  // ROW 2: GRAPHIC DESIGNING MULTI-PHOTO SHOWCASE SUITES (MOVING LEFT ←)
   const row2Projects = useMemo(() => {
     const row2ProjectIds = [
-      'aura-luxury-rebrand',
-      'solaris-performance-growth',
-      'velox-sky-identity',
-      'kuro-viral-growth',
-      'elysium-spirits-packaging',
-      'kuro-creative-toolkit',
+      'graphic-design-luxury-jewelry',
+      'graphic-design-culinary-hospitality',
+      'graphic-design-fashion-apparel',
+      'graphic-design-industrial-print',
+      'graphic-design-media-events',
+      'graphic-design-retail-commerce',
     ];
     return row2ProjectIds
       .map((id) => PORTFOLIO_ITEMS.find((item) => item.id === id))
@@ -271,6 +271,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
   const categories = [
     { id: 'all', label: 'All Projects' },
     { id: 'production', label: 'Production' },
+    { id: 'graphic-design', label: 'Graphic Design' },
     { id: 'branding', label: 'Brand & Creative' },
     { id: 'marketing', label: 'Marketing' },
     { id: 'technology', label: 'Technology' },
@@ -278,6 +279,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
 
   let filteredProjects = activeCategory === 'all'
     ? PORTFOLIO_ITEMS
+    : activeCategory === 'graphic-design'
+    ? PORTFOLIO_ITEMS.filter((item) => item.category === 'graphic-design' || item.categoryLabel?.toLowerCase().includes('graphic'))
     : PORTFOLIO_ITEMS.filter((item) => item.category === activeCategory);
 
   if (serviceMatch?.service.projectIds && serviceMatch.service.projectIds.length > 0) {
@@ -419,7 +422,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                   key={`r2-${project.id}-${idx}`}
                   project={project}
                   aspectRatio="4/3"
-                  width="400px"
+                  width="440px"
                 />
               ))}
             </div>
@@ -441,10 +444,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                 <FloatingCinematicCard
                   key={`r3-${project.id}-${idx}`}
                   project={project}
-                  onSelect={project.category === 'technology' ? () => setSelectedProject(project) : undefined}
                   aspectRatio="16/10"
                   width="480px"
-                  badgeText={project.category === 'technology' ? "TECH PLATFORM" : undefined}
                 />
               ))}
             </div>
@@ -469,11 +470,6 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
             <span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={18} /></span>
           </button>
         </div>
-
-        {/* Modal Window inside Showreel */}
-        {selectedProject && selectedProject.category === 'technology' && (
-          <CaseStudyModal project={selectedProject} onClose={() => setSelectedProject(null)} />
-        )}
       </section>
     );
   }
@@ -589,13 +585,12 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
         >
           {filteredProjects.map((project) => {
             const isReel = isVideoUrl(project.videoUrl || project.thumbnail) || project.category === 'production';
+            const hasMultiImages = Boolean(project.images && project.images.length > 1);
             const isDev = project.category === 'technology';
 
             return (
               <div
                 key={project.id}
-                onClick={isDev ? () => setSelectedProject(project) : undefined}
-                data-cursor={isDev ? 'CASE STUDY' : undefined}
                 style={{
                   position: 'relative',
                   display: 'flex',
@@ -604,21 +599,11 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                   overflow: 'hidden',
                   backgroundColor: 'var(--surface-dark)',
                   border: '1px solid var(--glass-border)',
-                  cursor: isDev ? 'pointer' : 'default',
+                  cursor: 'default',
                   transition: 'var(--transition-smooth)',
                 }}
-                onMouseEnter={(e) => {
-                  if (isDev) {
-                    e.currentTarget.style.borderColor = 'var(--glass-border-bright)';
-                    e.currentTarget.style.transform = 'translateY(-6px)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (isDev) {
-                    e.currentTarget.style.borderColor = 'var(--glass-border)';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }
-                }}
+                onMouseEnter={() => setHoveredProjectId(project.id)}
+                onMouseLeave={() => setHoveredProjectId(null)}
               >
                 <div
                   style={{
@@ -643,6 +628,12 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                         display: 'block',
                         transition: 'transform 0.6s var(--ease-out-expo)',
                       }}
+                    />
+                  ) : project.images && project.images.length > 1 ? (
+                    <AnimatedPhotoGrid
+                      images={project.images}
+                      isHovered={hoveredProjectId === project.id}
+                      title={project.title}
                     />
                   ) : (
                     <img
@@ -703,7 +694,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                     style={{
                       fontSize: isReel ? '1.15rem' : '1.25rem',
                       fontWeight: 700,
-                      marginBottom: isDev ? '10px' : 0,
+                      marginBottom: (isDev || hasMultiImages) ? '10px' : 0,
                       color: '#FFFFFF',
                       lineHeight: 1.35,
                     }}
@@ -711,8 +702,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                     {project.title}
                   </h3>
 
-                  {/* Description ONLY shown for Development Projects (SAAS platform, websites, etc.) */}
-                  {isDev && project.summary && (
+                  {/* Description shown for Development & Multi-image Design Projects */}
+                  {(isDev || hasMultiImages) && project.summary && (
                     <p
                       style={{
                         fontSize: '0.9rem',
@@ -728,23 +719,6 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                       {project.summary}
                     </p>
                   )}
-
-                  {/* Read Case Study CTA ONLY shown for Development Projects */}
-                  {isDev && (
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px',
-                        fontSize: '0.85rem',
-                        fontWeight: 600,
-                        color: '#FFFFFF',
-                      }}
-                    >
-                      <span>Read Case Study</span>
-                      <ArrowUpRight size={16} color="var(--accent-orange)" />
-                    </div>
-                  )}
                 </div>
               </div>
             );
@@ -752,11 +726,6 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
         </div>
 
       </div>
-
-      {/* Modal Window */}
-      {selectedProject && selectedProject.category === 'technology' && (
-        <CaseStudyModal project={selectedProject} onClose={() => setSelectedProject(null)} />
-      )}
     </section>
   );
 };
@@ -764,23 +733,20 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
 // Sub-component for Borderless Floating Cinematic Project Card
 const FloatingCinematicCard: React.FC<{
   project: PortfolioItem;
-  onSelect?: () => void;
   aspectRatio: string;
   width: string;
-  badgeText?: string;
-}> = ({ project, onSelect, aspectRatio, width, badgeText }) => {
+}> = ({ project, aspectRatio, width }) => {
   const [isHovered, setIsHovered] = useState(false);
   const isReel = isVideoUrl(project.videoUrl || project.thumbnail) || project.category === 'production';
 
   return (
     <div
-      onClick={onSelect}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{
         width: width,
         flexShrink: 0,
-        cursor: onSelect ? 'pointer' : 'default',
+        cursor: 'default',
         display: 'flex',
         flexDirection: 'column',
         gap: '14px',
@@ -819,6 +785,12 @@ const FloatingCinematicCard: React.FC<{
               transform: isHovered ? 'scale(1.08)' : 'scale(1)',
             }}
           />
+        ) : project.images && project.images.length > 1 ? (
+          <AnimatedPhotoGrid
+            images={project.images}
+            isHovered={isHovered}
+            title={project.title}
+          />
         ) : (
           <img
             src={project.thumbnail}
@@ -844,64 +816,11 @@ const FloatingCinematicCard: React.FC<{
             pointerEvents: 'none',
           }}
         />
-
-        {/* Floating Play Indicator Button on Hover - only for clickable development projects */}
-        {onSelect && (
-          <div
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: `translate(-50%, -50%) scale(${isHovered ? 1 : 0.7})`,
-              opacity: isHovered ? 1 : 0,
-              transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-              width: '56px',
-              height: '56px',
-              borderRadius: '50%',
-              backgroundColor: 'rgba(255, 106, 42, 0.9)',
-              boxShadow: '0 0 30px rgba(255, 106, 42, 0.5)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#FFFFFF',
-              zIndex: 10,
-              pointerEvents: 'none',
-            }}
-          >
-            <Play size={22} style={{ marginLeft: '3px' }} />
-          </div>
-        )}
-
-        {/* Pillar Stream Badge Bottom Left - only for non-reels */}
-        {!isReel && badgeText && (
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '14px',
-              left: '14px',
-              padding: '5px 12px',
-              borderRadius: 'var(--radius-pill)',
-              backgroundColor: 'rgba(8, 9, 10, 0.85)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              fontSize: '0.7rem',
-              fontWeight: 800,
-              color: 'rgba(255, 255, 255, 0.85)',
-              letterSpacing: '0.08em',
-              textTransform: 'uppercase',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-            }}
-          >
-            <span>{badgeText}</span>
-          </div>
-        )}
       </div>
 
       {/* Editorial Title & Specs */}
       <div style={{ padding: '0 6px' }}>
-        {!isReel && (project.categoryLabel || project.client) && (
+        {!isReel && (project.client || project.year) && (
           <div
             style={{
               display: 'flex',
@@ -910,25 +829,9 @@ const FloatingCinematicCard: React.FC<{
               marginBottom: '4px',
             }}
           >
-            {project.categoryLabel && (
-              <span
-                style={{
-                  fontSize: '0.74rem',
-                  fontWeight: 800,
-                  color: isHovered ? 'var(--accent-orange)' : 'rgba(255, 255, 255, 0.55)',
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                  transition: 'var(--transition-smooth)',
-                }}
-              >
-                {project.categoryLabel}
-              </span>
-            )}
-            {(project.client || project.year) && (
-              <span style={{ fontSize: '0.78rem', color: 'var(--text-dim)' }}>
-                {[project.client, project.year].filter(Boolean).join(' • ')}
-              </span>
-            )}
+            <span style={{ fontSize: '0.78rem', color: 'var(--text-dim)' }}>
+              {[project.client, project.year].filter(Boolean).join(' • ')}
+            </span>
           </div>
         )}
 
@@ -955,245 +858,6 @@ const FloatingCinematicCard: React.FC<{
           >
             {project.title}
           </h3>
-
-          {onSelect && (
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-                fontSize: '0.8rem',
-                fontWeight: 800,
-                color: 'var(--accent-orange)',
-                opacity: isHovered ? 1 : 0.5,
-                transform: isHovered ? 'translateX(3px)' : 'translateX(0)',
-                transition: 'all 0.3s ease',
-                flexShrink: 0,
-              }}
-            >
-              <span>View</span>
-              <ArrowUpRight size={15} />
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Sub-component for Case Study Modal Details (Exclusively for Development Projects like SAAS platform, websites, etc.)
-const CaseStudyModal: React.FC<{ project: PortfolioItem; onClose: () => void }> = ({ project, onClose }) => {
-  // Hard guard: ONLY Development Projects are allowed to open the modal
-  if (project.category !== 'technology') return null;
-
-  return (
-    <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        backgroundColor: 'rgba(8, 9, 10, 0.94)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        zIndex: 10000,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '24px',
-        overflowY: 'auto',
-      }}
-      onClick={onClose}
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        style={{
-          maxWidth: '860px',
-          width: '100%',
-          backgroundColor: 'var(--surface-dark)',
-          border: '1px solid var(--glass-border-bright)',
-          borderRadius: 'var(--radius-glass)',
-          overflow: 'hidden',
-          boxShadow: '0 24px 64px rgba(0, 0, 0, 0.85)',
-          animation: 'scaleUp 0.3s var(--ease-out-expo) forwards',
-          margin: 'auto',
-        }}
-      >
-        <div
-          style={{
-            position: 'relative',
-            aspectRatio: '16/9',
-            maxHeight: '440px',
-            overflow: 'hidden',
-            backgroundColor: '#000000',
-          }}
-        >
-          {isVideoUrl(project.videoUrl || project.thumbnail) ? (
-            <OptimizedVideo
-              src={project.videoUrl || project.thumbnail}
-              webmSrc={project.webmUrl}
-              poster={project.posterUrl || (project.thumbnail?.endsWith('.webp') ? project.thumbnail : undefined)}
-              priority={true}
-              controls={true}
-              muted={false}
-              title={`${project.title} — Video Demo by Shree Ram Production`}
-              ariaLabel={`${project.title} — Digital Platform Video Demo`}
-              videoStyle={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            />
-          ) : (
-            <img
-              src={project.thumbnail}
-              alt={`${project.title} — Digital Platform & Case Study by Shree Ram Production`}
-              title={`${project.title} — Shree Ram Production Case Study`}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            />
-          )}
-          <button
-            onClick={onClose}
-            className="srp-btn srp-btn--icon"
-            aria-label="Close case study"
-            style={{ position: 'absolute', top: '20px', right: '20px', width: '40px', height: '40px', zIndex: 10 }}
-          >
-            <X size={18} />
-          </button>
-        </div>
-
-        <div style={{ padding: '36px' }}>
-          {(project.categoryLabel || project.client || project.year) && (
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                alignItems: 'center',
-                gap: '16px',
-                marginBottom: '16px',
-              }}
-            >
-              {project.categoryLabel && (
-                <span className="badge-pill">
-                  {project.categoryLabel}
-                </span>
-              )}
-              {project.client && (
-                <span style={{ color: 'var(--text-dim)', fontSize: '0.9rem' }}>
-                  Client: <strong style={{ color: '#FFFFFF' }}>{project.client}</strong>
-                </span>
-              )}
-              {project.year && (
-                <span style={{ color: 'var(--text-dim)', fontSize: '0.9rem' }}>
-                  Year: {project.year}
-                </span>
-              )}
-            </div>
-          )}
-
-          <h2
-            style={{
-              fontSize: '1.8rem',
-              fontWeight: 800,
-              marginBottom: '16px',
-              color: '#FFFFFF',
-            }}
-          >
-            {project.title}
-          </h2>
-
-          {project.summary && (
-            <p
-              style={{
-                fontSize: '1.05rem',
-                color: 'var(--text-muted)',
-                lineHeight: 1.6,
-                marginBottom: '24px',
-              }}
-            >
-              {project.summary}
-            </p>
-          )}
-
-          {project.metrics?.value && (
-            <div
-              style={{
-                backgroundColor: 'rgba(255, 106, 42, 0.1)',
-                border: '1px solid rgba(255, 106, 42, 0.25)',
-                padding: '16px 24px',
-                borderRadius: 'var(--radius-ui)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '16px',
-                marginBottom: '28px',
-              }}
-            >
-              <TrendingUp size={28} color="var(--accent-orange)" />
-              <div>
-                <div style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--accent-orange)' }}>
-                  {project.metrics.value}
-                </div>
-                {project.metrics.label && (
-                  <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                    Key Metric Outcome ({project.metrics.label})
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {(project.challenge || project.solution) && (
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                gap: '24px',
-                marginBottom: '28px',
-              }}
-            >
-              {project.challenge && (
-                <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '20px', borderRadius: '12px' }}>
-                  <div style={{ color: 'var(--accent-orange)', fontWeight: 700, fontSize: '0.85rem', marginBottom: '8px' }}>
-                    THE CHALLENGE
-                  </div>
-                  <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)' }}>
-                    {project.challenge}
-                  </p>
-                </div>
-              )}
-
-              {project.solution && (
-                <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '20px', borderRadius: '12px' }}>
-                  <div style={{ color: '#FFFFFF', fontWeight: 700, fontSize: '0.85rem', marginBottom: '8px' }}>
-                    DEVELOPMENT & EXECUTION ARCHITECTURE
-                  </div>
-                  <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)' }}>
-                    {project.solution}
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
-
-          {project.deliverables && project.deliverables.length > 0 && (
-            <div>
-              <div style={{ fontWeight: 700, color: '#FFFFFF', marginBottom: '12px', fontSize: '0.9rem' }}>
-                TECHNICAL DELIVERABLES & STACK
-              </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-                {project.deliverables.map((del) => (
-                  <span
-                    key={del}
-                    style={{
-                      padding: '6px 14px',
-                      borderRadius: 'var(--radius-pill)',
-                      backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
-                      fontSize: '0.8rem',
-                      color: '#E0E0E0',
-                    }}
-                  >
-                    ✓ {del}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
         </div>
       </div>
     </div>

@@ -88,36 +88,29 @@ export const SERVICES_PILLARS: PillarWithServices[] = [
           'Distinctive logo suites and mark systems — primary, secondary, and responsive variants engineered for digital, print, and physical applications.',
       },
       {
-        id: 'graphic-design',
-        number: '03',
-        name: 'Graphic Design',
-        description:
-          'Editorial layouts, campaign collateral, and visual communication assets — typography-driven design with meticulous craft and commercial clarity.',
-      },
-      {
         id: 'social-media-creatives',
-        number: '04',
+        number: '03',
         name: 'Social Media Creatives',
         description:
           'Platform-native creative templates, ad visuals, and content series designed for consistent brand presence across social channels.',
       },
       {
         id: 'packaging-design',
-        number: '05',
+        number: '04',
         name: 'Packaging Design',
         description:
           'Product packaging, unboxing experiences, and retail-ready design — tactile finishes and structural design that commands shelf presence.',
       },
       {
         id: 'ui-ux-design',
-        number: '06',
+        number: '05',
         name: 'UI/UX Design',
         description:
           'User-centered interface design for web and mobile — intuitive flows, design systems, and pixel-perfect prototypes that convert.',
       },
       {
         id: 'marketing-creatives',
-        number: '07',
+        number: '06',
         name: 'Marketing Creatives',
         description:
           'Campaign creative toolkits — ad visuals, landing page design, email templates, and omnichannel assets built for performance.',

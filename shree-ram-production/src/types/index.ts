@@ -14,10 +14,11 @@ export interface PortfolioItem {
   id: string;
   title: string;
   client?: string;
-  category: 'production' | 'branding' | 'marketing' | 'technology';
+  category: 'production' | 'branding' | 'marketing' | 'technology' | 'graphic-design';
   categoryLabel?: string;
   year?: string;
   thumbnail: string;
+  images?: string[];
   videoUrl?: string;
   webmUrl?: string;
   posterUrl?: string;

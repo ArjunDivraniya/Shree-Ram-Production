@@ -159,7 +159,40 @@ The Production section now features your **19 Real Video Reels** located in `src
    },
    ```
 
-#### B. Adding a New Photo / Image Project (Branding, Marketing, Technology):
+#### B. Adding Graphic Designing Photos (Cinematic Single-Photo Slideshows):
+1. **Drop your photos into `public/images/graphic_designing/`**:
+   Example: `public/images/graphic_designing/My-Brand-Design.jpeg`
+2. **Run the automatic image optimizer command**:
+   ```bash
+   npm run optimize:images
+   ```
+   *This automatically creates:*
+   - `public/images/graphic_designing/webp/My-Brand-Design.webp` (ultra-compressed, crisp WebP)
+   - `public/images/graphic_designing/original_backup/My-Brand-Design.jpeg` (safe original backup)
+3. **Add the entry to `src/data/content.ts`** under `PORTFOLIO_ITEMS` using the `images: [...]` array:
+   ```typescript
+   {
+     id: 'graphic-design-my-suite',
+     title: 'Brand Suite — Visual Identity Systems',
+     client: 'Client Name',
+     category: 'graphic-design',
+     categoryLabel: 'Graphic Design',
+     year: '2026',
+     thumbnail: '/images/graphic_designing/webp/My-Brand-Design-1.webp',
+     images: [
+       '/images/graphic_designing/webp/My-Brand-Design-1.webp',
+       '/images/graphic_designing/webp/My-Brand-Design-2.webp',
+       '/images/graphic_designing/webp/My-Brand-Design-3.webp',
+       '/images/graphic_designing/webp/My-Brand-Design-4.webp',
+     ],
+     metrics: { label: 'Brand Lift', value: '+200%' },
+     summary: 'Complete graphic design and visual communication suite.',
+     deliverables: ['Logo Mark', 'Packaging', 'Social Kit', 'Print Collateral'],
+   },
+   ```
+   *Cards with multiple images automatically display as a single photo that smoothly cycles through its photos in a cinematic slideshow in Row 2 of the homepage and in the Work page gallery!*
+
+#### C. Adding a Single Photo / Image Project (Branding, Marketing, Technology):
 1. Place your image in `public/images/projects/` (or use an Unsplash / hosted CDN image URL).
 2. Add the entry to `src/data/content.ts` under `PORTFOLIO_ITEMS`:
    ```typescript

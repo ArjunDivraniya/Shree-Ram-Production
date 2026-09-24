@@ -6,7 +6,7 @@ import { useReducedMotion } from '../../hooks/useReducedMotion';
 interface ProjectReelProps {
   projects: PortfolioItem[];
   serviceName: string;
-  onSelectProject: (project: PortfolioItem) => void;
+  onSelectProject?: (project: PortfolioItem) => void;
   isReversed?: boolean;
   phase?: 'idle' | 'exit' | 'enter';
 }
@@ -14,7 +14,6 @@ interface ProjectReelProps {
 export const ProjectReel: React.FC<ProjectReelProps> = ({
   projects,
   serviceName,
-  onSelectProject,
   isReversed = false,
   phase = 'idle',
 }) => {
@@ -215,7 +214,6 @@ export const ProjectReel: React.FC<ProjectReelProps> = ({
             <ProjectCard
               project={item.project}
               serviceName={serviceName}
-              onSelect={onSelectProject}
               index={item.originalIndex}
             />
           </div>

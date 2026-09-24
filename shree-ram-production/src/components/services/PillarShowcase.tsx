@@ -50,8 +50,8 @@ export const PillarShowcase: React.FC<PillarShowcaseProps> = ({
     const list = Array.from(map.values());
     if (list.length >= 4) return list;
 
-    // Fallback if fewer than 4 projects
-    const remaining = PORTFOLIO_ITEMS.filter((p) => !map.has(p.id));
+    // Fallback if fewer than 4 projects (exclude graphic design multi-photo suites)
+    const remaining = PORTFOLIO_ITEMS.filter((p) => !map.has(p.id) && p.category !== 'graphic-design');
     return [...list, ...remaining.slice(0, Math.max(0, 5 - list.length))];
   }, [pillar]);
 

@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import gsap from 'gsap';
-import { ChevronLeft, ChevronRight, TrendingUp } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { PortfolioItem, ServiceDetail } from '../../types';
 import { useInView } from '../../hooks/useInView';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
@@ -50,13 +50,7 @@ export const CinematicProjectStage: React.FC<CinematicProjectStageProps> = ({
     return [...projects, ...projects, ...projects, ...projects];
   }, [projects]);
 
-  // Format header category text above each card (e.g. DEVELOPMENT, ILLUSTRATIONS, FASHION)
-  const getCategoryLabel = useCallback((project: PortfolioItem): string => {
-    if (project.categoryLabel) {
-      return project.categoryLabel.toUpperCase();
-    }
-    return (project.category || '').toUpperCase();
-  }, []);
+
 
   // Smooth continuous right-to-left GPU marquee loop (never stops on cursor hover or category hover)
   useEffect(() => {
@@ -264,7 +258,6 @@ export const CinematicProjectStage: React.FC<CinematicProjectStageProps> = ({
             const profile = STAGGER_PROFILES[idx % STAGGER_PROFILES.length];
             const isHovered = hoveredCardId === `${project.id}-${idx}`;
             const isReel = Boolean(project.videoUrl || project.thumbnail?.endsWith('.mp4') || project.thumbnail?.includes('/reels/') || project.category === 'production');
-            const categoryText = getCategoryLabel(project);
 
             return (
               <div
@@ -277,13 +270,6 @@ export const CinematicProjectStage: React.FC<CinematicProjectStageProps> = ({
                 onMouseLeave={() => setHoveredCardId(null)}
                 aria-label={`${project.title}`}
               >
-                {/* Uppercase Header directly above portrait card - hidden for reels */}
-                {!isReel && categoryText && (
-                  <div className="cinematic-gallery-item-header">
-                    <span>{categoryText}</span>
-                  </div>
-                )}
-
                 {/* Staggered Portrait Card Media Container touching bottom */}
                 <div
                   className="cinematic-gallery-card-media"
@@ -310,14 +296,6 @@ export const CinematicProjectStage: React.FC<CinematicProjectStageProps> = ({
                       loading="lazy"
                       className="cinematic-gallery-card-img"
                     />
-                  )}
-
-                  {/* Top-Right Performance Metric Tag - hidden for reels */}
-                  {!isReel && project.metrics?.value && (
-                    <div className="cinematic-gallery-metric-badge glass-panel">
-                      <TrendingUp size={11} color="var(--accent-orange)" />
-                      <span>{project.metrics.value}</span>
-                    </div>
                   )}
 
                   {/* Card Hover Dark Vignette & Clean Content Overlay - only title for reels */}
