@@ -107,7 +107,7 @@ The Work page is your full portfolio showcase featuring category filters and int
 * **File:** [`src/data/content.ts`](file:///Users/mayank/Shree-Ram-Production/shree-ram-production/src/data/content.ts)
   Look for `export const PORTFOLIO_ITEMS: PortfolioItem[] = [...]` (starts at line ~84).
 
-The Production section now features your **9 Real Video Reels** located in `src/assets/reels/` (and served via `public/reels/`):
+The Production section now features your **19 Real Video Reels** located in `src/assets/reels/` (and served via `public/reels/`):
 1. **Royal Enfield** (`/reels/Royal-Enfeild.mp4`) — Cinematic Commercial Shoot
 2. **Philips Healthcare** (`/reels/Phillips-Event.mp4`) — Global Summit & Event Highlights
 3. **Kaya Kalp** (`/reels/Kaya-Kalp.mp4`) — Luxury Wellness & Brand Storytelling
@@ -117,11 +117,21 @@ The Production section now features your **9 Real Video Reels** located in `src/
 7. **The Royal Heritage Wedding** (`/reels/Wedding-Reels.mp4`) — Grand Wedding Film
 8. **Celestial Romance** (`/reels/Wedding-Reel-2.mp4`) — Luxury Destination Wedding
 9. **Eternal Elegance** (`/reels/Wedding-Reel-3.mp4`) — Sangeet & Celebration Highlights
+10. **Titan World Store** (`/reels/Titan-Watch-World-Store.mp4`) — Luxury Timepieces & Retail Experience
+11. **Jockey Store** (`/reels/Jockey-Store.mp4`) — Premium Retail Store & Lifestyle Reel
+12. **Fastrack Store** (`/reels/FastTrack-Store.mp4`) — Youth Fashion & Accessories Retail Reel
+13. **Tunwal E-Bike Morbi** (`/reels/Tunwal-Ebike-Showroom-Morbi.mp4`) — Smart Electric Mobility Reel
+14. **Big Bite Fast Food** (`/reels/Big-Bite-Fast-Food.mp4`) — Culinary & Dine-In Commercial
+15. **Chamunda Lassi** (`/reels/Chamunda-Lassi.mp4`) — Authentic Refreshment & Brand Story
+16. **Modern Lassi** (`/reels/Modern-Lassi.mp4`) — Handcrafted Flavor & Refreshment
+17. **Har Bhole Plywood** (`/reels/Har-Bhole-Plywood.mp4`) — Architectural Materials & Craft
+18. **Maruti Communication** (`/reels/Maruti-Communication-Mobile- Accesories-Shop.mp4`) — Mobile & Accessories Flagship
+19. **Autonomous Mobility Future** (`/reels/Self-Driving-Car.mp4`) — Future of Self-Driving Tech
 
 ### How Video Reels Play on the Website:
 - **Work Page & Homepage Marquee Cards:** Videos play continuously muted and looped (`autoPlay muted loop playsInline`).
 - **Case Study Modal:** Clicking any project opens the interactive modal where visitors can watch the full video with sound, scrub controls, and full detail.
-- **Services Showcase:** Under the *Content & Production* pillar on `/services`, all 9 video reels loop smoothly in the horizontal marquee.
+- **Services Showcase:** Under the *Content & Production* pillar on `/services`, all 19 video reels loop smoothly in the horizontal marquee.
 
 ### How to Add a New Project:
 

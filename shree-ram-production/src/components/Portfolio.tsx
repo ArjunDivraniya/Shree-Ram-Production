@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -41,35 +41,40 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
 
   // Categorized items for 3 distinct streams of work
   // ROW 1: ONLY PRODUCTION REELS (PORTRAIT 9:16 FORMAT)
-  const row1Projects = [
-    PORTFOLIO_ITEMS[0], // Royal Enfield Reel
-    PORTFOLIO_ITEMS[1], // Philips Event Summit Reel
-    PORTFOLIO_ITEMS[2], // Kaya Kalp Wellness Reel
-    PORTFOLIO_ITEMS[3], // Autonomous Car Tech Reel
-    PORTFOLIO_ITEMS[4], // Brand Promotion Commercial Reel
-    PORTFOLIO_ITEMS[5], // Shree Ram Production Showreel
-    PORTFOLIO_ITEMS[6], // Royal Heritage Wedding Reel
-  ];
+  const row1Projects = useMemo(
+    () => PORTFOLIO_ITEMS.filter((item) => item.category === 'production'),
+    []
+  );
 
   // ROW 2: BRAND & CREATIVE + MARKETING
-  const row2Projects = [
-    PORTFOLIO_ITEMS[9],  // Aura Living Brand Architecture
-    PORTFOLIO_ITEMS[13], // Solaris Energy Performance Marketing
-    PORTFOLIO_ITEMS[10], // Velox Aviation Brand Identity
-    PORTFOLIO_ITEMS[14], // Kuro Fashion Paid Social
-    PORTFOLIO_ITEMS[11], // Elysium Reserve Luxury Packaging
-    PORTFOLIO_ITEMS[12], // Kuro Studio Design & Social Kit
-  ];
+  const row2Projects = useMemo(() => {
+    const row2ProjectIds = [
+      'aura-luxury-rebrand',
+      'solaris-performance-growth',
+      'velox-sky-identity',
+      'kuro-viral-growth',
+      'elysium-spirits-packaging',
+      'kuro-creative-toolkit',
+    ];
+    return row2ProjectIds
+      .map((id) => PORTFOLIO_ITEMS.find((item) => item.id === id))
+      .filter(Boolean) as typeof PORTFOLIO_ITEMS;
+  }, []);
 
   // ROW 3: TECHNOLOGY & DIGITAL PLATFORMS
-  const row3Projects = [
-    PORTFOLIO_ITEMS[17], // Lumina Spatial Web3D
-    PORTFOLIO_ITEMS[18], // Nexus Bank Digital Platform
-    PORTFOLIO_ITEMS[15], // Titan Software Enterprise SEO
-    PORTFOLIO_ITEMS[19], // Aether Apparel Headless Commerce
-    PORTFOLIO_ITEMS[20], // Zenith Holdings Enterprise CRM
-    PORTFOLIO_ITEMS[16], // Pulse Fitness Funnel & CRO
-  ];
+  const row3Projects = useMemo(() => {
+    const row3ProjectIds = [
+      'lumina-interactive-platform',
+      'nexus-fintech-ecosystem',
+      'titan-seo-domination',
+      'aether-headless-commerce',
+      'zenith-crm-automation',
+      'pulse-cro-engine',
+    ];
+    return row3ProjectIds
+      .map((id) => PORTFOLIO_ITEMS.find((item) => item.id === id))
+      .filter(Boolean) as typeof PORTFOLIO_ITEMS;
+  }, []);
 
   useEffect(() => {
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -169,7 +174,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
       const tween1 = gsap.to(row1Ref.current, {
         xPercent: 0,
         repeat: -1,
-        duration: 34,
+        duration: 68,
         ease: 'none',
       });
 
