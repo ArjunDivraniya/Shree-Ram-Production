@@ -294,6 +294,32 @@ export const PORTFOLIO_ITEMS: PortfolioItem[] = [
     videoUrl: '/reels/Self-Driving-Car.mp4',
     summary: 'Futuristic automotive reel exploring autonomous pilot intelligence, sensory perception, and smooth road navigation.',
   },
+  {
+    id: 'pogo-clothing-store',
+    title: 'Pogo Clothing Store — Trendsetting Apparel & Retail Fashion',
+    client: 'Pogo Clothing Store',
+    category: 'production',
+    categoryLabel: 'Fashion Retail',
+    year: '2026',
+    thumbnail: '/reels/posters/Pogo-Clothing-Store.webp',
+    posterUrl: '/reels/posters/Pogo-Clothing-Store.webp',
+    webmUrl: '/reels/webm/Pogo-Clothing-Store.webm',
+    videoUrl: '/reels/Pogo-Clothing-Store.mp4',
+    summary: 'High-energy fashion reel exploring contemporary streetwear, vibrant clothing collections, and dynamic retail experience.',
+  },
+  {
+    id: 'xtreme-automobile-service',
+    title: 'Xtreme Automobile — High-Performance Car Care & Detailing',
+    client: 'Xtreme Automobile',
+    category: 'production',
+    categoryLabel: 'Automotive Commercial',
+    year: '2026',
+    thumbnail: '/reels/posters/Xtreme-AutoMobile-Car-Service.webp',
+    posterUrl: '/reels/posters/Xtreme-AutoMobile-Car-Service.webp',
+    webmUrl: '/reels/webm/Xtreme-AutoMobile-Car-Service.webm',
+    videoUrl: '/reels/Xtreme-AutoMobile-Car-Service.mp4',
+    summary: 'Precision automotive commercial showcasing elite car detailing, advanced mechanical servicing, and high-performance workshop craftsmanship.',
+  },
 
   // GRAPHIC DESIGN SHOWCASE (SINGLE-PHOTO CINEMATIC SLIDESHOW SUITES)
   {
