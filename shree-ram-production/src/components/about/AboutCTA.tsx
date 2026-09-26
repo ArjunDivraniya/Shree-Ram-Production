@@ -65,7 +65,6 @@ export const AboutCTA: React.FC = () => {
     {
       num: '01',
       title: 'WHATSAPP',
-      detail: '+91 93131 19830',
       ctaText: 'Chat on WhatsApp',
       href: 'https://wa.me/919313119830?text=Hello%20Shree%20Ram%20Production%2C%20I%20would%20like%20to%20start%20a%20conversation.',
       icon: MessageSquare,
@@ -73,7 +72,6 @@ export const AboutCTA: React.FC = () => {
     {
       num: '02',
       title: 'CALL',
-      detail: '+91 93131 19830',
       ctaText: 'Call our team',
       href: 'tel:+919313119830',
       icon: Phone,
@@ -81,7 +79,6 @@ export const AboutCTA: React.FC = () => {
     {
       num: '03',
       title: 'EMAIL',
-      detail: 'shreeramproduction.in@gmail.com',
       ctaText: 'Send email inquiry',
       href: 'mailto:shreeramproduction.in@gmail.com?subject=Project%20Inquiry%20-%20Shree%20Ram%20Production',
       icon: Mail,
@@ -89,7 +86,6 @@ export const AboutCTA: React.FC = () => {
     {
       num: '04',
       title: 'INSTAGRAM',
-      detail: '@ram_production___',
       ctaText: 'Follow on Instagram',
       href: 'https://www.instagram.com/ram_production___?stkn=NWRnYWM5YTVta3hy',
       icon: InstagramIcon,
@@ -233,18 +229,6 @@ export const AboutCTA: React.FC = () => {
                     >
                       {opt.title}
                     </h3>
-                    <div
-                      style={{
-                        fontSize: 'clamp(0.85rem, 1.1vw, 1.0rem)',
-                        fontWeight: 600,
-                        color: isHovered ? '#FF6A2A' : '#8E8E93',
-                        marginTop: '4px',
-                        letterSpacing: '0.02em',
-                        transition: 'color 0.4s ease',
-                      }}
-                    >
-                      {opt.detail}
-                    </div>
                   </div>
                 </div>
 
