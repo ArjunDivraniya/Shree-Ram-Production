@@ -81,6 +81,33 @@ export function createHomepageJsonLd() {
         '@type': 'Country',
         name: 'India',
       },
+      member: [
+        {
+          '@type': 'Person',
+          name: 'Arjun Divraniya',
+          jobTitle: 'Technology & Digital',
+        },
+        {
+          '@type': 'Person',
+          name: 'Vivek Bhut',
+          jobTitle: 'Content & Production',
+        },
+        {
+          '@type': 'Person',
+          name: 'Vasu Viroja',
+          jobTitle: 'Brand & Creative',
+        },
+        {
+          '@type': 'Person',
+          name: 'Gautam Thaker',
+          jobTitle: 'Marketing & Growth',
+        },
+        {
+          '@type': 'Person',
+          name: 'Mayank Dudhatra',
+          jobTitle: 'Technology & Digital',
+        },
+      ],
       knowsAbout: [
         'Content & Production',
         'Brand & Creative',
@@ -237,6 +264,69 @@ export const ABOUT_JSON_LD = [
       '@type': 'Organization',
       name: SITE_NAME,
       logo: SITE_IMAGE,
+      member: [
+        {
+          '@type': 'Person',
+          name: 'Arjun Divraniya',
+          jobTitle: 'Technology & Digital',
+        },
+        {
+          '@type': 'Person',
+          name: 'Vivek Bhut',
+          jobTitle: 'Content & Production',
+        },
+        {
+          '@type': 'Person',
+          name: 'Vasu Viroja',
+          jobTitle: 'Brand & Creative',
+        },
+        {
+          '@type': 'Person',
+          name: 'Gautam Thaker',
+          jobTitle: 'Marketing & Growth',
+        },
+        {
+          '@type': 'Person',
+          name: 'Mayank Dudhatra',
+          jobTitle: 'Technology & Digital',
+        },
+      ],
+    },
+    mainEntity: {
+      '@type': 'ItemList',
+      name: 'The People Behind The Work',
+      itemListElement: [
+        {
+          '@type': 'Person',
+          position: 1,
+          name: 'Arjun Divraniya',
+          jobTitle: 'Technology & Digital',
+        },
+        {
+          '@type': 'Person',
+          position: 2,
+          name: 'Vivek Bhut',
+          jobTitle: 'Content & Production',
+        },
+        {
+          '@type': 'Person',
+          position: 3,
+          name: 'Vasu Viroja',
+          jobTitle: 'Brand & Creative',
+        },
+        {
+          '@type': 'Person',
+          position: 4,
+          name: 'Gautam Thaker',
+          jobTitle: 'Marketing & Growth',
+        },
+        {
+          '@type': 'Person',
+          position: 5,
+          name: 'Mayank Dudhatra',
+          jobTitle: 'Technology & Digital',
+        },
+      ],
     },
   },
 ];

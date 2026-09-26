@@ -59,12 +59,10 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
       <AboutCTA />
 
       {/* Cross-linking for sitelinks hierarchy */}
-      <nav aria-label="Related pages" style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '32px 24px 48px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexWrap: 'wrap', gap: '16px', fontSize: '0.9rem' }}>
-        <Link to="/services" style={{ color: 'var(--accent-orange)', textDecoration: 'none', fontWeight: 600 }}>Explore Services — growth solutions</Link>
-        <span style={{ color: 'var(--text-dim)' }} aria-hidden="true">•</span>
-        <Link to="/work" style={{ color: 'var(--accent-orange)', textDecoration: 'none', fontWeight: 600 }}>View Work — projects & case studies</Link>
-        <span style={{ color: 'var(--text-dim)' }} aria-hidden="true">•</span>
-        <Link to="/contact" style={{ color: 'var(--accent-orange)', textDecoration: 'none', fontWeight: 600 }}>Contact — contact Shree Ram Production</Link>
+      <nav aria-label="Related pages" className="sr-only">
+        <Link to="/services">Explore Services — growth solutions</Link>
+        <Link to="/work">View Work — projects & case studies</Link>
+        <Link to="/contact">Contact — contact Shree Ram Production</Link>
       </nav>
 
       {/* FOOTER */}

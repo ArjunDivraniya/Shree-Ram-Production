@@ -198,6 +198,18 @@ export const AboutTeam: React.FC = () => {
             ))}
           </div>
         </div>
+
+        {/* Semantic SEO & search engine structured index for The People Behind The Work */}
+        <div className="sr-only">
+          <h3>The People Behind The Work — Shree Ram Production Team</h3>
+          <ul>
+            <li>Arjun Divraniya — Technology &amp; Digital</li>
+            <li>Vivek Bhut — Content &amp; Production</li>
+            <li>Vasu Viroja — Brand &amp; Creative</li>
+            <li>Gautam Thaker — Marketing &amp; Growth</li>
+            <li>Mayank Dudhatra — Technology &amp; Digital</li>
+          </ul>
+        </div>
       </div>
     </section>
   );
