@@ -41,17 +41,12 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       />
 
       <div className="container">
-        
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(12, 1fr)',
-            gap: '40px',
-            marginBottom: '64px',
-          }}
-        >
-          {/* Brand & Mission */}
-          <div style={{ gridColumn: 'span 12' }} className="footer-brand-col">
+
+        {/* Top Row: Part-1 (Brand) & Part-2 (Pillar Solutions + Navigation) */}
+        <div className="footer-top-row">
+
+          {/* Part-1: SHREE RAM PRODUCTION */}
+          <div className="footer-brand-col">
             <div
               style={{
                 display: 'flex',
@@ -83,7 +78,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               </span>
             </div>
 
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', maxWidth: '360px', marginBottom: '24px', lineHeight: 1.6 }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', maxWidth: '440px', marginBottom: '24px', lineHeight: 1.6 }}>
               Everything Your Business Needs to Grow. Content, Brand, Growth & Technology Agency.
             </p>
 
@@ -106,77 +101,76 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </div>
           </div>
 
-          {/* Quick Links — semantic pillar navigation to /services */}
-          <nav aria-label="Services" style={{ gridColumn: 'span 6' }} className="footer-links-col">
-            <h3 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#FFFFFF', letterSpacing: '0.08em', marginBottom: '20px', textTransform: 'uppercase' }}>
-              Pillar Solutions
-            </h3>
-            <ul style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.9rem', color: 'var(--text-muted)', listStyle: 'none', padding: 0, margin: 0 }}>
-              <li><Link to="/services" style={{ color: 'inherit', textDecoration: 'none' }}>Content & Production services</Link></li>
-              <li><Link to="/services" style={{ color: 'inherit', textDecoration: 'none' }}>Brand & Creative services</Link></li>
-              <li><Link to="/services" style={{ color: 'inherit', textDecoration: 'none' }}>Marketing & Growth services</Link></li>
-              <li><Link to="/services" style={{ color: 'inherit', textDecoration: 'none' }}>Technology & Digital services</Link></li>
-            </ul>
-          </nav>
+          {/* Part-2: Pillar Solutions & Navigation Columns */}
+          <div className="footer-nav-group">
+            {/* Quick Links — semantic pillar navigation to /services */}
+            <nav aria-label="Services" className="footer-links-col">
+              <h3 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#FFFFFF', letterSpacing: '0.08em', marginBottom: '20px', textTransform: 'uppercase' }}>
+                Pillar Solutions
+              </h3>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.9rem', color: 'var(--text-muted)', listStyle: 'none', padding: 0, margin: 0 }}>
+                <li><Link to="/services" style={{ color: 'inherit', textDecoration: 'none' }}>Content & Production services</Link></li>
+                <li><Link to="/services" style={{ color: 'inherit', textDecoration: 'none' }}>Brand & Creative services</Link></li>
+                <li><Link to="/services" style={{ color: 'inherit', textDecoration: 'none' }}>Marketing & Growth services</Link></li>
+                <li><Link to="/services" style={{ color: 'inherit', textDecoration: 'none' }}>Technology & Digital services</Link></li>
+              </ul>
+            </nav>
 
-          {/* Site Navigation — semantic links to canonical routes for sitelinks hierarchy */}
-          <nav aria-label="Footer navigation" style={{ gridColumn: 'span 6' }} className="footer-nav-col">
-            <h3 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#FFFFFF', letterSpacing: '0.08em', marginBottom: '20px', textTransform: 'uppercase' }}>
-              Navigation
-            </h3>
-            <ul style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.9rem', color: 'var(--text-muted)', listStyle: 'none', padding: 0, margin: 0 }}>
-              <li><Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>Home — Shree Ram Production</Link></li>
-              <li><Link to="/services" style={{ color: 'inherit', textDecoration: 'none' }}>Services — growth solutions & capabilities</Link></li>
-              <li><Link to="/work" style={{ color: 'inherit', textDecoration: 'none' }}>Work — projects & case studies</Link></li>
-              <li><Link to="/about" style={{ color: 'inherit', textDecoration: 'none' }}>About — company information</Link></li>
-              <li><Link to="/contact" style={{ color: 'inherit', textDecoration: 'none' }}>Contact — contact Shree Ram Production</Link></li>
-            </ul>
-          </nav>
-
-          {/* Studio Locations & Direct Contact Details */}
-          <div style={{ gridColumn: 'span 12' }} className="footer-location-col">
-            <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#FFFFFF', letterSpacing: '0.08em', marginBottom: '20px', textTransform: 'uppercase' }}>
-              Direct Contact & Studio Presence
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '18px', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <Phone size={16} color="var(--accent-orange)" style={{ flexShrink: 0 }} />
-                <span>
-                  Call & WhatsApp:{' '}
-                  <a href="tel:+919313119830" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 600 }}>
-                    +91 93131 19830
-                  </a>
-                  {' · '}
-                  <a href="https://wa.me/919313119830?text=Hello%20Shree%20Ram%20Production%2C%20I%20would%20like%20to%20start%20a%20conversation." target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-orange)', textDecoration: 'none', fontWeight: 600 }}>
-                    WhatsApp
-                  </a>
-                </span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <Mail size={16} color="var(--accent-orange)" style={{ flexShrink: 0 }} />
-                <span>
-                  Email:{' '}
-                  <a href="mailto:shreeramproduction.in@gmail.com" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 600 }}>
-                    shreeramproduction.in@gmail.com
-                  </a>
-                </span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <InstagramIcon size={16} color="var(--accent-orange)" style={{ flexShrink: 0 }} />
-                <span>
-                  Instagram:{' '}
-                  <a href="https://www.instagram.com/ram_production___?stkn=NWRnYWM5YTVta3hy" target="_blank" rel="noopener noreferrer" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 600 }}>
-                    @ram_production___
-                  </a>
-                </span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <MapPin size={16} color="var(--accent-orange)" style={{ flexShrink: 0 }} />
-                <span>Ahmedabad, Gujarat, India</span>
-              </div>
-            </div>
+            {/* Site Navigation — semantic links to canonical routes for sitelinks hierarchy */}
+            <nav aria-label="Footer navigation" className="footer-nav-col">
+              <h3 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#FFFFFF', letterSpacing: '0.08em', marginBottom: '20px', textTransform: 'uppercase' }}>
+                Navigation
+              </h3>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.9rem', color: 'var(--text-muted)', listStyle: 'none', padding: 0, margin: 0 }}>
+                <li><Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>Home — Shree Ram Production</Link></li>
+                <li><Link to="/services" style={{ color: 'inherit', textDecoration: 'none' }}>Services — growth solutions & capabilities</Link></li>
+                <li><Link to="/work" style={{ color: 'inherit', textDecoration: 'none' }}>Work — projects & case studies</Link></li>
+                <li><Link to="/about" style={{ color: 'inherit', textDecoration: 'none' }}>About — company information</Link></li>
+                <li><Link to="/contact" style={{ color: 'inherit', textDecoration: 'none' }}>Contact — contact Shree Ram Production</Link></li>
+              </ul>
+            </nav>
           </div>
 
+        </div>
+
+        {/* Studio Locations & Direct Contact Details */}
+        <div className="footer-location-col">
+          <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#FFFFFF', letterSpacing: '0.08em', marginBottom: '24px', textTransform: 'uppercase' }}>
+            Direct Contact & Studio Presence
+          </div>
+          <div className="footer-contact-row">
+            <div className="footer-contact-item">
+              <Phone size={16} color="var(--accent-orange)" style={{ flexShrink: 0 }} />
+              <span>
+                Contact Us:{' '}
+                <a href="tel:+919313119830" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 600 }}>
+                  +91 93131 19830
+                </a>
+              </span>
+            </div>
+            <div className="footer-contact-item">
+              <Mail size={16} color="var(--accent-orange)" style={{ flexShrink: 0 }} />
+              <span>
+                Email:{' '}
+                <a href="mailto:shreeramproduction.in@gmail.com" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 600 }}>
+                  shreeramproduction.in@gmail.com
+                </a>
+              </span>
+            </div>
+            <div className="footer-contact-item">
+              <InstagramIcon size={16} color="var(--accent-orange)" style={{ flexShrink: 0 }} />
+              <span>
+                Instagram:{' '}
+                <a href="https://www.instagram.com/ram_production___?stkn=NWRnYWM5YTVta3hy" target="_blank" rel="noopener noreferrer" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 600 }}>
+                  @ram_production___
+                </a>
+              </span>
+            </div>
+            <div className="footer-contact-item">
+              <MapPin size={16} color="var(--accent-orange)" style={{ flexShrink: 0 }} />
+              <span>Ahmedabad, Gujarat, India</span>
+            </div>
+          </div>
         </div>
 
         {/* Bottom Copyright Bar */}
@@ -208,14 +202,91 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
       {/* RESPONSIVE LAYOUT BREAKPOINTS */}
       <style>{`
-        @media (max-width: 767px) {
-          .footer-brand-col,
-          .footer-location-col {
-            grid-column: span 12 !important;
+        .footer-top-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 64px;
+          margin-bottom: 56px;
+        }
+
+        .footer-brand-col {
+          flex: 1 1 420px;
+          max-width: 460px;
+        }
+
+        .footer-nav-group {
+          display: flex;
+          gap: 64px;
+          flex: 0 0 auto;
+        }
+
+        .footer-links-col,
+        .footer-nav-col {
+          min-width: 190px;
+        }
+
+        .footer-location-col {
+          width: 100%;
+          padding-top: 36px;
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
+          margin-bottom: 56px;
+        }
+
+        .footer-contact-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+          gap: 24px;
+        }
+
+        .footer-contact-item {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          white-space: nowrap;
+          font-size: 0.9rem;
+          color: var(--text-muted);
+        }
+
+        @media (max-width: 1080px) {
+          .footer-top-row {
+            gap: 48px;
           }
-          .footer-links-col,
-          .footer-nav-col {
-            grid-column: span 6 !important;
+          .footer-nav-group {
+            gap: 48px;
+          }
+          .footer-contact-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px 32px;
+          }
+        }
+
+        @media (max-width: 767px) {
+          .footer-top-row {
+            flex-direction: column;
+            gap: 40px;
+            margin-bottom: 40px;
+          }
+          .footer-brand-col {
+            max-width: 100%;
+          }
+          .footer-nav-group {
+            width: 100%;
+            justify-content: space-between;
+            gap: 32px;
+          }
+          .footer-location-col {
+            padding-top: 28px;
+            margin-bottom: 40px;
+          }
+          .footer-contact-row {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
           }
           .footer-copyright-bar {
             flex-direction: column !important;
@@ -225,17 +296,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         }
 
         @media (max-width: 480px) {
-          .footer-links-col,
-          .footer-nav-col {
-            grid-column: span 12 !important;
+          .footer-nav-group {
+            flex-direction: column;
+            gap: 28px;
           }
-        }
-
-        @media (min-width: 992px) {
-          .footer-brand-col { grid-column: span 4 !important; }
-          .footer-links-col { grid-column: span 3 !important; }
-          .footer-nav-col { grid-column: span 2 !important; }
-          .footer-location-col { grid-column: span 3 !important; }
         }
       `}</style>
     </footer>
