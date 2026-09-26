@@ -15,12 +15,32 @@ interface CinematicProjectStageProps {
 
 // Preset height & offset profiles for staggered vertical rhythm matching reference photo
 const STAGGER_PROFILES = [
-  { height: '380px', aspectRatio: '3/4', marginTop: '30px' },  // Card 0: Medium-low offset
-  { height: '500px', aspectRatio: '9/16', marginTop: '0px' },   // Card 1: Extra tall hero portrait
-  { height: '440px', aspectRatio: '3/4', marginTop: '18px' },  // Card 2: Mid-tall portrait
-  { height: '400px', aspectRatio: '4/5', marginTop: '40px' },  // Card 3: Mid-low portrait
-  { height: '460px', aspectRatio: '9/16', marginTop: '12px' },  // Card 4: Tall portrait
+  { height: '400px', aspectRatio: '9/16', marginTop: '24px' },  // Card 0: Medium offset
+  { height: '500px', aspectRatio: '9/16', marginTop: '0px' },   // Card 1: Hero tall portrait
+  { height: '440px', aspectRatio: '9/16', marginTop: '16px' },  // Card 2: Mid-tall portrait
+  { height: '420px', aspectRatio: '9/16', marginTop: '30px' },  // Card 3: Mid-low portrait
+  { height: '470px', aspectRatio: '9/16', marginTop: '10px' },  // Card 4: Tall portrait
 ];
+
+// Helper to extract 3 distinct landscape photos to display vertically inside a portrait box
+const getProjectVerticalPhotos = (project: PortfolioItem): string[] => {
+  const imgs = project.images && project.images.length > 0
+    ? project.images
+    : project.thumbnail
+      ? [project.thumbnail]
+      : [];
+
+  if (imgs.length >= 3) {
+    return [imgs[0], imgs[1], imgs[2]];
+  }
+  if (imgs.length === 2) {
+    return [imgs[0], imgs[1], imgs[0]];
+  }
+  if (imgs.length === 1) {
+    return [imgs[0], imgs[0], imgs[0]];
+  }
+  return [];
+};
 
 export const CinematicProjectStage: React.FC<CinematicProjectStageProps> = ({
   service,
@@ -278,7 +298,7 @@ export const CinematicProjectStage: React.FC<CinematicProjectStageProps> = ({
                     aspectRatio: profile.aspectRatio,
                   }}
                 >
-                  {project.videoUrl || project.thumbnail?.endsWith('.mp4') || project.thumbnail?.includes('/reels/') ? (
+                  {isReel ? (
                     <OptimizedVideo
                       src={project.videoUrl || project.thumbnail}
                       webmSrc={project.webmUrl}
@@ -289,13 +309,19 @@ export const CinematicProjectStage: React.FC<CinematicProjectStageProps> = ({
                       videoStyle={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
                   ) : (
-                    <img
-                      src={project.thumbnail}
-                      alt={`${project.title} — ${project.categoryLabel || 'Creative Project'} by Shree Ram Production`}
-                      title={`${project.title} — Shree Ram Production`}
-                      loading="lazy"
-                      className="cinematic-gallery-card-img"
-                    />
+                    <div className="cinematic-vertical-photo-stack">
+                      {getProjectVerticalPhotos(project).map((imgUrl, photoIdx) => (
+                        <div key={photoIdx} className="cinematic-vertical-photo-slot">
+                          <img
+                            src={imgUrl}
+                            alt={`${project.title} — ${project.categoryLabel || 'Creative Project'} photo ${photoIdx + 1}`}
+                            title={`${project.title} — Shree Ram Production`}
+                            loading="lazy"
+                            className="cinematic-vertical-photo-img"
+                          />
+                        </div>
+                      ))}
+                    </div>
                   )}
 
                   {/* Card Hover Dark Vignette & Clean Content Overlay - only title for reels */}

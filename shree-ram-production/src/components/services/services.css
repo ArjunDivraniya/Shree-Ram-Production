@@ -454,6 +454,51 @@
   transform: scale(1.06);
 }
 
+/* 3-Photo Vertical Stack for Landscape Photos in Portrait Cards */
+.cinematic-vertical-photo-stack {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  gap: 3px;
+  background: #08090a;
+  overflow: hidden;
+}
+
+.cinematic-vertical-photo-slot {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  background: #0d0e12;
+}
+
+.cinematic-vertical-photo-slot:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.cinematic-vertical-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cinematic-gallery-item:hover .cinematic-vertical-photo-img,
+.cinematic-gallery-item.is-hovered .cinematic-vertical-photo-img {
+  transform: scale(1.05);
+}
+
 /* Metric Tag */
 .cinematic-gallery-metric-badge {
   position: absolute;

@@ -23,13 +23,14 @@ export const PillarShowcase: React.FC<PillarShowcaseProps> = ({
 
   // Resolve projects once for the entire pillar so hovering categories does not change/switch the marquee projects
   const pillarProjects = useMemo((): PortfolioItem[] => {
-    const categoryMap: Record<string, string> = {
+    const categoryMap: Record<string, string | string[]> = {
       'content-production': 'production',
-      'brand-creative': 'branding',
+      'brand-creative': ['graphic-design', 'branding'],
       'marketing-growth': 'marketing',
       'technology-digital': 'technology',
     };
-    const targetCategory = categoryMap[pillar.id];
+    const target = categoryMap[pillar.id];
+    const targetCategories = Array.isArray(target) ? target : target ? [target] : [];
 
     // Collect any projects optionally referenced in this pillar's services
     const referenced = pillar.services
@@ -38,8 +39,8 @@ export const PillarShowcase: React.FC<PillarShowcaseProps> = ({
       .filter((p): p is PortfolioItem => Boolean(p));
 
     // Combine with category-matching projects
-    const categoryProjects = targetCategory
-      ? PORTFOLIO_ITEMS.filter((p) => p.category === targetCategory)
+    const categoryProjects = targetCategories.length > 0
+      ? PORTFOLIO_ITEMS.filter((p) => targetCategories.includes(p.category))
       : [];
 
     const map = new Map<string, PortfolioItem>();
@@ -50,8 +51,8 @@ export const PillarShowcase: React.FC<PillarShowcaseProps> = ({
     const list = Array.from(map.values());
     if (list.length >= 4) return list;
 
-    // Fallback if fewer than 4 projects (exclude graphic design multi-photo suites)
-    const remaining = PORTFOLIO_ITEMS.filter((p) => !map.has(p.id) && p.category !== 'graphic-design');
+    // Fallback if fewer than 4 projects
+    const remaining = PORTFOLIO_ITEMS.filter((p) => !map.has(p.id));
     return [...list, ...remaining.slice(0, Math.max(0, 5 - list.length))];
   }, [pillar]);
 
