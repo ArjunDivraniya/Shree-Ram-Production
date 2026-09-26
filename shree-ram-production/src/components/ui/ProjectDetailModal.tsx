@@ -524,7 +524,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <a
-              href="https://wa.me/919426989491?text=Hello%20Shree%20Ram%20Production%2C%20I%20am%20interested%20in%20a%20development%20project%20similar%20to%20your%20showcase."
+              href="https://wa.me/919313119830?text=Hello%20Shree%20Ram%20Production%2C%20I%20am%20interested%20in%20a%20development%20project%20similar%20to%20your%20showcase."
               target="_blank"
               rel="noopener noreferrer"
               className="srp-btn srp-btn--primary srp-btn--sm"

@@ -66,6 +66,11 @@ export function createHomepageJsonLd() {
       image: SITE_IMAGE,
       description:
         'Shree Ram Production — creative production, marketing & growth agency in Ahmedabad helping brands build visibility, acquire customers and scale digitally through Content & Production, Brand & Creative, Marketing & Growth and Technology & Digital services.',
+      telephone: '+919313119830',
+      email: 'shreeramproduction.in@gmail.com',
+      sameAs: [
+        'https://www.instagram.com/ram_production___?stkn=NWRnYWM5YTVta3hy',
+      ],
       address: {
         '@type': 'PostalAddress',
         addressLocality: 'Ahmedabad',
@@ -266,6 +271,11 @@ export const CONTACT_JSON_LD = [
       '@type': 'ProfessionalService',
       name: SITE_NAME,
       url: `${SITE_URL}/`,
+      telephone: '+919313119830',
+      email: 'shreeramproduction.in@gmail.com',
+      sameAs: [
+        'https://www.instagram.com/ram_production___?stkn=NWRnYWM5YTVta3hy',
+      ],
       address: {
         '@type': 'PostalAddress',
         addressLocality: 'Ahmedabad',

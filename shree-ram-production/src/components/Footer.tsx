@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Globe } from 'lucide-react';
+import { MapPin, Phone, Mail } from 'lucide-react';
+import { InstagramIcon } from './ui/InstagramIcon';
 import mainLogo from '../assets/logo/shreeramproduction-logo.png';
 
 interface FooterProps {
@@ -132,19 +133,46 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </ul>
           </nav>
 
-          {/* Studio Locations */}
+          {/* Studio Locations & Direct Contact Details */}
           <div style={{ gridColumn: 'span 12' }} className="footer-location-col">
             <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#FFFFFF', letterSpacing: '0.08em', marginBottom: '20px', textTransform: 'uppercase' }}>
-              Studio Presence
+              Direct Contact & Studio Presence
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <MapPin size={16} color="var(--accent-orange)" style={{ flexShrink: 0 }} />
-                <span>Ahmedabad Gujrat, India</span>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '18px', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Phone size={16} color="var(--accent-orange)" style={{ flexShrink: 0 }} />
+                <span>
+                  Call & WhatsApp:{' '}
+                  <a href="tel:+919313119830" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 600 }}>
+                    +91 93131 19830
+                  </a>
+                  {' · '}
+                  <a href="https://wa.me/919313119830?text=Hello%20Shree%20Ram%20Production%2C%20I%20would%20like%20to%20start%20a%20conversation." target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-orange)', textDecoration: 'none', fontWeight: 600 }}>
+                    WhatsApp
+                  </a>
+                </span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Globe size={16} color="var(--accent-orange)" style={{ flexShrink: 0 }} />
-                <span>Global Remote Production Teams</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Mail size={16} color="var(--accent-orange)" style={{ flexShrink: 0 }} />
+                <span>
+                  Email:{' '}
+                  <a href="mailto:shreeramproduction.in@gmail.com" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 600 }}>
+                    shreeramproduction.in@gmail.com
+                  </a>
+                </span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <InstagramIcon size={16} color="var(--accent-orange)" style={{ flexShrink: 0 }} />
+                <span>
+                  Instagram:{' '}
+                  <a href="https://www.instagram.com/ram_production___?stkn=NWRnYWM5YTVta3hy" target="_blank" rel="noopener noreferrer" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 600 }}>
+                    @ram_production___
+                  </a>
+                </span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <MapPin size={16} color="var(--accent-orange)" style={{ flexShrink: 0 }} />
+                <span>Ahmedabad, Gujarat, India</span>
               </div>
             </div>
           </div>

@@ -1,16 +1,20 @@
 /**
  * Central notification helpers for Shree Ram Production contact enquiries.
  * When a client submits the contact form we notify the team via BOTH:
- *  - Email to hello@shreeramproduction.com
- *  - WhatsApp to +91 98765 43210
+ *  - Email to shreeramproduction.in@gmail.com
+ *  - WhatsApp / Call to +91 93131 19830
  * This file keeps the logic in one place so future backend integration
  * (e.g. fetch to /api/contact or EmailJS / WhatsApp Cloud API) only needs
  * to be added here.
  */
 
-export const TEAM_EMAIL = 'shreeramproduction7@gmail.com';
-export const TEAM_WHATSAPP_NUMBER = '919876543210'; // E.164 without '+', used for wa.me
-export const TEAM_WHATSAPP_DISPLAY = '+91 98765 43210';
+export const TEAM_EMAIL = 'shreeramproduction.in@gmail.com';
+export const TEAM_WHATSAPP_NUMBER = '919313119830'; // E.164 without '+', used for wa.me
+export const TEAM_WHATSAPP_DISPLAY = '+91 93131 19830';
+export const TEAM_PHONE_NUMBER = '+919313119830';
+export const TEAM_PHONE_DISPLAY = '+91 93131 19830';
+export const TEAM_INSTAGRAM_URL = 'https://www.instagram.com/ram_production___?stkn=NWRnYWM5YTVta3hy';
+export const TEAM_INSTAGRAM_HANDLE = '@ram_production___';
 
 export interface EnquiryPayload {
   services: string[];

@@ -277,9 +277,9 @@ The About page tells the agency story and introduces your team. Each section has
 * **File:** [`src/utils/notify.ts`](file:///Users/mayank/Shree-Ram-Production/shree-ram-production/src/utils/notify.ts#L11-L13)
   When a visitor submits the contact form, it notifies you via email and WhatsApp:
   ```typescript
-  export const TEAM_EMAIL = 'shreeramproduction7@gmail.com'; // Change to your agency email
-  export const TEAM_WHATSAPP_NUMBER = '919876543210';        // Change to your WhatsApp phone (country code + number, no '+')
-  export const TEAM_WHATSAPP_DISPLAY = '+91 98765 43210';    // Display format shown to visitors
+  export const TEAM_EMAIL = 'shreeramproduction.in@gmail.com'; // Agency email
+  export const TEAM_WHATSAPP_NUMBER = '919313119830';        // WhatsApp phone (country code + number, no '+')
+  export const TEAM_WHATSAPP_DISPLAY = '+91 93131 19830';    // Display format shown to visitors
   ```
 
 ---

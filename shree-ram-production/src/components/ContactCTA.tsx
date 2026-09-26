@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowUpRight, MessageSquare, Phone, Mail } from 'lucide-react';
+import { InstagramIcon } from './ui/InstagramIcon';
 import SectionMarker from './ui/SectionMarker';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -151,23 +152,34 @@ export const ContactCTA: React.FC = () => {
     {
       num: '01',
       title: 'WHATSAPP',
-      ctaText: 'Start a conversation',
-      href: 'https://wa.me/919876543210?text=Hello%20Shree%20Ram%20Production%2C%20I%20would%20like%20to%20start%20a%20conversation.',
+      detail: '+91 93131 19830',
+      ctaText: 'Chat on WhatsApp',
+      href: 'https://wa.me/919313119830?text=Hello%20Shree%20Ram%20Production%2C%20I%20would%20like%20to%20start%20a%20conversation.',
       icon: MessageSquare,
     },
     {
       num: '02',
       title: 'CALL',
-      ctaText: 'Talk to our team',
-      href: 'tel:+919876543210',
+      detail: '+91 93131 19830',
+      ctaText: 'Call our team',
+      href: 'tel:+919313119830',
       icon: Phone,
     },
     {
       num: '03',
       title: 'EMAIL',
-      ctaText: 'Send your requirements',
-      href: 'mailto:hello@shreeramproduction.com?subject=Project%20Inquiry%20-%20Shree%20Ram%20Production',
+      detail: 'shreeramproduction.in@gmail.com',
+      ctaText: 'Send email inquiry',
+      href: 'mailto:shreeramproduction.in@gmail.com?subject=Project%20Inquiry%20-%20Shree%20Ram%20Production',
       icon: Mail,
+    },
+    {
+      num: '04',
+      title: 'INSTAGRAM',
+      detail: '@ram_production___',
+      ctaText: 'Follow on Instagram',
+      href: 'https://www.instagram.com/ram_production___?stkn=NWRnYWM5YTVta3hy',
+      icon: InstagramIcon,
     },
   ];
 
@@ -378,19 +390,33 @@ export const ContactCTA: React.FC = () => {
                     {opt.num}
                   </span>
 
-                  <h3
-                    style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: 'clamp(1.7rem, 3.4vw, 3.0rem)',
-                      fontWeight: 800,
-                      color: isHovered ? '#FFFFFF' : '#F5F5F2',
-                      letterSpacing: '-0.01em',
-                      margin: 0,
-                      transition: 'color 0.4s ease',
-                    }}
-                  >
-                    {opt.title}
-                  </h3>
+                  <div>
+                    <h3
+                      style={{
+                        fontFamily: 'var(--font-heading)',
+                        fontSize: 'clamp(1.7rem, 3.4vw, 3.0rem)',
+                        fontWeight: 800,
+                        color: isHovered ? '#FFFFFF' : '#F5F5F2',
+                        letterSpacing: '-0.01em',
+                        margin: 0,
+                        transition: 'color 0.4s ease',
+                      }}
+                    >
+                      {opt.title}
+                    </h3>
+                    <div
+                      style={{
+                        fontSize: 'clamp(0.85rem, 1.1vw, 1.0rem)',
+                        fontWeight: 600,
+                        color: isHovered ? 'var(--accent-orange)' : '#8E8E93',
+                        marginTop: '4px',
+                        letterSpacing: '0.02em',
+                        transition: 'color 0.4s ease',
+                      }}
+                    >
+                      {opt.detail}
+                    </div>
+                  </div>
                 </div>
 
                 {/* Right Side: CTA Text & Moving Arrow */}

@@ -34,9 +34,10 @@ const PREF_OPTIONS = [
 ] as const;
 
 const CONTACT_LINKS = {
-  whatsapp: 'https://wa.me/919876543210?text=Hello%20Shree%20Ram%20Production%2C%20I%20would%20like%20to%20start%20a%20conversation.',
-  call: 'tel:+919876543210',
-  email: 'mailto:hello@shreeramproduction.com?subject=Project%20Inquiry%20-%20Shree%20Ram%20Production',
+  whatsapp: 'https://wa.me/919313119830?text=Hello%20Shree%20Ram%20Production%2C%20I%20would%20like%20to%20start%20a%20conversation.',
+  call: 'tel:+919313119830',
+  email: 'mailto:shreeramproduction.in@gmail.com?subject=Project%20Inquiry%20-%20Shree%20Ram%20Production',
+  instagram: 'https://www.instagram.com/ram_production___?stkn=NWRnYWM5YTVta3hy',
 };
 
 interface FormData {
@@ -233,7 +234,9 @@ export const ContactEnquiry: React.FC = () => {
             <p className="srp-success__copy">A copy has been prepared for <strong style={{ color: '#FFFFFF' }}>{TEAM_EMAIL}</strong> and WhatsApp <strong style={{ color: '#FFFFFF' }}>{TEAM_WHATSAPP_DISPLAY}</strong> so we never miss your request. Whether you need one service or a complete growth solution, we’ll figure out the right way forward together. If it’s urgent, reach us via WhatsApp or Call.</p>
             <div className="srp-success__actions">
               <a href={CONTACT_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" className="srp-btn srp-btn--primary"><span>Message on WhatsApp</span><span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={16} /></span></a>
+              <a href={CONTACT_LINKS.call} className="srp-btn srp-btn--secondary"><span>Call: +91 93131 19830</span><span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={16} /></span></a>
               <a href={CONTACT_LINKS.email} className="srp-btn srp-btn--ghost"><span>Send an email</span><span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={16} /></span></a>
+              <a href={CONTACT_LINKS.instagram} target="_blank" rel="noopener noreferrer" className="srp-btn srp-btn--ghost"><span>Instagram</span><span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={16} /></span></a>
             </div>
             <div className="srp-arrow" aria-hidden="true" style={{ marginTop: 8 }}>
               <div ref={successArrowFillRef} className="srp-arrow__fill" /><div ref={successArrowHeadRef} className="srp-arrow__head"><ArrowUpRight size={14} style={{ transform: 'rotate(45deg)' }} /></div>
@@ -442,9 +445,10 @@ export const ContactEnquiry: React.FC = () => {
         <div className="srp-direct">
           <span className="srp-direct__label">Prefer a quick conversation?</span>
           <span className="srp-direct__links">
-            <a href={CONTACT_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" className="srp-direct__link">WhatsApp <ArrowUpRight size={13} aria-hidden="true" /></a>
-            <a href={CONTACT_LINKS.email} className="srp-direct__link">Email <ArrowUpRight size={13} aria-hidden="true" /></a>
-            <a href={CONTACT_LINKS.call} className="srp-direct__link">Call <ArrowUpRight size={13} aria-hidden="true" /></a>
+            <a href={CONTACT_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" className="srp-direct__link">WhatsApp: +91 93131 19830 <ArrowUpRight size={13} aria-hidden="true" /></a>
+            <a href={CONTACT_LINKS.call} className="srp-direct__link">Call: +91 93131 19830 <ArrowUpRight size={13} aria-hidden="true" /></a>
+            <a href={CONTACT_LINKS.email} className="srp-direct__link">Email: shreeramproduction.in@gmail.com <ArrowUpRight size={13} aria-hidden="true" /></a>
+            <a href={CONTACT_LINKS.instagram} target="_blank" rel="noopener noreferrer" className="srp-direct__link">Instagram: @ram_production___ <ArrowUpRight size={13} aria-hidden="true" /></a>
           </span>
         </div>
         <div style={{ marginTop: 28, textAlign: 'center', fontFamily: 'var(--font-heading)', fontSize: '0.74rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#68696D' }}>No packages. No pressure. Just a conversation about what you need.</div>
