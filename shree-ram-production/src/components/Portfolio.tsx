@@ -9,6 +9,7 @@ import { ArrowUpRight } from 'lucide-react';
 import SectionMarker from './ui/SectionMarker';
 import { OptimizedVideo } from './ui/OptimizedVideo';
 import { AnimatedPhotoGrid } from './ui/AnimatedPhotoGrid';
+import { ProjectDetailModal } from './ui/ProjectDetailModal';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -26,6 +27,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
   const serviceMatch = serviceParam ? findServiceById(serviceParam) : null;
 
   const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null);
+  const [selectedProject, setSelectedProject] = useState<PortfolioItem | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   // Standalone page category filter
   const [activeCategory, setActiveCategory] = useState<string>('all');
@@ -61,15 +64,14 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
       .filter(Boolean) as typeof PORTFOLIO_ITEMS;
   }, []);
 
-  // ROW 3: TECHNOLOGY & DIGITAL PLATFORMS
+  // ROW 3: DEVELOPMENT PROJECTS (REAL DEV PROJECTS WITH MULTI-PHOTO SLIDESHOW)
   const row3Projects = useMemo(() => {
     const row3ProjectIds = [
-      'lumina-interactive-platform',
-      'nexus-fintech-ecosystem',
-      'titan-seo-domination',
-      'aether-headless-commerce',
-      'zenith-crm-automation',
-      'pulse-cro-engine',
+      'cafe-pos-system',
+      'car-rental-system',
+      'jairamji-enterprise',
+      'library-management-system',
+      'shivay-studio',
     ];
     return row3ProjectIds
       .map((id) => PORTFOLIO_ITEMS.find((item) => item.id === id))
@@ -428,7 +430,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
             </div>
           </div>
 
-          {/* ROW 03 (MOVING RIGHT →) */}
+          {/* ROW 03 (MOVING RIGHT →) - REAL DEVELOPMENT PROJECTS */}
           <div style={{ width: '100%', overflow: 'hidden' }}>
             <div
               ref={row3Ref}
@@ -440,12 +442,16 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                 transformStyle: 'preserve-3d',
               }}
             >
-              {[...row3Projects, ...row3Projects].map((project, idx) => (
+              {[...row3Projects, ...row3Projects, ...row3Projects, ...row3Projects].map((project, idx) => (
                 <FloatingCinematicCard
                   key={`r3-${project.id}-${idx}`}
                   project={project}
                   aspectRatio="16/10"
                   width="480px"
+                  onClick={() => {
+                    setSelectedProject(project);
+                    setIsModalOpen(true);
+                  }}
                 />
               ))}
             </div>
@@ -470,6 +476,13 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
             <span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={18} /></span>
           </button>
         </div>
+
+        {/* Project Details Modal */}
+        <ProjectDetailModal
+          project={selectedProject}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
       </section>
     );
   }
@@ -591,6 +604,12 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
             return (
               <div
                 key={project.id}
+                onClick={() => {
+                  if (project.category === 'technology') {
+                    setSelectedProject(project);
+                    setIsModalOpen(true);
+                  }
+                }}
                 style={{
                   position: 'relative',
                   display: 'flex',
@@ -598,8 +617,10 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                   borderRadius: 'var(--radius-media)',
                   overflow: 'hidden',
                   backgroundColor: 'var(--surface-dark)',
-                  border: '1px solid var(--glass-border)',
-                  cursor: 'default',
+                  border: isDev && hoveredProjectId === project.id
+                    ? '1px solid rgba(255, 106, 42, 0.45)'
+                    : '1px solid var(--glass-border)',
+                  cursor: isDev ? 'pointer' : 'default',
                   transition: 'var(--transition-smooth)',
                 }}
                 onMouseEnter={() => setHoveredProjectId(project.id)}
@@ -634,6 +655,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                       images={project.images}
                       isHovered={hoveredProjectId === project.id}
                       title={project.title}
+                      intervalMs={1800}
                     />
                   ) : (
                     <img
@@ -725,6 +747,12 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
           })}
         </div>
 
+        {/* Project Details Modal */}
+        <ProjectDetailModal
+          project={selectedProject}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
       </div>
     </section>
   );
@@ -735,18 +763,21 @@ const FloatingCinematicCard: React.FC<{
   project: PortfolioItem;
   aspectRatio: string;
   width: string;
-}> = ({ project, aspectRatio, width }) => {
+  onClick?: () => void;
+}> = ({ project, aspectRatio, width, onClick }) => {
   const [isHovered, setIsHovered] = useState(false);
   const isReel = isVideoUrl(project.videoUrl || project.thumbnail) || project.category === 'production';
+  const isClickable = Boolean(onClick);
 
   return (
     <div
+      onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{
         width: width,
         flexShrink: 0,
-        cursor: 'default',
+        cursor: isClickable ? 'pointer' : 'default',
         display: 'flex',
         flexDirection: 'column',
         gap: '14px',
@@ -762,6 +793,9 @@ const FloatingCinematicCard: React.FC<{
           borderRadius: '20px',
           overflow: 'hidden',
           backgroundColor: '#0F1013',
+          border: isClickable && isHovered
+            ? '1px solid rgba(255, 106, 42, 0.45)'
+            : '1px solid rgba(255, 255, 255, 0.05)',
           boxShadow: isHovered
             ? '0 30px 80px rgba(0, 0, 0, 0.9), 0 0 35px rgba(255, 106, 42, 0.25)'
             : '0 16px 48px rgba(0, 0, 0, 0.65)',
@@ -770,6 +804,36 @@ const FloatingCinematicCard: React.FC<{
           filter: isHovered ? 'brightness(1.08)' : 'brightness(0.95)',
         }}
       >
+        {isClickable && (
+          <div
+            style={{
+              position: 'absolute',
+              top: '12px',
+              right: '12px',
+              zIndex: 6,
+              opacity: isHovered ? 1 : 0,
+              transform: isHovered ? 'translateY(0) scale(1)' : 'translateY(-6px) scale(0.92)',
+              transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '5px 12px',
+              borderRadius: '999px',
+              backgroundColor: 'rgba(8, 9, 10, 0.82)',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255, 106, 42, 0.4)',
+              color: '#FFFFFF',
+              fontSize: '0.72rem',
+              fontWeight: 700,
+              letterSpacing: '0.04em',
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.6)',
+              pointerEvents: 'none',
+            }}
+          >
+            <span>VIEW DETAILS</span>
+            <ArrowUpRight size={13} style={{ color: 'var(--accent-orange)' }} />
+          </div>
+        )}
         {isVideoUrl(project.videoUrl || project.thumbnail) ? (
           <OptimizedVideo
             src={project.videoUrl || project.thumbnail}
@@ -790,6 +854,7 @@ const FloatingCinematicCard: React.FC<{
             images={project.images}
             isHovered={isHovered}
             title={project.title}
+            intervalMs={1800}
           />
         ) : (
           <img

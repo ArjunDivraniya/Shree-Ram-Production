@@ -17,6 +17,7 @@ export const AnimatedPhotoGrid: React.FC<AnimatedPhotoGridProps> = ({
   const count = images.length;
 
   // Staggered slide interval offset per box so all boxes do not transition at the exact same moment
+  // Faster, energetic slideshow cadence
   const slideInterval = useMemo(() => {
     if (intervalMs) return intervalMs;
     let hash = 0;
@@ -25,8 +26,8 @@ export const AnimatedPhotoGrid: React.FC<AnimatedPhotoGridProps> = ({
       hash = (hash << 5) - hash + str.charCodeAt(i);
       hash |= 0;
     }
-    const offset = Math.abs(hash % 900); // 0ms to 900ms offset
-    return 3600 + offset; // between 3.6s and 4.5s
+    const offset = Math.abs(hash % 350); // 0ms to 350ms offset
+    return 1650 + offset; // snappy interval between 1.65s and 2.0s
   }, [images, title, intervalMs]);
 
   // Preload all slideshow images on mount for instantaneous, flicker-free transitions
@@ -75,7 +76,7 @@ export const AnimatedPhotoGrid: React.FC<AnimatedPhotoGridProps> = ({
               inset: 0,
               opacity: isActive ? 1 : 0,
               zIndex: isActive ? 2 : 1,
-              transition: 'opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1)',
+              transition: 'opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1)',
               pointerEvents: 'none',
             }}
           >
@@ -90,10 +91,10 @@ export const AnimatedPhotoGrid: React.FC<AnimatedPhotoGridProps> = ({
                 display: 'block',
                 transform: isActive
                   ? isHovered
-                    ? 'scale(1.07)'
-                    : 'scale(1.03)'
+                    ? 'scale(1.06)'
+                    : 'scale(1.025)'
                   : 'scale(1.0)',
-                transition: 'transform 4.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease',
+                transition: 'transform 2.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease',
                 filter: isHovered ? 'brightness(1.05) contrast(1.02)' : 'brightness(0.97)',
               }}
             />
@@ -126,7 +127,7 @@ export const AnimatedPhotoGrid: React.FC<AnimatedPhotoGridProps> = ({
         }}
       />
 
-      {/* Minimalist Luxury Progress Indicator Bars (Only when multi-photo) */}
+      {/* Minimalist Luxury Progress Indicator (Dots for <= 5, Sleek Badge for > 5) */}
       {count > 1 && (
         <div
           style={{
@@ -137,30 +138,44 @@ export const AnimatedPhotoGrid: React.FC<AnimatedPhotoGridProps> = ({
             alignItems: 'center',
             gap: '6px',
             zIndex: 5,
-            padding: '4px 8px',
+            padding: count <= 5 ? '4px 8px' : '4px 10px',
             borderRadius: '999px',
-            backgroundColor: 'rgba(8, 9, 10, 0.55)',
-            backdropFilter: 'blur(8px)',
-            WebkitBackdropFilter: 'blur(8px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            backgroundColor: 'rgba(8, 9, 10, 0.72)',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            border: '1px solid rgba(255, 255, 255, 0.12)',
+            fontSize: '0.74rem',
+            fontWeight: 700,
+            color: '#FFFFFF',
+            letterSpacing: '0.04em',
           }}
         >
-          {images.map((_, dotIdx) => {
-            const isDotActive = activeIndex === dotIdx;
-            return (
-              <div
-                key={`dot-${dotIdx}`}
-                style={{
-                  width: isDotActive ? '18px' : '6px',
-                  height: '4px',
-                  borderRadius: '3px',
-                  backgroundColor: isDotActive ? 'var(--accent-orange)' : 'rgba(255, 255, 255, 0.3)',
-                  boxShadow: isDotActive ? '0 0 8px rgba(255, 106, 42, 0.6)' : 'none',
-                  transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-                }}
-              />
-            );
-          })}
+          {count <= 5 ? (
+            images.map((_, dotIdx) => {
+              const isDotActive = activeIndex === dotIdx;
+              return (
+                <div
+                  key={`dot-${dotIdx}`}
+                  style={{
+                    width: isDotActive ? '18px' : '6px',
+                    height: '4px',
+                    borderRadius: '3px',
+                    backgroundColor: isDotActive ? 'var(--accent-orange)' : 'rgba(255, 255, 255, 0.3)',
+                    boxShadow: isDotActive ? '0 0 8px rgba(255, 106, 42, 0.6)' : 'none',
+                    transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+                  }}
+                />
+              );
+            })
+          ) : (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{ color: 'var(--accent-orange)' }}>
+                {String(activeIndex + 1).padStart(2, '0')}
+              </span>
+              <span style={{ opacity: 0.45 }}>/</span>
+              <span style={{ opacity: 0.85 }}>{String(count).padStart(2, '0')}</span>
+            </div>
+          )}
         </div>
       )}
     </div>
