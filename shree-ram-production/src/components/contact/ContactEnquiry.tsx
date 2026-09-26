@@ -3,7 +3,7 @@ import { gsap } from 'gsap';
 import { ArrowUpRight, Check, ArrowLeft, CheckCircle2, ChevronDown } from 'lucide-react';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { contactIntroAnimation, progressAnimation, serviceSelectionAnimation, successAnimation } from './animations';
-import { triggerDualTeamNotification, TEAM_EMAIL, TEAM_WHATSAPP_DISPLAY } from '../../utils/notify';
+import { triggerDualTeamNotification } from '../../utils/notify';
 import SectionMarker from '../ui/SectionMarker';
 import './contact.css';
 
@@ -231,10 +231,10 @@ export const ContactEnquiry: React.FC = () => {
             <div className="srp-success__kicker"><CheckCircle2 size={14} aria-hidden="true" /><span>Message received</span></div>
             <h2 className="srp-success__title">Thank you.<br /><span style={{ color: 'var(--accent-orange)' }}>Your message is on its way.</span></h2>
             <p className="srp-success__subtitle">We’ve received your enquiry and notified our team instantly via Email &amp; WhatsApp — we’ll review and get back to you soon.</p>
-            <p className="srp-success__copy">A copy has been prepared for <strong style={{ color: '#FFFFFF' }}>{TEAM_EMAIL}</strong> and WhatsApp <strong style={{ color: '#FFFFFF' }}>{TEAM_WHATSAPP_DISPLAY}</strong> so we never miss your request. Whether you need one service or a complete growth solution, we’ll figure out the right way forward together. If it’s urgent, reach us via WhatsApp or Call.</p>
+            <p className="srp-success__copy">A copy has been prepared for our team via Email &amp; WhatsApp so we never miss your request. Whether you need one service or a complete growth solution, we’ll figure out the right way forward together. If it’s urgent, reach us via WhatsApp or Call.</p>
             <div className="srp-success__actions">
               <a href={CONTACT_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" className="srp-btn srp-btn--primary"><span>Message on WhatsApp</span><span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={16} /></span></a>
-              <a href={CONTACT_LINKS.call} className="srp-btn srp-btn--secondary"><span>Call: +91 93131 19830</span><span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={16} /></span></a>
+              <a href={CONTACT_LINKS.call} className="srp-btn srp-btn--secondary"><span>Call our team</span><span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={16} /></span></a>
               <a href={CONTACT_LINKS.email} className="srp-btn srp-btn--ghost"><span>Send an email</span><span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={16} /></span></a>
               <a href={CONTACT_LINKS.instagram} target="_blank" rel="noopener noreferrer" className="srp-btn srp-btn--ghost"><span>Instagram</span><span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={16} /></span></a>
             </div>
@@ -423,7 +423,7 @@ export const ContactEnquiry: React.FC = () => {
                     </div>
                   </div>
                   <div style={{ marginTop: 16, padding: '12px 14px', borderRadius: 10, background: 'rgba(255,106,42,0.08)', border: '1px solid rgba(255,106,42,0.18)', fontSize: '0.82rem', lineHeight: 1.5, color: '#D6D6D8' }}>
-                    <span style={{ fontWeight: 700, color: '#FF6A2A' }}>Note:</span> On submit, our team is notified instantly via <strong style={{ color: '#FFFFFF' }}>Email</strong> ({TEAM_EMAIL}) and <strong style={{ color: '#FFFFFF' }}>WhatsApp</strong> ({TEAM_WHATSAPP_DISPLAY}) so we can take note right away.
+                    <span style={{ fontWeight: 700, color: '#FF6A2A' }}>Note:</span> On submit, our team is notified instantly via <strong style={{ color: '#FFFFFF' }}>Email</strong> and <strong style={{ color: '#FFFFFF' }}>WhatsApp</strong> so we can take note right away.
                   </div>
                 </div>
               )}
@@ -445,10 +445,10 @@ export const ContactEnquiry: React.FC = () => {
         <div className="srp-direct">
           <span className="srp-direct__label">Prefer a quick conversation?</span>
           <span className="srp-direct__links">
-            <a href={CONTACT_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" className="srp-direct__link">WhatsApp: +91 93131 19830 <ArrowUpRight size={13} aria-hidden="true" /></a>
-            <a href={CONTACT_LINKS.call} className="srp-direct__link">Call: +91 93131 19830 <ArrowUpRight size={13} aria-hidden="true" /></a>
-            <a href={CONTACT_LINKS.email} className="srp-direct__link">Email: shreeramproduction.in@gmail.com <ArrowUpRight size={13} aria-hidden="true" /></a>
-            <a href={CONTACT_LINKS.instagram} target="_blank" rel="noopener noreferrer" className="srp-direct__link">Instagram: @ram_production___ <ArrowUpRight size={13} aria-hidden="true" /></a>
+            <a href={CONTACT_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" className="srp-direct__link">WhatsApp <ArrowUpRight size={13} aria-hidden="true" /></a>
+            <a href={CONTACT_LINKS.call} className="srp-direct__link">Call Us <ArrowUpRight size={13} aria-hidden="true" /></a>
+            <a href={CONTACT_LINKS.email} className="srp-direct__link">Email <ArrowUpRight size={13} aria-hidden="true" /></a>
+            <a href={CONTACT_LINKS.instagram} target="_blank" rel="noopener noreferrer" className="srp-direct__link">Instagram <ArrowUpRight size={13} aria-hidden="true" /></a>
           </span>
         </div>
         <div style={{ marginTop: 28, textAlign: 'center', fontFamily: 'var(--font-heading)', fontSize: '0.74rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#68696D' }}>No packages. No pressure. Just a conversation about what you need.</div>
