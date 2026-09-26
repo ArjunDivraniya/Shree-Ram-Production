@@ -25,7 +25,7 @@ export const PillarShowcase: React.FC<PillarShowcaseProps> = ({
   const pillarProjects = useMemo((): PortfolioItem[] => {
     const categoryMap: Record<string, string | string[]> = {
       'content-production': 'production',
-      'brand-creative': ['graphic-design', 'branding'],
+      'brand-creative': 'graphic-design',
       'marketing-growth': 'marketing',
       'technology-digital': 'technology',
     };

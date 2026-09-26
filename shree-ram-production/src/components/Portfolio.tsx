@@ -58,6 +58,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
       'graphic-design-industrial-print',
       'graphic-design-media-events',
       'graphic-design-retail-commerce',
+      'graphic-design-botanical-infrastructure',
+      'graphic-design-couture-events-trade',
     ];
     return row2ProjectIds
       .map((id) => PORTFOLIO_ITEMS.find((item) => item.id === id))
