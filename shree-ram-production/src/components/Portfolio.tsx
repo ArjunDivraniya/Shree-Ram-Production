@@ -41,6 +41,9 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
   const headingRef = useRef<HTMLDivElement>(null);
 
   const [isReducedMotion, setIsReducedMotion] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(() =>
+    typeof window !== 'undefined' ? window.innerWidth < 768 : false
+  );
 
   // Categorized items for 3 distinct streams of work
   // ROW 1: ONLY PRODUCTION REELS (PORTRAIT 9:16 FORMAT)
@@ -89,7 +92,14 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
     };
 
     motionQuery.addEventListener('change', handleMotionChange);
-    return () => motionQuery.removeEventListener('change', handleMotionChange);
+
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      motionQuery.removeEventListener('change', handleMotionChange);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   // GSAP Infinite Auto-Scroll, Dynamic Skew & Velocity Physics
@@ -375,12 +385,13 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
             ==================================================================== */}
 
         <div
+          className="portfolio-showreel-rows"
           style={{
             position: 'relative',
             zIndex: 5,
             display: 'flex',
             flexDirection: 'column',
-            gap: '44px',
+            gap: isMobile ? '24px' : '44px',
             width: '100%',
             perspective: '1200px',
           }}
@@ -389,9 +400,10 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
           <div style={{ width: '100%', overflow: 'hidden' }}>
             <div
               ref={row1Ref}
+              className="portfolio-showreel-track"
               style={{
                 display: 'flex',
-                gap: '36px',
+                gap: isMobile ? '20px' : '36px',
                 width: 'max-content',
                 willChange: 'transform',
                 transformStyle: 'preserve-3d',
@@ -403,6 +415,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                   project={project}
                   aspectRatio="9/16"
                   width="290px"
+                  className="portfolio-card--row1"
                 />
               ))}
             </div>
@@ -412,9 +425,10 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
           <div style={{ width: '100%', overflow: 'hidden' }}>
             <div
               ref={row2Ref}
+              className="portfolio-showreel-track"
               style={{
                 display: 'flex',
-                gap: '36px',
+                gap: isMobile ? '20px' : '36px',
                 width: 'max-content',
                 willChange: 'transform',
                 transformStyle: 'preserve-3d',
@@ -426,7 +440,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                   key={`r2-${project.id}-${idx}`}
                   project={project}
                   aspectRatio="4/3"
-                  width="440px"
+                  width={isMobile ? '260px' : '440px'}
+                  className="portfolio-card--row2"
                 />
               ))}
             </div>
@@ -436,9 +451,10 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
           <div style={{ width: '100%', overflow: 'hidden' }}>
             <div
               ref={row3Ref}
+              className="portfolio-showreel-track"
               style={{
                 display: 'flex',
-                gap: '36px',
+                gap: isMobile ? '20px' : '36px',
                 width: 'max-content',
                 willChange: 'transform',
                 transformStyle: 'preserve-3d',
@@ -449,7 +465,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                   key={`r3-${project.id}-${idx}`}
                   project={project}
                   aspectRatio="16/10"
-                  width="480px"
+                  width={isMobile ? '270px' : '480px'}
+                  className="portfolio-card--row3"
                   onClick={() => {
                     setSelectedProject(project);
                     setIsModalOpen(true);
@@ -592,10 +609,15 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
 
         {/* Portfolio Showcase Grid */}
         <div
+          className="work-showcase-grid"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-            gap: '32px',
+            gridTemplateColumns: isMobile && activeCategory === 'production'
+              ? 'repeat(auto-fill, minmax(280px, 1fr))'
+              : isMobile
+              ? '1fr'
+              : 'repeat(auto-fill, minmax(320px, 1fr))',
+            gap: isMobile ? '24px' : '32px',
           }}
         >
           {filteredProjects.map((project) => {
@@ -606,6 +628,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
             return (
               <div
                 key={project.id}
+                className={`work-showcase-card ${isReel ? 'work-showcase-card--reel' : ''}`}
                 onClick={() => {
                   if (project.category === 'technology') {
                     setSelectedProject(project);
@@ -624,15 +647,20 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                     : '1px solid var(--glass-border)',
                   cursor: isDev ? 'pointer' : 'default',
                   transition: 'var(--transition-smooth)',
+                  width: '100%',
+                  maxWidth: isMobile && isReel ? '310px' : undefined,
+                  margin: isMobile && isReel ? '0 auto' : undefined,
                 }}
                 onMouseEnter={() => setHoveredProjectId(project.id)}
                 onMouseLeave={() => setHoveredProjectId(null)}
               >
                 <div
+                  className={`work-showcase-media ${isReel ? 'work-showcase-media--reel' : ''}`}
                   style={{
                     position: 'relative',
                     width: '100%',
                     aspectRatio: isReel ? '9/16' : '16/10',
+                    maxHeight: isMobile && isReel ? '550px' : undefined,
                     overflow: 'hidden',
                     backgroundColor: '#000000',
                   }}
@@ -683,7 +711,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                   />
                 </div>
 
-                <div style={{ padding: isReel ? '18px 20px 22px' : '24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <div style={{ padding: isReel ? (isMobile ? '16px 18px 20px' : '18px 20px 22px') : '24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
                   {(project.categoryLabel || project.year) && (
                     <div
                       style={{
@@ -716,7 +744,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
 
                   <h3
                     style={{
-                      fontSize: isReel ? '1.15rem' : '1.25rem',
+                      fontSize: isReel ? (isMobile ? '1.1rem' : '1.15rem') : '1.25rem',
                       fontWeight: 700,
                       marginBottom: (isDev || hasMultiImages) ? '10px' : 0,
                       color: '#FFFFFF',
@@ -765,8 +793,9 @@ const FloatingCinematicCard: React.FC<{
   project: PortfolioItem;
   aspectRatio: string;
   width: string;
+  className?: string;
   onClick?: () => void;
-}> = ({ project, aspectRatio, width, onClick }) => {
+}> = ({ project, aspectRatio, width, className, onClick }) => {
   const [isHovered, setIsHovered] = useState(false);
   const isReel = isVideoUrl(project.videoUrl || project.thumbnail) || project.category === 'production';
   const isClickable = Boolean(onClick);
@@ -776,6 +805,7 @@ const FloatingCinematicCard: React.FC<{
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      className={`floating-cinematic-card ${className || ''}`}
       style={{
         width: width,
         flexShrink: 0,

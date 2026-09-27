@@ -614,3 +614,53 @@ video {
     scroll-behavior: auto !important;
   }
 }
+
+/* Homepage Portfolio Showcase Mobile Box Size Reduction (Row 2 & Row 3) */
+@media (max-width: 768px) {
+  .portfolio-card--row2 {
+    width: 260px !important;
+  }
+  .portfolio-card--row3 {
+    width: 270px !important;
+  }
+  .portfolio-showreel-rows {
+    gap: 24px !important;
+  }
+  .portfolio-showreel-track {
+    gap: 20px !important;
+  }
+}
+
+/* Standalone Work Page Mobile Reel Video & Box Size Reduction */
+@media (max-width: 768px) {
+  .work-showcase-card--reel {
+    max-width: 310px !important;
+    margin: 0 auto !important;
+    width: 100% !important;
+  }
+
+  .work-showcase-media--reel {
+    max-height: 550px !important;
+  }
+
+  .work-showcase-card--reel .optimized-video-element,
+  .work-showcase-card--reel video {
+    max-height: 550px !important;
+    object-fit: cover !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .work-showcase-card--reel {
+    max-width: 295px !important;
+  }
+
+  .work-showcase-media--reel {
+    max-height: 525px !important;
+  }
+
+  .work-showcase-card--reel .optimized-video-element,
+  .work-showcase-card--reel video {
+    max-height: 525px !important;
+  }
+}
