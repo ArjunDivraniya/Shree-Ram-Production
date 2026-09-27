@@ -311,7 +311,7 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
             zIndex: 999,
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'space-between',
+            justifyContent: 'flex-start',
             padding: '24px 24px 36px',
             animation: 'appleFadeSlide 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards',
             pointerEvents: 'auto',
@@ -350,20 +350,45 @@ export const PremiumNavbar: React.FC<PremiumNavbarProps> = ({ onNavigate }) => {
             })}
           </div>
 
-          <a
-            href="/contact"
-            onClick={(event) => handleLinkClick(event, 'contact', 'contact', '/contact')}
-            className="srp-btn srp-btn--primary srp-btn--lg"
-            style={{ width: '100%', marginTop: '24px' }}
+          {/* Bottom Drawer CTA Container */}
+          <div
+            style={{
+              marginTop: 'auto',
+              paddingTop: '32px',
+              width: '100%',
+              flexShrink: 0,
+            }}
           >
-            <span>Let's Talk</span>
-            <span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={18} /></span>
-          </a>
+            <a
+              href="/contact"
+              onClick={(event) => handleLinkClick(event, 'contact', 'contact', '/contact')}
+              className="srp-btn srp-btn--primary apple-drawer-cta"
+            >
+              <span>Let's Talk</span>
+              <span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={16} /></span>
+            </a>
+          </div>
         </div>
       )}
 
       {/* COMPREHENSIVE RESPONSIVE STYLES FOR APPLE NAVBAR */}
       <style>{`
+        .apple-drawer-cta {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          width: 100% !important;
+          height: 48px !important;
+          min-height: 48px !important;
+          max-height: 48px !important;
+          padding: 0 24px !important;
+          font-size: 0.92rem !important;
+          font-weight: 700 !important;
+          border-radius: 14px !important;
+          box-sizing: border-box !important;
+          flex: 0 0 48px !important;
+          text-decoration: none !important;
+        }
         @keyframes appleFadeSlide {
           from {
             opacity: 0;
