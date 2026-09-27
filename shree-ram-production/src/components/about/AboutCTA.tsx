@@ -95,13 +95,7 @@ export const AboutCTA: React.FC = () => {
   return (
     <section
       ref={sectionRef}
-      style={{
-        padding: '140px 0 120px 0',
-        background: 'transparent',
-        position: 'relative',
-        overflow: 'hidden',
-        borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-      }}
+      className="about-cta-section"
     >
       {/* Ambient Radial Light Glow */}
       <div
@@ -127,16 +121,7 @@ export const AboutCTA: React.FC = () => {
         {/* Main Heading */}
         <h2
           ref={headingRef}
-          style={{
-            fontFamily: 'var(--font-heading)',
-            fontSize: 'clamp(2.5rem, 5.5vw, 5.2rem)',
-            fontWeight: 800,
-            lineHeight: 1.04,
-            textTransform: 'uppercase',
-            color: '#FFFFFF',
-            letterSpacing: '-0.03em',
-            marginBottom: '24px',
-          }}
+          className="about-cta-heading"
         >
           <div style={{ willChange: 'transform, opacity, clip-path' }}>LET'S BUILD</div>
           <div style={{ color: '#FF6A2A', willChange: 'transform, opacity, clip-path' }}>
@@ -147,18 +132,12 @@ export const AboutCTA: React.FC = () => {
         {/* Supporting Text */}
         <p
           ref={textRef}
-          style={{
-            fontSize: 'clamp(1.1rem, 1.8vw, 1.35rem)',
-            color: '#F5F5F2',
-            lineHeight: 1.6,
-            maxWidth: '680px',
-            marginBottom: '64px',
-          }}
+          className="about-cta-subheading"
         >
           Have a project in mind, need one service, or looking for a creative partner? Let's talk.
         </p>
 
-        {/* 3 Real Contact Options (WhatsApp, Call, Email) */}
+        {/* 4 Real Contact Options (WhatsApp, Call, Email, Instagram) */}
         <div
           style={{
             display: 'flex',
@@ -179,105 +158,42 @@ export const AboutCTA: React.FC = () => {
                 rel={opt.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                 onMouseEnter={() => setHoveredIndex(idx)}
                 onMouseLeave={() => setHoveredIndex(null)}
+                className="about-cta-row"
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '36px 0',
-                  borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-                  textDecoration: 'none',
-                  position: 'relative',
                   opacity: isSiblingHovered ? 0.35 : 1,
-                  transition: 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-                  cursor: 'pointer',
                 }}
               >
-                {/* Left Side: Number & Title */}
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '28px',
-                    transform: isHovered ? 'translateX(8px)' : 'translateX(0)',
-                    transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-                  }}
-                >
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: '1.1rem',
-                      fontWeight: 800,
-                      color: isHovered ? '#FF6A2A' : '#A5A5A8',
-                      letterSpacing: '0.1em',
-                      transition: 'color 0.4s ease',
-                    }}
-                  >
+                {/* Left Side: Number, Title & Mobile Subtext */}
+                <div className="about-cta-left">
+                  <span className="about-cta-num">
                     {opt.num}
                   </span>
 
-                  <div>
-                    <h3
-                      style={{
-                        fontFamily: 'var(--font-heading)',
-                        fontSize: 'clamp(1.7rem, 3.4vw, 3.0rem)',
-                        fontWeight: 800,
-                        color: isHovered ? '#FFFFFF' : '#F5F5F2',
-                        letterSpacing: '-0.01em',
-                        margin: 0,
-                        transition: 'color 0.4s ease',
-                      }}
-                    >
+                  <div className="about-cta-title-box">
+                    <h3 className="about-cta-title">
                       {opt.title}
                     </h3>
+                    <span className="about-cta-subtext-mobile">
+                      {opt.ctaText}
+                    </span>
                   </div>
                 </div>
 
-                {/* Right Side: CTA Text & Moving Arrow */}
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    transform: isHovered ? 'translate(5px, -5px)' : 'translate(0, 0)',
-                    transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-                  }}
-                >
-                  <span
-                    style={{
-                      fontSize: 'clamp(0.95rem, 1.4vw, 1.25rem)',
-                      fontWeight: 700,
-                      color: isHovered ? '#FF6A2A' : '#A5A5A8',
-                      transition: 'color 0.4s ease',
-                    }}
-                  >
+                {/* Right Side: Desktop CTA Text & Moving Arrow */}
+                <div className="about-cta-right">
+                  <span className="about-cta-text-desktop">
                     {opt.ctaText}
                   </span>
 
                   <ArrowUpRight
                     size={28}
+                    className="about-cta-arrow"
                     color={isHovered ? '#FF6A2A' : '#A5A5A8'}
-                    style={{
-                      transform: isHovered ? 'translate(5px, -5px)' : 'translate(0, 0)',
-                      transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s ease',
-                    }}
                   />
                 </div>
 
                 {/* Orange Underline Accent */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    bottom: '-1px',
-                    left: 0,
-                    width: '100%',
-                    height: '2px',
-                    backgroundColor: '#FF6A2A',
-                    transform: isHovered ? 'scaleX(1)' : 'scaleX(0)',
-                    transformOrigin: 'left center',
-                    transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-                    boxShadow: isHovered ? '0 0 14px #FF6A2A' : 'none',
-                  }}
-                />
+                <div className="about-cta-line" />
               </a>
             );
           })}

@@ -1257,3 +1257,212 @@
     border-radius: 16px;
   }
 }
+
+/* --------------------------------------------------------------------------
+   12. ABOUT FINAL CTA (LET'S TALK)
+   -------------------------------------------------------------------------- */
+.about-cta-section {
+  padding: 140px 0 120px 0;
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.about-cta-heading {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 5.5vw, 5.2rem);
+  font-weight: 800;
+  line-height: 1.04;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  letter-spacing: -0.03em;
+  margin-bottom: 24px;
+}
+
+.about-cta-subheading {
+  font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+  color: #F5F5F2;
+  line-height: 1.6;
+  max-width: 680px;
+  margin-bottom: 64px;
+}
+
+.about-cta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 36px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  text-decoration: none;
+  position: relative;
+  cursor: pointer;
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.about-cta-left {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.about-cta-num {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #A5A5A8;
+  letter-spacing: 0.1em;
+  transition: color 0.4s ease;
+  min-width: 28px;
+}
+
+.about-cta-title-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.about-cta-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.7rem, 3.4vw, 3.0rem);
+  font-weight: 800;
+  color: #F5F5F2;
+  letter-spacing: -0.01em;
+  margin: 0;
+  transition: color 0.4s ease;
+}
+
+.about-cta-subtext-mobile {
+  display: none;
+}
+
+.about-cta-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.about-cta-text-desktop {
+  font-size: clamp(0.95rem, 1.4vw, 1.25rem);
+  font-weight: 700;
+  color: #A5A5A8;
+  transition: color 0.4s ease;
+}
+
+.about-cta-arrow {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s ease;
+  flex-shrink: 0;
+}
+
+.about-cta-line {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #FF6A2A;
+  transform: scaleX(0);
+  transformOrigin: left center;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.about-cta-row:hover .about-cta-num {
+  color: #FF6A2A;
+}
+
+.about-cta-row:hover .about-cta-title {
+  color: #FFFFFF;
+}
+
+.about-cta-row:hover .about-cta-text-desktop,
+.about-cta-row:hover .about-cta-subtext-mobile {
+  color: #FF6A2A;
+}
+
+.about-cta-row:hover .about-cta-arrow {
+  color: #FF6A2A;
+  transform: translate(4px, -4px);
+}
+
+.about-cta-row:hover .about-cta-left {
+  transform: translateX(8px);
+}
+
+.about-cta-row:hover .about-cta-right {
+  transform: translate(4px, -4px);
+}
+
+.about-cta-row:hover .about-cta-line {
+  transform: scaleX(1);
+  box-shadow: 0 0 14px #FF6A2A;
+}
+
+/* Responsive: Tablet & Mobile */
+@media (max-width: 768px) {
+  .about-cta-section {
+    padding: 80px 0 60px 0;
+  }
+
+  .about-cta-heading {
+    font-size: clamp(2.0rem, 8vw, 2.8rem);
+    margin-bottom: 16px;
+  }
+
+  .about-cta-subheading {
+    font-size: 1.05rem;
+    margin-bottom: 36px;
+  }
+
+  .about-cta-row {
+    padding: 22px 0;
+  }
+
+  .about-cta-left {
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .about-cta-num {
+    font-size: 0.95rem;
+    padding-top: 4px;
+    min-width: 24px;
+  }
+
+  .about-cta-title {
+    font-size: clamp(1.4rem, 5.5vw, 1.85rem);
+    line-height: 1.15;
+  }
+
+  .about-cta-subtext-mobile {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #A5A5A8;
+    margin-top: 4px;
+    transition: color 0.3s ease;
+  }
+
+  .about-cta-right .about-cta-text-desktop {
+    display: none;
+  }
+
+  .about-cta-right {
+    gap: 0;
+    align-self: center;
+  }
+
+  .about-cta-arrow {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+@media (max-width: 380px) {
+  .about-cta-left {
+    gap: 12px;
+  }
+  .about-cta-title {
+    font-size: 1.35rem;
+  }
+}
