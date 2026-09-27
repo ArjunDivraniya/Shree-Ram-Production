@@ -67,14 +67,12 @@ export const ContactEnquiry: React.FC = () => {
   const subCopyRef = useRef<HTMLParagraphElement>(null);
   const subNoteRef = useRef<HTMLDivElement>(null);
   const arrowFillRef = useRef<HTMLDivElement>(null);
-  const arrowHeadRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const formShellRef = useRef<HTMLDivElement>(null);
   const barFillsRef = useRef<(HTMLDivElement | null)[]>([]);
   const stepRef = useRef<HTMLDivElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
   const successArrowFillRef = useRef<HTMLDivElement>(null);
-  const successArrowHeadRef = useRef<HTMLDivElement>(null);
 
   const [step, setStep] = useState<number>(0);
   const [formData, setFormData] = useState<FormData>({
@@ -92,7 +90,6 @@ export const ContactEnquiry: React.FC = () => {
       subCopy: subCopyRef.current,
       subNote: subNoteRef.current,
       arrowFill: arrowFillRef.current,
-      arrowHead: arrowHeadRef.current,
       progress: progressRef.current,
       formShell: formShellRef.current,
     }, prefersReducedMotion);
@@ -114,7 +111,7 @@ export const ContactEnquiry: React.FC = () => {
 
   useEffect(() => {
     if (!showSuccess) return;
-    requestAnimationFrame(() => { successAnimation(successRef.current, successArrowFillRef.current, successArrowHeadRef.current, prefersReducedMotion); });
+    requestAnimationFrame(() => { successAnimation(successRef.current, successArrowFillRef.current, null, prefersReducedMotion); });
   }, [showSuccess, prefersReducedMotion]);
 
   const toggleService = useCallback((id: string, btnEl: HTMLElement | null) => {
@@ -239,7 +236,7 @@ export const ContactEnquiry: React.FC = () => {
               <a href={CONTACT_LINKS.instagram} target="_blank" rel="noopener noreferrer" className="srp-btn srp-btn--ghost"><span>Instagram</span><span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={16} /></span></a>
             </div>
             <div className="srp-arrow" aria-hidden="true" style={{ marginTop: 8 }}>
-              <div ref={successArrowFillRef} className="srp-arrow__fill" /><div ref={successArrowHeadRef} className="srp-arrow__head"><ArrowUpRight size={14} style={{ transform: 'rotate(45deg)' }} /></div>
+              <div ref={successArrowFillRef} className="srp-arrow__fill" />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 18, fontFamily: 'var(--font-heading)', fontSize: '0.78rem', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#68696D' }}>
               <span style={{ width: 6, height: 6, borderRadius: 999, background: 'var(--accent-orange)', boxShadow: '0 0 10px rgba(255,106,42,0.6)', flexShrink: 0 }} />
@@ -265,7 +262,7 @@ export const ContactEnquiry: React.FC = () => {
           <p ref={subCopyRef} className="srp-contact__sub-copy">Whether you need one service or a complete growth solution, tell us what you’re looking for. We’ll figure out the right way forward — no packages, no pressure.</p>
           <div ref={subNoteRef} className="srp-contact__sub-note">You don’t have to buy a package to work with us.<br />One service, several, or a full growth system — you choose.</div>
         </div>
-        <div className="srp-arrow" aria-hidden="true"><div ref={arrowFillRef} className="srp-arrow__fill" /><div ref={arrowHeadRef} className="srp-arrow__head"><ArrowUpRight size={14} style={{ transform: 'rotate(45deg)' }} /></div></div>
+        <div className="srp-arrow" aria-hidden="true"><div ref={arrowFillRef} className="srp-arrow__fill" /></div>
 
         <div ref={progressRef} className="srp-progress" role="progressbar" aria-valuenow={step + 1} aria-valuemin={1} aria-valuemax={4} aria-label={`Step ${step + 1} of 4`}>
           <div className="srp-progress__track" aria-hidden="true">

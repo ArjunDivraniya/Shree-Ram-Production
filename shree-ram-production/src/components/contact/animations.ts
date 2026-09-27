@@ -8,7 +8,7 @@ export interface ContactIntroTargets {
   subCopy: HTMLElement | null;
   subNote: HTMLElement | null;
   arrowFill: HTMLElement | null;
-  arrowHead: HTMLElement | null;
+  arrowHead?: HTMLElement | null;
   progress: HTMLElement | null;
   formShell: HTMLElement | null;
 }
@@ -36,8 +36,10 @@ export function contactIntroAnimation(
     }
     if (t.subCopy) tl.fromTo(t.subCopy, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' }, '-=0.45');
     if (t.subNote) tl.fromTo(t.subNote, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' }, '-=0.45');
-    if (t.arrowFill && t.arrowHead) {
+    if (t.arrowFill) {
       tl.fromTo(t.arrowFill, { scaleX: 0 }, { scaleX: 1, duration: 0.9, ease: 'power3.inOut' }, '-=0.25');
+    }
+    if (t.arrowHead) {
       tl.fromTo(t.arrowHead, { opacity: 0, x: -10 }, { opacity: 1, x: 0, duration: 0.45, ease: 'power2.out' }, '-=0.35');
     }
     if (t.progress) tl.fromTo(t.progress, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.4');
@@ -62,7 +64,7 @@ export function serviceSelectionAnimation(el: HTMLElement, selected: boolean, pr
   if (check) gsap.fromTo(check, { scale: 0.7 }, { scale: 1, duration: 0.32, ease: 'back.out(1.6)', overwrite: true });
 }
 
-export function successAnimation(container: HTMLElement | null, arrowFill: HTMLElement | null, arrowHead: HTMLElement | null, prefersReducedMotion: boolean) {
+export function successAnimation(container: HTMLElement | null, arrowFill: HTMLElement | null, arrowHead: HTMLElement | null = null, prefersReducedMotion: boolean = false) {
   if (!container) return;
   if (prefersReducedMotion) {
     gsap.set(container, { opacity: 1, y: 0 });
