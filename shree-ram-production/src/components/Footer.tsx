@@ -267,20 +267,22 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         @media (max-width: 767px) {
           .footer-top-row {
             flex-direction: column;
-            gap: 40px;
-            margin-bottom: 40px;
+            gap: 56px;
+            margin-bottom: 44px;
           }
           .footer-brand-col {
+            flex: 0 0 auto;
+            width: 100%;
             max-width: 100%;
           }
           .footer-nav-group {
             width: 100%;
             justify-content: space-between;
-            gap: 32px;
+            gap: 28px;
           }
           .footer-location-col {
             padding-top: 28px;
-            margin-bottom: 40px;
+            margin-bottom: 36px;
           }
           .footer-contact-row {
             display: flex;
@@ -296,9 +298,17 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         }
 
         @media (max-width: 480px) {
+          .footer-top-row {
+            gap: 52px;
+          }
+          .footer-brand-col {
+            flex: 0 0 auto;
+            width: 100%;
+            max-width: 100%;
+          }
           .footer-nav-group {
             flex-direction: column;
-            gap: 28px;
+            gap: 24px;
           }
         }
       `}</style>
