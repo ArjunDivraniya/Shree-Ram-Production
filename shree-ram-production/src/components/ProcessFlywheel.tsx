@@ -383,7 +383,7 @@ export const ProcessFlywheel: React.FC = () => {
               {!isMobile && (
                 <>
                   <path
-                    d="M 600 60 C 600 250, 280 250, 280 440 C 280 690, 920 690, 920 940 C 920 1190, 280 1190, 280 1440 C 280 1690, 920 1690, 920 1940"
+                    d="M 600 180 C 600 310, 280 310, 280 440 C 280 690, 920 690, 920 940 C 920 1190, 280 1190, 280 1440 C 280 1690, 920 1690, 920 1940"
                     stroke="rgba(255, 255, 255, 0.12)"
                     strokeWidth="4"
                     strokeDasharray="8 8"
@@ -391,7 +391,7 @@ export const ProcessFlywheel: React.FC = () => {
                   />
                   <path
                     ref={desktopActivePathRef}
-                    d="M 600 60 C 600 250, 280 250, 280 440 C 280 690, 920 690, 920 940 C 920 1190, 280 1190, 280 1440 C 280 1690, 920 1690, 920 1940"
+                    d="M 600 180 C 600 310, 280 310, 280 440 C 280 690, 920 690, 920 940 C 920 1190, 280 1190, 280 1440 C 280 1690, 920 1690, 920 1940"
                     stroke="#FF6A2A"
                     strokeWidth="5"
                     strokeLinecap="round"
@@ -400,7 +400,7 @@ export const ProcessFlywheel: React.FC = () => {
                       filter: 'drop-shadow(0 0 10px rgba(255, 106, 42, 0.8))',
                     }}
                   />
-                  <g transform="translate(600, 60)">
+                  <g transform="translate(600, 180)">
                     <circle r="18" fill="#141518" stroke="rgba(255,106,42,0.4)" strokeWidth="2" />
                     <circle r="6" fill="#FF6A2A" />
                   </g>
@@ -446,7 +446,7 @@ export const ProcessFlywheel: React.FC = () => {
               {isMobile && (
                 <>
                   <path
-                    d="M 45 60 C 45 250, 75 250, 75 440 C 75 690, 25 690, 25 940 C 25 1190, 75 1190, 75 1440 C 75 1690, 25 1690, 25 1940"
+                    d="M 45 180 C 45 310, 75 310, 75 440 C 75 690, 25 690, 25 940 C 25 1190, 75 1190, 75 1440 C 75 1690, 25 1690, 25 1940"
                     stroke="rgba(255, 255, 255, 0.12)"
                     strokeWidth="4"
                     strokeDasharray="8 8"
@@ -454,7 +454,7 @@ export const ProcessFlywheel: React.FC = () => {
                   />
                   <path
                     ref={mobileActivePathRef}
-                    d="M 45 60 C 45 250, 75 250, 75 440 C 75 690, 25 690, 25 940 C 25 1190, 75 1190, 75 1440 C 75 1690, 25 1690, 25 1940"
+                    d="M 45 180 C 45 310, 75 310, 75 440 C 75 690, 25 690, 25 940 C 25 1190, 75 1190, 75 1440 C 75 1690, 25 1690, 25 1940"
                     stroke="#FF6A2A"
                     strokeWidth="5"
                     strokeLinecap="round"
@@ -463,7 +463,7 @@ export const ProcessFlywheel: React.FC = () => {
                       filter: 'drop-shadow(0 0 10px rgba(255, 106, 42, 0.8))',
                     }}
                   />
-                  <g transform="translate(45, 60)">
+                  <g transform="translate(45, 180)">
                     <circle r="14" fill="#141518" stroke="rgba(255,106,42,0.4)" strokeWidth="2" />
                     <circle r="5" fill="#FF6A2A" />
                   </g>
@@ -509,7 +509,7 @@ export const ProcessFlywheel: React.FC = () => {
               <circle
                 ref={glowPulseRef}
                 cx={isMobile ? "45" : "600"}
-                cy="60"
+                cy="180"
                 r="16"
                 fill="rgba(255, 106, 42, 0.4)"
                 filter="url(#tip-orange-glow)"
@@ -517,7 +517,7 @@ export const ProcessFlywheel: React.FC = () => {
               <circle
                 ref={glowDotRef}
                 cx={isMobile ? "45" : "600"}
-                cy="60"
+                cy="180"
                 r="6"
                 fill="#FFFFFF"
                 stroke="#FF6A2A"
