@@ -946,34 +946,43 @@
   }
 
   .services-selector-list {
-    flex-direction: row;
-    overflow-x: auto;
+    flex-direction: column;
+    overflow-x: visible;
+    width: 100%;
     gap: 0;
-    padding-bottom: 8px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .services-selector-list::-webkit-scrollbar {
-    display: none;
+    padding-bottom: 0;
   }
 
   .services-selector-list li {
+    width: 100%;
     flex-shrink: 0;
   }
 
   .services-selector-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-    padding: 10px 16px;
-    border-bottom: none;
-    border-right: 1px solid rgba(255, 255, 255, 0.06);
-    min-width: max-content;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 14px 12px 14px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-right: none;
+    border-radius: 4px;
+    min-width: 0;
   }
 
   .services-selector-item:first-child {
-    border-top: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .services-selector-number {
+    font-size: 0.82rem;
+    min-width: 24px;
+  }
+
+  .services-selector-name {
+    font-size: 0.95rem;
+    flex: 1;
   }
 
   .cinematic-stage-container {

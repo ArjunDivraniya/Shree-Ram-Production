@@ -27,31 +27,16 @@ export const ServiceSelector: React.FC<ServiceSelectorProps> = ({
     );
 
     if (activeItem) {
-      const isMobile = window.innerWidth < 768;
-
-      if (isMobile) {
-        gsap.to(indicatorRef.current, {
-          left: activeItem.offsetLeft,
-          width: activeItem.offsetWidth,
-          top: 'auto',
-          bottom: 0,
-          height: 2,
-          opacity: 1,
-          duration: 0.45,
-          ease: 'power3.out',
-        });
-      } else {
-        gsap.to(indicatorRef.current, {
-          top: activeItem.offsetTop,
-          height: activeItem.offsetHeight,
-          left: 0,
-          width: 3,
-          bottom: 'auto',
-          opacity: 1,
-          duration: 0.45,
-          ease: 'power3.out',
-        });
-      }
+      gsap.to(indicatorRef.current, {
+        top: activeItem.offsetTop,
+        height: activeItem.offsetHeight,
+        left: 0,
+        width: 3,
+        bottom: 'auto',
+        opacity: 1,
+        duration: 0.45,
+        ease: 'power3.out',
+      });
     }
   }, [activeServiceId, services]);
 
