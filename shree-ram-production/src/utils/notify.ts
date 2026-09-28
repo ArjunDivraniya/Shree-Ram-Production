@@ -69,11 +69,65 @@ export function buildTeamWhatsAppUrl(message: string): string {
   return `https://wa.me/${TEAM_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
+export interface SendEnquiryResult {
+  success: boolean;
+  messageId?: string;
+  simulated?: boolean;
+  clientConfirmed?: boolean;
+  error?: string;
+}
+
 /**
- * Trigger both notifications in the browser.
- * - Email: opens default mail client via mailto: (team receives enquiry)
- * - WhatsApp: opens wa.me in new tab (team receives WhatsApp)
- * Returns URLs so UI can show fallbacks if popups are blocked.
+ * Send enquiry data automatically via backend API powered by Nodemailer.
+ * This sends the enquiry directly in the background without needing the user
+ * to open their email client or click send.
+ */
+export async function sendEnquiryViaNodemailer(payload: EnquiryPayload): Promise<SendEnquiryResult> {
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 18000); // 18s timeout
+
+    const response = await fetch('/api/send-enquiry', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const errData = await response.json().catch(() => ({}));
+      throw new Error(errData?.error || `Server responded with status ${response.status}`);
+    }
+
+    const data: SendEnquiryResult = await response.json();
+
+    // Cache locally for reference
+    try {
+      localStorage.setItem('srp_last_enquiry', JSON.stringify({
+        ...payload,
+        at: new Date().toISOString(),
+        result: data,
+      }));
+    } catch {}
+
+    return data;
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Network error or backend unavailable.';
+    console.error('❌ [Enquiry API Error]:', message);
+    return {
+      success: false,
+      error: message,
+    };
+  }
+}
+
+/**
+ * Fallback dual notification in browser (WhatsApp link + mailto)
+ * Kept for optional direct-click triggers if needed.
  */
 export function triggerDualTeamNotification(payload: EnquiryPayload): { mailtoUrl: string; whatsappUrl: string; message: string } {
   const message = buildTeamEnquiryMessage(payload);
@@ -81,26 +135,9 @@ export function triggerDualTeamNotification(payload: EnquiryPayload): { mailtoUr
   const mailtoUrl = buildTeamMailtoUrl(message, subject);
   const whatsappUrl = buildTeamWhatsAppUrl(message);
 
-  // Persist for debugging / fallback (e.g. if popup blocked, user can still copy)
   try {
     localStorage.setItem('srp_last_enquiry', JSON.stringify({ ...payload, message, at: new Date().toISOString() }));
   } catch {}
-
-  // Attempt to open both — WhatsApp first in new tab, then email in current context
-  // Stagger to avoid popup blocker coalescing
-  try {
-    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
-  } catch {}
-  // Small delay so WhatsApp tab opens before mailto navigation
-  window.setTimeout(() => {
-    // Using hidden anchor is more reliable than location.href for mailto in some browsers
-    const a = document.createElement('a');
-    a.href = mailtoUrl;
-    a.style.display = 'none';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }, 400);
 
   return { mailtoUrl, whatsappUrl, message };
 }

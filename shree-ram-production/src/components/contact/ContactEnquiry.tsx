@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { gsap } from 'gsap';
-import { ArrowUpRight, Check, ArrowLeft, CheckCircle2, ChevronDown } from 'lucide-react';
+import { ArrowUpRight, Check, ArrowLeft, CheckCircle2, ChevronDown, MessageSquare, Phone, Mail } from 'lucide-react';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { contactIntroAnimation, progressAnimation, serviceSelectionAnimation, successAnimation } from './animations';
-import { triggerDualTeamNotification } from '../../utils/notify';
+import { sendEnquiryViaNodemailer } from '../../utils/notify';
 import SectionMarker from '../ui/SectionMarker';
 import './contact.css';
 
@@ -28,9 +28,9 @@ const BUDGET_OPTIONS = [
 ] as const;
 
 const PREF_OPTIONS = [
-  { id: 'whatsapp', label: 'WhatsApp' },
-  { id: 'phone', label: 'Phone Call' },
-  { id: 'email', label: 'Email' },
+  { id: 'whatsapp', label: 'WhatsApp', icon: MessageSquare },
+  { id: 'phone', label: 'Phone Call', icon: Phone },
+  { id: 'email', label: 'Email', icon: Mail },
 ] as const;
 
 const CONTACT_LINKS = {
@@ -80,6 +80,7 @@ export const ContactEnquiry: React.FC = () => {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitState, setSubmitState] = useState<SubmitState>('idle');
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
 
   useEffect(() => {
@@ -111,7 +112,24 @@ export const ContactEnquiry: React.FC = () => {
 
   useEffect(() => {
     if (!showSuccess) return;
-    requestAnimationFrame(() => { successAnimation(successRef.current, successArrowFillRef.current, null, prefersReducedMotion); });
+    
+    // Smoothly scroll to the Thank You section so the viewport stays exactly on the confirmation card
+    const scrollToThankYou = () => {
+      const el = sectionRef.current || document.getElementById('contact-enquiry');
+      if (el) {
+        const top = el.getBoundingClientRect().top + window.pageYOffset - 80;
+        window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+      }
+    };
+    
+    scrollToThankYou();
+    const t = window.setTimeout(scrollToThankYou, 100);
+
+    requestAnimationFrame(() => {
+      successAnimation(successRef.current, successArrowFillRef.current, null, prefersReducedMotion);
+    });
+
+    return () => window.clearTimeout(t);
   }, [showSuccess, prefersReducedMotion]);
 
   const toggleService = useCallback((id: string, btnEl: HTMLElement | null) => {
@@ -181,37 +199,54 @@ export const ContactEnquiry: React.FC = () => {
   const handleNext = useCallback(() => { if (!validateStep(step)) return; if (step < 3) goToStep(step + 1); }, [step, validateStep, goToStep]);
   const handleBack = useCallback(() => { if (step > 0) goToStep(step - 1); }, [step, goToStep]);
 
-  const handleSubmit = useCallback((e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     if (step < 3) { handleNext(); return; }
     const valid0 = validateStep(0); const valid1 = validateStep(1); const valid2 = validateStep(2);
     if (!valid0) { goToStep(0); return; }
     if (!valid1) { goToStep(1); return; }
     if (!valid2) { goToStep(2); return; }
+    
     setSubmitState('sending');
+    setSubmitError(null);
 
-    // --- Dual notification: Email + WhatsApp to team (so we can take note immediately) ---
+    // --- Prepare clean payload for automated Nodemailer email delivery ---
     const _serviceLabels = SERVICE_OPTIONS.filter(o => formData.services.includes(o.id)).map(o => o.label);
     const _budgetLabel = BUDGET_OPTIONS.find(b => b.id === formData.budget)?.label ?? '';
     const payload = {
       services: _serviceLabels,
-      name: formData.name,
-      business: formData.business,
-      email: formData.email,
-      phone: formData.phone,
-      website: formData.website,
+      name: formData.name.trim(),
+      business: formData.business.trim(),
+      email: formData.email.trim(),
+      phone: formData.phone.trim(),
+      website: formData.website.trim(),
       industry: formData.industry,
-      goal: formData.goal,
+      goal: formData.goal.trim(),
       budgetLabel: _budgetLabel,
       preferences: formData.preferences,
     };
-    // Trigger both — team receives Email and WhatsApp for every enquiry
-    triggerDualTeamNotification(payload);
 
-    window.setTimeout(() => {
+    // Automated background delivery via backend Nodemailer route
+    const result = await sendEnquiryViaNodemailer(payload);
+
+    if (result.success) {
       setSubmitState('received');
-      window.setTimeout(() => setShowSuccess(true), 520);
-    }, 1400);
+      window.setTimeout(() => {
+        setShowSuccess(true);
+        window.requestAnimationFrame(() => {
+          const el = document.getElementById('contact-enquiry');
+          if (el) {
+            const top = el.getBoundingClientRect().top + window.pageYOffset - 80;
+            window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+          }
+        });
+      }, 400);
+    } else {
+      setSubmitState('idle');
+      setSubmitError(
+        result.error || 'Unable to send right now. Please try again or chat with our team directly on WhatsApp.'
+      );
+    }
   }, [step, validateStep, goToStep, handleNext, formData]);
 
   const selectedServiceLabels = SERVICE_OPTIONS.filter(o => formData.services.includes(o.id)).map(o => o.label);
@@ -219,20 +254,19 @@ export const ContactEnquiry: React.FC = () => {
 
   if (showSuccess) {
     return (
-      <section ref={sectionRef} id="contact-enquiry" className="srp-contact srp-contact--page" aria-labelledby="contact-heading">
+      <section ref={sectionRef} id="contact-enquiry" className="srp-contact srp-contact--page srp-contact--success" aria-labelledby="contact-heading">
         <div className="srp-contact__ambient" aria-hidden="true">
           <div className="srp-contact__ambient--radial" /><div className="srp-contact__ambient--grid" /><div className="srp-contact__ambient--noise" />
         </div>
         <div className="container srp-contact__inner">
           <div ref={successRef} className="srp-success">
-            <div className="srp-success__kicker"><CheckCircle2 size={14} aria-hidden="true" /><span>Message received</span></div>
-            <h2 className="srp-success__title">Thank you.<br /><span style={{ color: 'var(--accent-orange)' }}>Your message is on its way.</span></h2>
-            <p className="srp-success__subtitle">We’ve received your enquiry and notified our team instantly via Email &amp; WhatsApp — we’ll review and get back to you soon.</p>
-            <p className="srp-success__copy">A copy has been prepared for our team via Email &amp; WhatsApp so we never miss your request. Whether you need one service or a complete growth solution, we’ll figure out the right way forward together. If it’s urgent, reach us via WhatsApp or Call.</p>
+            <div className="srp-success__kicker"><CheckCircle2 size={14} aria-hidden="true" /><span>Enquiry Received</span></div>
+            <h2 className="srp-success__title">Thank you.<br /><span style={{ color: 'var(--accent-orange)' }}>Your enquiry has been received.</span></h2>
+            <p className="srp-success__subtitle">We’ve received your enquiry and our team will review your project details shortly.</p>
+            <p className="srp-success__copy">Our creative direction and production team will review your objectives and connect with you via your preferred channel. If your project is urgent or time-sensitive, feel free to reach us directly on WhatsApp or Call.</p>
             <div className="srp-success__actions">
-              <a href={CONTACT_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" className="srp-btn srp-btn--primary"><span>Message on WhatsApp</span><span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={16} /></span></a>
+              <a href={CONTACT_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" className="srp-btn srp-btn--primary"><span>Chat on WhatsApp</span><span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={16} /></span></a>
               <a href={CONTACT_LINKS.call} className="srp-btn srp-btn--secondary"><span>Call our team</span><span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={16} /></span></a>
-              <a href={CONTACT_LINKS.email} className="srp-btn srp-btn--ghost"><span>Send an email</span><span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={16} /></span></a>
               <a href={CONTACT_LINKS.instagram} target="_blank" rel="noopener noreferrer" className="srp-btn srp-btn--ghost"><span>Instagram</span><span className="srp-btn__arrow" aria-hidden="true"><ArrowUpRight size={16} /></span></a>
             </div>
             <div className="srp-arrow" aria-hidden="true" style={{ marginTop: 8 }}>
@@ -415,13 +449,39 @@ export const ContactEnquiry: React.FC = () => {
                     <div className="srp-pref__grid" role="group" aria-label="Contact preferences">
                       {PREF_OPTIONS.map(opt => {
                         const active = formData.preferences.includes(opt.id);
-                        return <button key={opt.id} type="button" className={['srp-pref__pill', active ? 'srp-pref__pill--active' : ''].filter(Boolean).join(' ')} aria-pressed={active} onClick={() => togglePref(opt.id)}>{opt.label}</button>;
+                        const Icon = opt.icon;
+                        return (
+                          <button
+                            key={opt.id}
+                            type="button"
+                            className={`srp-pref__pill ${active ? 'srp-pref__pill--active' : ''}`}
+                            aria-pressed={active}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              togglePref(opt.id);
+                            }}
+                          >
+                            <Icon size={15} className="srp-pref__icon" aria-hidden="true" />
+                            <span>{opt.label}</span>
+                            {active && (
+                              <span className="srp-pref__check" aria-hidden="true">
+                                <Check size={12} strokeWidth={3} />
+                              </span>
+                            )}
+                          </button>
+                        );
                       })}
                     </div>
                   </div>
-                  <div style={{ marginTop: 16, padding: '12px 14px', borderRadius: 10, background: 'rgba(255,106,42,0.08)', border: '1px solid rgba(255,106,42,0.18)', fontSize: '0.82rem', lineHeight: 1.5, color: '#D6D6D8' }}>
-                    <span style={{ fontWeight: 700, color: '#FF6A2A' }}>Note:</span> On submit, our team is notified instantly via <strong style={{ color: '#FFFFFF' }}>Email</strong> and <strong style={{ color: '#FFFFFF' }}>WhatsApp</strong> so we can take note right away.
-                  </div>
+                  {submitError && (
+                    <div style={{ marginTop: 14, padding: '12px 16px', borderRadius: 10, background: 'rgba(255, 75, 75, 0.12)', border: '1px solid rgba(255, 75, 75, 0.3)', color: '#FF8888', fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
+                      <span>{submitError}</span>
+                      <a href={CONTACT_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" style={{ color: '#25D366', fontWeight: 700, textDecoration: 'underline', fontSize: '0.84rem' }}>
+                        Message on WhatsApp ↗
+                      </a>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
