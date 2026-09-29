@@ -19,6 +19,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate: _onNavigate }) => {
   );
   const [visible, setVisible] = useState(false);
   const [activeProjectId, setActiveProjectId] = useState<string>(ORBIT_PROJECTS[0]?.id ?? '');
+  const [preparingProjectId, setPreparingProjectId] = useState<string>(ORBIT_PROJECTS[1]?.id ?? '');
   const orbitRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const centerDotRef = useRef<HTMLDivElement>(null);
@@ -123,8 +124,8 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate: _onNavigate }) => {
 
       let dims = getDims();
       const count = cards.length;
-      // spread equally, start offset so first card starts at lower/right entering
-      const baseAngles = cards.map((_, i) => (i / count) * Math.PI * 2 - Math.PI * 0.52);
+      // Spread equally, card 0 starts at focal point 0 (rightmost active position)
+      const baseAngles = cards.map((_, i) => -(i / count) * Math.PI * 2);
       const rotation = { value: 0 };
       let activeIdx = 0;
 
@@ -207,7 +208,9 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate: _onNavigate }) => {
 
         if (bestIdx !== activeIdx) {
           activeIdx = bestIdx;
+          const nextIdx = (activeIdx + 1) % count;
           setActiveProjectId(ORBIT_PROJECTS[activeIdx]?.id ?? '');
+          setPreparingProjectId(ORBIT_PROJECTS[nextIdx]?.id ?? '');
         }
 
         if (centerDotRef.current) {
@@ -434,6 +437,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate: _onNavigate }) => {
 
               {ORBIT_PROJECTS.map((project, idx) => {
                 const isActive = project.id === activeProjectId;
+                const isPreparing = project.id === preparingProjectId;
                 return (
                   <div
                     key={project.id}
@@ -450,6 +454,8 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate: _onNavigate }) => {
                           webmSrc={project.webmUrl}
                           poster={project.posterUrl || (project.thumbnail?.endsWith('.webp') ? project.thumbnail : undefined)}
                           active={isActive}
+                          prepare={isPreparing}
+                          releaseTimeoutMs={24000}
                           priority={idx === 0}
                           title={`${project.title} — Reel by Shree Ram Production`}
                           ariaLabel={`${project.title} — Video Production by Shree Ram Production`}

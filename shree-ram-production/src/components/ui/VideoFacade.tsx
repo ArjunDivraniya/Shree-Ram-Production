@@ -11,16 +11,25 @@ export interface VideoFacadeProps {
   poster?: string;
   /**
    * Explicit active control:
-   * When defined (boolean):
-   * - true: video source is attached (if not already attached), loaded, and played.
-   * - false: video is paused. Sources remain attached; no unmounting or re-downloads.
-   * Essential for carousels / orbits (Hero) so cards progressively attach on first activation
-   * and never re-request media on subsequent rotations.
+   * - true: actively playing
+   * - false: paused
    */
   active?: boolean;
   /**
+   * Controlled 1+1 Strategy:
+   * When true, attaches video source and pre-buffers in background ready to play.
+   */
+  prepare?: boolean;
+  /**
+   * Inactivity cleanup timeout in milliseconds (e.g. 24000ms / ~4 card rotations).
+   * If a card remains inactive without active or prepare for this duration,
+   * its hardware decoder buffer is cleanly released to prevent memory bloat.
+   * Default: 24000ms.
+   */
+  releaseTimeoutMs?: number;
+  /**
    * If true, video loads on first hover (desktop) or tap (mobile).
-   * Pauses on mouse leave. Sources remain attached; no re-downloads on re-hover.
+   * Pauses on mouse leave.
    */
   loadOnHover?: boolean;
   /**
@@ -60,15 +69,13 @@ export interface VideoFacadeProps {
 }
 
 /**
- * VideoFacade implements progressive persistent loading:
- * 1. Initial Page Load: Only the active card (Card 0) attaches its video source.
- *    Inactive cards render only lightweight WebP posters (~35 KB).
- * 2. First Activation: When an inactive card becomes active for the FIRST time,
- *    its video source is attached, loaded, and played.
- * 3. Inactive State: When rotated away / unhovered, video pauses cleanly.
- *    The source is NOT removed, video.load() is NOT called, and the element is NOT destroyed.
- * 4. Reactivation: When the card becomes active again in subsequent carousel cycles,
- *    it reuses the existing video element and buffer — calling play() with ZERO new network requests.
+ * VideoFacade implements the Controlled 1 + 1 Video Strategy:
+ * 1. Black-Screen-Proof: The poster remains visible until the video has genuinely
+ *    painted valid frames (`hasRenderedFrame === true` from `playing` / `timeupdate`).
+ * 2. 1 + 1 Staging: At any moment, 1 video is actively playing and 1 video is preparing/pre-buffering.
+ * 3. Buffer Preservation: Rotated-away cards pause without destroying their buffer for rapid reuse.
+ * 4. Controlled Eviction: Inactive cards that remain unneeded past `releaseTimeoutMs`
+ *    cleanly release their hardware decoders without causing black flashes or layout shifts.
  */
 export const VideoFacade: React.FC<VideoFacadeProps> = ({
   src,
@@ -77,6 +84,8 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
   webmSrc: customWebmSrc,
   poster: customPoster,
   active,
+  prepare = false,
+  releaseTimeoutMs = 24000,
   loadOnHover = false,
   priority = false,
   title,
@@ -97,6 +106,7 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const cleanupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const rawMp4 = mp4 || src || '';
   const rawWebm = webm || customWebmSrc;
@@ -130,18 +140,15 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
 
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [isInView, setIsInView] = useState<boolean>(priority);
-  const [isVideoReady, setIsVideoReady] = useState<boolean>(false);
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [hasRenderedFrame, setHasRenderedFrame] = useState<boolean>(false);
+  const [isStalled, setIsStalled] = useState<boolean>(false);
   const [hasError, setHasError] = useState<boolean>(false);
 
-  // Progressive Persistent Loading State:
-  // hasAttached is initialized to true ONLY if active is explicitly true on mount
-  // (e.g. Hero Card 0), or if priority is true and active is not explicitly false.
-  // Once set to true, it remains true for the entire lifecycle of this mounted card.
+  // Progressive Source Attachment State:
+  // True if active on mount, prepared, or marked high priority
   const [hasAttached, setHasAttached] = useState<boolean>(() => {
-    if (typeof active === 'boolean') {
-      return active;
-    }
+    if (typeof active === 'boolean' && active) return true;
+    if (prepare) return true;
     return priority;
   });
 
@@ -159,20 +166,26 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
     return isInView;
   }, [active, loadOnHover, isHovered, priority, isInView]);
 
-  // Keep a ref to shouldActivate for async event callbacks
+  // Keep a ref to shouldActivate for async media event callbacks
   const shouldActivateRef = useRef<boolean>(shouldActivate);
   useEffect(() => {
     shouldActivateRef.current = shouldActivate;
   }, [shouldActivate]);
 
-  // SOURCE LIFECYCLE:
-  // false -> first activation -> true forever for this mounted card.
-  // Never resets back to false when deactivated.
+  // SOURCE ATTACHMENT & PREPARATION:
+  // Attach sources when active, preparing, or hovered
   useEffect(() => {
-    if (shouldActivate && !hasAttached) {
-      setHasAttached(true);
+    if (shouldActivate || prepare) {
+      if (!hasAttached) {
+        setHasAttached(true);
+      }
+      // Cancel any pending eviction timer immediately
+      if (cleanupTimerRef.current) {
+        clearTimeout(cleanupTimerRef.current);
+        cleanupTimerRef.current = null;
+      }
     }
-  }, [shouldActivate, hasAttached]);
+  }, [shouldActivate, prepare, hasAttached]);
 
   // Viewport intersection observer (only used when active prop is not explicitly provided)
   useEffect(() => {
@@ -213,7 +226,7 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
     return () => observer.disconnect();
   }, [active, priority]);
 
-  // Safe play helper that checks paused state to avoid redundant calls
+  // Safe play helper
   const safePlay = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -224,7 +237,6 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
     }
 
     if (!video.paused) {
-      setIsPlaying(true);
       return;
     }
 
@@ -232,12 +244,10 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
     if (playPromise !== undefined) {
       playPromise
         .then(() => {
-          setIsPlaying(true);
           onPlay?.();
         })
         .catch((_err) => {
-          // Autoplay policy prevented playback; will retry on first user interaction
-          setIsPlaying(false);
+          // Retry on user interaction if restricted by browser policy
           const handleUserInteraction = () => {
             if (videoRef.current && shouldActivateRef.current) {
               videoRef.current.play().catch(() => {});
@@ -251,7 +261,7 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
     }
   }, [muted, onPlay]);
 
-  // Safe pause helper that pauses existing media without destroying buffer
+  // Safe pause helper
   const safePause = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -259,14 +269,12 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
       if (!video.paused) {
         video.pause();
       }
-      setIsPlaying(false);
     } catch (_err) {}
   }, []);
 
-  // PLAYBACK LIFECYCLE:
-  // active === true  -> play existing media (if autoPlay)
-  // active === false -> pause existing media
-  // NEVER calls video.load() on active transitions; preserves existing buffer
+  // PLAYBACK SYNCHRONIZATION:
+  // Play when shouldActivate; pause when inactive.
+  // Never calls video.load() on playback toggles to prevent buffer resets.
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !hasAttached) return;
@@ -278,8 +286,76 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
     }
   }, [shouldActivate, hasAttached, autoPlay, safePlay, safePause]);
 
+  // CONTROLLED INACTIVITY EVICTION:
+  // If card is both inactive and not preparing for releaseTimeoutMs, release decoder
+  useEffect(() => {
+    if (!hasAttached) return;
+
+    if (!shouldActivate && !prepare) {
+      // Inactive: start eviction timer
+      if (releaseTimeoutMs && releaseTimeoutMs > 0) {
+        if (cleanupTimerRef.current) {
+          clearTimeout(cleanupTimerRef.current);
+        }
+        cleanupTimerRef.current = setTimeout(() => {
+          // Release decoder buffer cleanly
+          setHasAttached(false);
+          setHasRenderedFrame(false);
+          setIsStalled(false);
+          if (videoRef.current) {
+            try {
+              videoRef.current.pause();
+              videoRef.current.removeAttribute('src');
+              videoRef.current.load(); // Flush decoder session
+            } catch (_e) {}
+          }
+        }, releaseTimeoutMs);
+      }
+    } else {
+      // Active or preparing: cancel eviction timer
+      if (cleanupTimerRef.current) {
+        clearTimeout(cleanupTimerRef.current);
+        cleanupTimerRef.current = null;
+      }
+    }
+
+    return () => {
+      if (cleanupTimerRef.current) {
+        clearTimeout(cleanupTimerRef.current);
+        cleanupTimerRef.current = null;
+      }
+    };
+  }, [shouldActivate, prepare, hasAttached, releaseTimeoutMs]);
+
+  // MEDIA EVENT HANDLERS (Black-Screen Prevention):
+  // Video is only marked ready to render when playing & actual pixels are confirmed
+  const handlePlaying = () => {
+    setIsStalled(false);
+    setHasRenderedFrame(true);
+    setHasError(false);
+    onPlay?.();
+  };
+
+  const handleTimeUpdate = () => {
+    const video = videoRef.current;
+    if (video && video.currentTime > 0.03 && !hasRenderedFrame) {
+      setHasRenderedFrame(true);
+      setIsStalled(false);
+    }
+  };
+
+  const handleWaiting = () => {
+    setIsStalled(true);
+  };
+
+  const handleCanPlay = () => {
+    setIsStalled(false);
+    if (autoPlay && shouldActivateRef.current) {
+      safePlay();
+    }
+  };
+
   const handleLoadedData = () => {
-    setIsVideoReady(true);
     setHasError(false);
     if (autoPlay && shouldActivateRef.current) {
       safePlay();
@@ -287,18 +363,14 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
     onLoadedData?.();
   };
 
-  const handleCanPlay = () => {
-    if (autoPlay && shouldActivateRef.current) {
-      safePlay();
-    }
+  const handleVideoError = () => {
+    setHasError(true);
+    setHasRenderedFrame(false);
+    setIsStalled(false);
   };
 
-  const handleVideoError = () => {
-    // Graceful fallback to poster on network or decoding error
-    setHasError(true);
-    setIsVideoReady(false);
-    setIsPlaying(false);
-  };
+  // The video element is only visible when it is actively requested, has confirmed rendered frames, and is not stalled
+  const isVideoVisible = shouldActivate && hasRenderedFrame && !hasError && !isStalled;
 
   return (
     <div
@@ -324,15 +396,15 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
       }}
     >
       {/* 
-        1. POSTER IMAGE (LCP-ready & zero-layout-shift facade)
-        Remains mounted as an instant fallback and smooth background.
-        Transitions opacity smoothly when video starts playing.
+        1. WEBP POSTER IMAGE (LCP-ready & zero-layout-shift facade)
+        Permanently anchored underneath. Never unmounted.
+        Fades out ONLY when the video has genuinely commenced painted playback.
       */}
       {resolvedPoster && (
         <img
           src={resolvedPoster}
           alt={title || ariaLabel || 'Preview Poster'}
-          aria-hidden={isVideoReady && isPlaying ? 'true' : 'false'}
+          aria-hidden={isVideoVisible ? 'true' : 'false'}
           loading={priority ? 'eager' : 'lazy'}
           decoding="async"
           fetchPriority={priority ? 'high' : 'low'}
@@ -342,8 +414,8 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
             width: '100%',
             height: '100%',
             objectFit,
-            transition: 'opacity 0.35s ease-out',
-            opacity: isVideoReady && isPlaying && !hasError ? 0 : 1,
+            transition: 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+            opacity: isVideoVisible ? 0 : 1,
             pointerEvents: 'none',
             zIndex: 1,
           }}
@@ -352,9 +424,8 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
 
       {/* 
         2. VIDEO ELEMENT
-        Mounted once the card has been activated for the first time (hasAttached === true).
-        Sources stay attached across carousel cycles so subsequent active states
-        reuse the existing buffer with ZERO new network requests.
+        Mounted when active or preparing.
+        Opacity remains 0 until actual frames paint (ZERO black screens).
         Uses ONLY nested <source> tags to prevent dual source-selection network requests.
       */}
       {hasAttached && !hasError && (
@@ -366,12 +437,17 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
           loop={loop}
           playsInline={playsInline}
           controls={controls}
-          preload="metadata"
+          preload={shouldActivate ? 'auto' : 'metadata'}
           poster={resolvedPoster}
           onLoadedData={handleLoadedData}
           onCanPlay={handleCanPlay}
-          onPlay={() => setIsPlaying(true)}
-          onPause={() => setIsPlaying(false)}
+          onPlaying={handlePlaying}
+          onTimeUpdate={handleTimeUpdate}
+          onWaiting={handleWaiting}
+          onStalled={handleWaiting}
+          onPause={() => {
+            // Keep frame visible if still active; poster covers if inactive
+          }}
           onError={handleVideoError}
           style={{
             position: 'absolute',
@@ -381,8 +457,8 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
             objectFit,
             display: 'block',
             zIndex: 2,
-            opacity: isVideoReady ? 1 : 0,
-            transition: 'opacity 0.3s ease-out',
+            opacity: isVideoVisible ? 1 : 0,
+            transition: 'opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
             ...videoStyle,
           }}
         >
