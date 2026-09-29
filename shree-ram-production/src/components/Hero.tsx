@@ -449,7 +449,8 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate: _onNavigate }) => {
                           src={project.videoUrl || project.thumbnail}
                           webmSrc={project.webmUrl}
                           poster={project.posterUrl || (project.thumbnail?.endsWith('.webp') ? project.thumbnail : undefined)}
-                          priority={isActive || idx === 0}
+                          active={isActive}
+                          priority={idx === 0}
                           title={`${project.title} — Reel by Shree Ram Production`}
                           ariaLabel={`${project.title} — Video Production by Shree Ram Production`}
                           videoStyle={{ width: '100%', height: '100%', objectFit: 'cover' }}

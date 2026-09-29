@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import ArjunImg from '../../assets/out team/Arjun-2.png';
+import ArjunImg from '../../assets/out team/Arjun-2.webp';
 import SectionMarker from '../ui/SectionMarker';
 
 gsap.registerPlugin(ScrollTrigger);

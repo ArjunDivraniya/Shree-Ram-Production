@@ -294,8 +294,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
   let filteredProjects = activeCategory === 'all'
     ? PORTFOLIO_ITEMS
     : activeCategory === 'graphic-design'
-    ? PORTFOLIO_ITEMS.filter((item) => item.category === 'graphic-design' || item.categoryLabel?.toLowerCase().includes('graphic'))
-    : PORTFOLIO_ITEMS.filter((item) => item.category === activeCategory);
+      ? PORTFOLIO_ITEMS.filter((item) => item.category === 'graphic-design' || item.categoryLabel?.toLowerCase().includes('graphic'))
+      : PORTFOLIO_ITEMS.filter((item) => item.category === activeCategory);
 
   if (serviceMatch?.service.projectIds && serviceMatch.service.projectIds.length > 0) {
     const serviceProjectIds = new Set(serviceMatch.service.projectIds);
@@ -519,7 +519,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
       }}
     >
       <div className="container">
-        
+
         {/* Header */}
         <div
           style={{
@@ -615,8 +615,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
             gridTemplateColumns: isMobile && activeCategory === 'production'
               ? 'repeat(auto-fill, minmax(280px, 1fr))'
               : isMobile
-              ? '1fr'
-              : 'repeat(auto-fill, minmax(320px, 1fr))',
+                ? '1fr'
+                : 'repeat(auto-fill, minmax(320px, 1fr))',
             gap: isMobile ? '24px' : '32px',
           }}
         >

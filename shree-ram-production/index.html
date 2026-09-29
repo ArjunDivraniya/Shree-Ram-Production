@@ -1,18 +1,24 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" href="/shreeramproduction-logo.png" />
-    <meta name="theme-color" content="#08090A" />
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@600;700&family=Dancing+Script:wght@700&family=Inter:wght@300;400;500;600;700&family=Oswald:wght@500;600;700&family=Space+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/shreeramproduction-logo.png" />
+  <meta name="theme-color" content="#08090A" />
 
-    <!-- Structured Data: Organization / ProfessionalService -->
-    <script type="application/ld+json">
+  <!-- Preload Primary LCP Asset (Hero Active Card Poster) -->
+  <link rel="preload" as="image" href="/reels/posters/Royal-Enfeild.webp" fetchpriority="high" type="image/webp" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@600;700&family=Dancing+Script:wght@700&family=Inter:wght@300;400;500;600;700&family=Oswald:wght@500;600;700&family=Space+Grotesk:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+
+  <!-- Structured Data: Organization / ProfessionalService -->
+  <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "ProfessionalService",
@@ -87,8 +93,8 @@
         ]
       }
     </script>
-    <!-- Structured Data: WebSite -->
-    <script type="application/ld+json">
+  <!-- Structured Data: WebSite -->
+  <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "WebSite",
@@ -97,9 +103,11 @@
         "inLanguage": "en-IN"
       }
     </script>
-  </head>
-  <body style="background-color: #08090A; color: #FFFFFF; margin: 0; padding: 0;">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+</head>
+
+<body style="background-color: #08090A; color: #FFFFFF; margin: 0; padding: 0;">
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>

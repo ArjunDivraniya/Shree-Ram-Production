@@ -30,14 +30,16 @@ export const AnimatedPhotoGrid: React.FC<AnimatedPhotoGridProps> = ({
     return 1650 + offset; // snappy interval between 1.65s and 2.0s
   }, [images, title, intervalMs]);
 
-  // Preload all slideshow images on mount for instantaneous, flicker-free transitions
+  // Preload only the next image in sequence on demand (prevents network choke on mount)
   useEffect(() => {
     if (!images || images.length <= 1) return;
-    images.forEach((src) => {
+    const nextIndex = (activeIndex + 1) % images.length;
+    const nextSrc = images[nextIndex];
+    if (nextSrc) {
       const img = new Image();
-      img.src = src;
-    });
-  }, [images]);
+      img.src = nextSrc;
+    }
+  }, [images, activeIndex]);
 
   // Auto-advance slideshow timer (pauses when user hovers over card)
   useEffect(() => {
@@ -83,7 +85,8 @@ export const AnimatedPhotoGrid: React.FC<AnimatedPhotoGridProps> = ({
             <img
               src={imgSrc}
               alt={`${title} — Showcase Asset ${idx + 1}`}
-              loading={idx === 0 ? 'eager' : 'lazy'}
+              loading="lazy"
+              decoding="async"
               style={{
                 width: '100%',
                 height: '100%',
