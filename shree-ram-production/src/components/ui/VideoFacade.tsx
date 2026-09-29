@@ -12,19 +12,19 @@ export interface VideoFacadeProps {
   /**
    * Explicit active control:
    * When defined (boolean):
-   * - true: video source is attached, loaded, and played.
-   * - false: video source is paused/released and poster is displayed.
-   * Essential for carousels / orbits (Hero) so only the active card loads video.
+   * - true: video source is attached (if not already attached), loaded, and played.
+   * - false: video is paused. Sources remain attached; no unmounting or re-downloads.
+   * Essential for carousels / orbits (Hero) so cards progressively attach on first activation
+   * and never re-request media on subsequent rotations.
    */
   active?: boolean;
   /**
-   * If true, video loads and plays only on hover (desktop) or tap (mobile).
-   * Falls back to poster when unhovered.
+   * If true, video loads on first hover (desktop) or tap (mobile).
+   * Pauses on mouse leave. Sources remain attached; no re-downloads on re-hover.
    */
   loadOnHover?: boolean;
   /**
    * If true, eager loads poster and prioritizes LCP rendering.
-   * Video source still follows active prop if active is provided.
    */
   priority?: boolean;
   /** HTML video title attribute for accessibility and SEO */
@@ -60,15 +60,15 @@ export interface VideoFacadeProps {
 }
 
 /**
- * VideoFacade implements industry-standard poster-first / facade video loading:
- * 1. Always displays a lightweight WebP poster initially.
- * 2. Only attaches video sources and initiates video loading when genuinely needed:
- *    - Controlled by `active` prop (e.g. Hero orbit cards: only 1 card active at a time)
- *    - Controlled by `loadOnHover` (e.g. Marquee cards: only load on user hover/tap)
- *    - Controlled by `IntersectionObserver` (200px rootMargin) when neither is specified
- * 3. Gracefully pauses and releases video streams when deactivated to conserve memory & bandwidth.
- * 4. Zero layout shift by locking exact aspect ratio and dimensions on container, poster, and video.
- * 5. Mobile autoplay resilient with programmatic muted enforcement and error catching.
+ * VideoFacade implements progressive persistent loading:
+ * 1. Initial Page Load: Only the active card (Card 0) attaches its video source.
+ *    Inactive cards render only lightweight WebP posters (~35 KB).
+ * 2. First Activation: When an inactive card becomes active for the FIRST time,
+ *    its video source is attached, loaded, and played.
+ * 3. Inactive State: When rotated away / unhovered, video pauses cleanly.
+ *    The source is NOT removed, video.load() is NOT called, and the element is NOT destroyed.
+ * 4. Reactivation: When the card becomes active again in subsequent carousel cycles,
+ *    it reuses the existing video element and buffer — calling play() with ZERO new network requests.
  */
 export const VideoFacade: React.FC<VideoFacadeProps> = ({
   src,
@@ -134,27 +134,47 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [hasError, setHasError] = useState<boolean>(false);
 
-  // Determine whether video should be actively attached and loaded
-  const shouldActivate = useMemo(() => {
-    // 1. Explicit active control takes highest precedence
+  // Progressive Persistent Loading State:
+  // hasAttached is initialized to true ONLY if active is explicitly true on mount
+  // (e.g. Hero Card 0), or if priority is true and active is not explicitly false.
+  // Once set to true, it remains true for the entire lifecycle of this mounted card.
+  const [hasAttached, setHasAttached] = useState<boolean>(() => {
     if (typeof active === 'boolean') {
       return active;
     }
+    return priority;
+  });
 
-    // 2. Hover/tap activation for marquees and previews
+  // Determine whether video should be actively playing right now
+  const shouldActivate = useMemo(() => {
+    if (typeof active === 'boolean') {
+      return active;
+    }
     if (loadOnHover) {
       return isHovered;
     }
-
-    // 3. Fallback to viewport visibility
     if (priority) {
       return true;
     }
-
     return isInView;
   }, [active, loadOnHover, isHovered, priority, isInView]);
 
-  // Viewport intersection observer (only used when not explicitly controlled by active prop)
+  // Keep a ref to shouldActivate for async event callbacks
+  const shouldActivateRef = useRef<boolean>(shouldActivate);
+  useEffect(() => {
+    shouldActivateRef.current = shouldActivate;
+  }, [shouldActivate]);
+
+  // SOURCE LIFECYCLE:
+  // false -> first activation -> true forever for this mounted card.
+  // Never resets back to false when deactivated.
+  useEffect(() => {
+    if (shouldActivate && !hasAttached) {
+      setHasAttached(true);
+    }
+  }, [shouldActivate, hasAttached]);
+
+  // Viewport intersection observer (only used when active prop is not explicitly provided)
   useEffect(() => {
     if (typeof active === 'boolean') return;
     if (priority) {
@@ -175,8 +195,7 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
           setIsInView(true);
         } else {
           setIsInView(false);
-          // Pause when scrolling out of view
-          if (videoRef.current) {
+          if (videoRef.current && !videoRef.current.paused) {
             try {
               videoRef.current.pause();
             } catch (_e) {}
@@ -194,7 +213,7 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
     return () => observer.disconnect();
   }, [active, priority]);
 
-  // Safe play helper
+  // Safe play helper that checks paused state to avoid redundant calls
   const safePlay = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -202,6 +221,11 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
     if (muted) {
       video.muted = true;
       video.defaultMuted = true;
+    }
+
+    if (!video.paused) {
+      setIsPlaying(true);
+      return;
     }
 
     const playPromise = video.play();
@@ -215,7 +239,7 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
           // Autoplay policy prevented playback; will retry on first user interaction
           setIsPlaying(false);
           const handleUserInteraction = () => {
-            if (videoRef.current && shouldActivate) {
+            if (videoRef.current && shouldActivateRef.current) {
               videoRef.current.play().catch(() => {});
             }
             window.removeEventListener('touchstart', handleUserInteraction);
@@ -225,47 +249,48 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
           window.addEventListener('click', handleUserInteraction, { once: true, passive: true });
         });
     }
-  }, [muted, onPlay, shouldActivate]);
+  }, [muted, onPlay]);
 
-  // Safe pause and optional stream release helper
+  // Safe pause helper that pauses existing media without destroying buffer
   const safePause = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
     try {
-      video.pause();
+      if (!video.paused) {
+        video.pause();
+      }
       setIsPlaying(false);
     } catch (_err) {}
   }, []);
 
-  // Synchronize activation state with video loading & playback
+  // PLAYBACK LIFECYCLE:
+  // active === true  -> play existing media (if autoPlay)
+  // active === false -> pause existing media
+  // NEVER calls video.load() on active transitions; preserves existing buffer
   useEffect(() => {
     const video = videoRef.current;
+    if (!video || !hasAttached) return;
 
-    if (shouldActivate) {
-      // Activated: attach sources, reload if needed, and start playback
-      if (video) {
-        if (video.readyState >= 2) {
-          safePlay();
-        } else {
-          try {
-            video.load();
-          } catch (_e) {}
-        }
-      }
+    if (shouldActivate && autoPlay) {
+      safePlay();
     } else {
-      // Deactivated: pause video and reset ready state
       safePause();
-      setIsVideoReady(false);
     }
-  }, [shouldActivate, safePlay, safePause]);
+  }, [shouldActivate, hasAttached, autoPlay, safePlay, safePause]);
 
   const handleLoadedData = () => {
     setIsVideoReady(true);
     setHasError(false);
-    if (autoPlay && shouldActivate) {
+    if (autoPlay && shouldActivateRef.current) {
       safePlay();
     }
     onLoadedData?.();
+  };
+
+  const handleCanPlay = () => {
+    if (autoPlay && shouldActivateRef.current) {
+      safePlay();
+    }
   };
 
   const handleVideoError = () => {
@@ -327,10 +352,12 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
 
       {/* 
         2. VIDEO ELEMENT
-        Only renders sources and loads when shouldActivate === true.
-        When inactive, no network requests are sent.
+        Mounted once the card has been activated for the first time (hasAttached === true).
+        Sources stay attached across carousel cycles so subsequent active states
+        reuse the existing buffer with ZERO new network requests.
+        Uses ONLY nested <source> tags to prevent dual source-selection network requests.
       */}
-      {shouldActivate && !hasError && (
+      {hasAttached && !hasError && (
         <video
           ref={videoRef}
           title={title}
@@ -338,14 +365,11 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
           muted={muted}
           loop={loop}
           playsInline={playsInline}
-          autoPlay={autoPlay}
           controls={controls}
-          preload="none"
+          preload="metadata"
           poster={resolvedPoster}
           onLoadedData={handleLoadedData}
-          onCanPlay={() => {
-            if (autoPlay && shouldActivate) safePlay();
-          }}
+          onCanPlay={handleCanPlay}
           onPlay={() => setIsPlaying(true)}
           onPause={() => setIsPlaying(false)}
           onError={handleVideoError}
