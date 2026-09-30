@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TESTIMONIALS } from '../data/content';
-import { Check, ArrowDown, Quote } from 'lucide-react';
+import { Check, ArrowDown, Quote, Zap, Sparkles, Utensils, Smartphone, HeartPulse, Layers, Coffee, Star, Video } from 'lucide-react';
 import SectionMarker from './ui/SectionMarker';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -10,6 +10,27 @@ gsap.registerPlugin(ScrollTrigger);
 interface TestimonialsProps {
   onNavigate?: (sectionId: string) => void;
 }
+
+const renderCategoryIcon = (iconName?: string) => {
+  switch (iconName) {
+    case 'Zap':
+      return <Zap size={20} color="#FF6A2A" />;
+    case 'Sparkles':
+      return <Sparkles size={20} color="#FF6A2A" />;
+    case 'Utensils':
+      return <Utensils size={20} color="#FF6A2A" />;
+    case 'Smartphone':
+      return <Smartphone size={20} color="#FF6A2A" />;
+    case 'HeartPulse':
+      return <HeartPulse size={20} color="#FF6A2A" />;
+    case 'Layers':
+      return <Layers size={20} color="#FF6A2A" />;
+    case 'Coffee':
+      return <Coffee size={20} color="#FF6A2A" />;
+    default:
+      return <Video size={20} color="#FF6A2A" />;
+  }
+};
 
 export const Testimonials: React.FC<TestimonialsProps> = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -26,8 +47,6 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
   const stageRef = useRef<HTMLDivElement>(null);
   const quoteRef = useRef<HTMLQuoteElement>(null);
   const authorSubRef = useRef<HTMLDivElement>(null);
-  const authorHeaderRef = useRef<HTMLSpanElement>(null);
-  const imageCardRef = useRef<HTMLDivElement>(null);
 
   // State management
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -45,8 +64,6 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
       const targets = [
         quoteRef.current,
         authorSubRef.current,
-        authorHeaderRef.current,
-        imageCardRef.current,
       ].filter(Boolean);
 
       // Smooth Fade Out & Scale down
@@ -210,22 +227,35 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
             </h2>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '28px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '28px' }}>
             {TESTIMONIALS.map((item) => (
-              <div key={item.id} style={{ padding: '28px', backgroundColor: 'rgba(255, 255, 255, 0.02)', borderRadius: '16px' }}>
-                <p style={{ fontFamily: "'Oswald', sans-serif", fontSize: '1.15rem', color: '#FFFFFF', marginBottom: '20px', lineHeight: 1.35, textTransform: 'uppercase' }}>
-                  "{item.quote}"
-                </p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                  <img
-                    src={item.avatar}
-                    alt={`${item.author} — ${item.role} at ${item.company}`}
-                    title={`${item.author} — Client Review for Shree Ram Production`}
-                    style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover' }}
-                  />
-                  <div>
-                    <h4 style={{ fontSize: '1.05rem', fontWeight: 600 }}>{item.author}</h4>
-                    <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>{item.role} • {item.company}</p>
+              <div key={item.id} style={{ padding: '28px', backgroundColor: 'rgba(255, 255, 255, 0.02)', borderRadius: '20px', border: '1px solid rgba(255, 106, 42, 0.2)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '20px' }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+                    <div style={{ width: '44px', height: '44px', borderRadius: '12px', backgroundColor: 'rgba(255, 106, 42, 0.15)', border: '1px solid rgba(255, 106, 42, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      {renderCategoryIcon(item.categoryIcon)}
+                    </div>
+                    <span style={{ fontSize: '0.75rem', padding: '4px 10px', borderRadius: '20px', backgroundColor: 'rgba(255, 255, 255, 0.05)', color: '#FF6A2A', fontWeight: 600 }}>
+                      {item.location || 'Gujarat'}
+                    </span>
+                  </div>
+
+                  <p style={{ fontFamily: "'Oswald', sans-serif", fontSize: '1.1rem', color: '#FFFFFF', marginBottom: '20px', lineHeight: 1.4, textTransform: 'uppercase' }}>
+                    "{item.quote}"
+                  </p>
+                </div>
+
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '14px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                    <div>
+                      <h4 style={{ fontSize: '1.05rem', fontWeight: 600, margin: 0 }}>{item.company}</h4>
+                      <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', margin: 0 }}>{item.role}</p>
+                    </div>
+                    <div style={{ display: 'flex', gap: '2px' }}>
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} size={12} fill="#FF6A2A" color="#FF6A2A" />
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -263,8 +293,6 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
           alignItems: 'center',
         }}
       >
-        {/* Continuous global canvas — per-section glow removed */}
-
         {/* Dynamic Circular Arc Line in Background */}
         <svg
           aria-hidden="true"
@@ -294,9 +322,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
           <circle cx="310" cy="180" r="12" fill="none" stroke="rgba(255, 106, 42, 0.4)" strokeWidth="1" />
         </svg>
 
-        {/* ====================================================================
-            SCROLL-DRIVEN SPLIT TITLE WORDS (CLIENT'S Top-Left / TESTIMONIAL Bottom-Right)
-            ==================================================================== */}
+        {/* SCROLL-DRIVEN SPLIT TITLE WORDS */}
         <div
           style={{
             position: 'absolute',
@@ -331,7 +357,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
             CLIENT'S
           </h2>
 
-          {/* Orange Accent Glowing Dot sitting right above TESTIMONIAL */}
+          {/* Orange Accent Glowing Dot */}
           <div
             ref={orangeDotRef}
             style={{
@@ -368,9 +394,6 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
           </h2>
         </div>
 
-        {/* Initial Hero Preview Author Name */}
-        
-
         {/* Initial Hero Scroll Down Button */}
         <div
           ref={arrowBtnRef}
@@ -402,9 +425,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
           </div>
         </div>
 
-        {/* ====================================================================
-            MAIN TESTIMONIALS DISPLAY STAGE (RESPONSIVE WRAPPER)
-            ==================================================================== */}
+        {/* MAIN TESTIMONIALS DISPLAY STAGE */}
         <div
           ref={stageRef}
           className="testimonial-stage-container"
@@ -412,7 +433,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
             position: 'relative',
             zIndex: 20,
             width: '100%',
-            maxWidth: '1360px',
+            maxWidth: '1200px',
             padding: '0 32px',
             display: 'flex',
             flexDirection: 'column',
@@ -426,10 +447,10 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
             style={{
               position: 'relative',
               width: '100%',
-              minHeight: '360px',
+              minHeight: '320px',
               display: 'grid',
-              gridTemplateColumns: 'auto minmax(0, 1fr) auto',
-              gap: '36px',
+              gridTemplateColumns: 'auto minmax(0, 1fr)',
+              gap: '40px',
               alignItems: 'center',
               padding: '10px 0',
             }}
@@ -511,14 +532,13 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
-                paddingRight: '8px',
               }}
             >
               <blockquote
                 ref={quoteRef}
                 style={{
                   fontFamily: "'Bebas Neue', 'Oswald', 'Space Grotesk', sans-serif",
-                  fontSize: 'clamp(1.25rem, 2.2vw, 2.0rem)',
+                  fontSize: 'clamp(1.35rem, 2.5vw, 2.3rem)',
                   fontWeight: 600,
                   lineHeight: 1.25,
                   color: '#FFFFFF',
@@ -531,74 +551,30 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
                 "{activeItem.quote}"
               </blockquote>
 
-              <div ref={authorSubRef} style={{ marginTop: '20px' }}>
-                <h3
-                  style={{
-                    fontFamily: "'Oswald', sans-serif",
-                    fontSize: '1.25rem',
-                    fontWeight: 600,
-                    color: '#FFFFFF',
-                    marginBottom: '2px',
-                    letterSpacing: '0.02em',
-                  }}
-                >
-                  {activeItem.author}
-                </h3>
-                <p style={{ fontSize: '0.85rem', color: '#FF6A2A', fontWeight: 600 }}>
-                  {activeItem.role} <span style={{ color: 'var(--text-dim)' }}>•</span> {activeItem.company}
-                </p>
-              </div>
-            </div>
+              <div ref={authorSubRef} style={{ marginTop: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+                <div>
+                  <h3
+                    style={{
+                      fontFamily: "'Oswald', sans-serif",
+                      fontSize: '1.45rem',
+                      fontWeight: 700,
+                      color: '#FFFFFF',
+                      marginBottom: '2px',
+                      letterSpacing: '0.02em',
+                    }}
+                  >
+                    {activeItem.company}
+                  </h3>
+                  <p style={{ fontSize: '0.9rem', color: '#FF6A2A', fontWeight: 600, margin: 0 }}>
+                    {activeItem.role} <span style={{ color: 'var(--text-dim, rgba(255, 255, 255, 0.4))' }}>•</span> {activeItem.author}
+                  </p>
+                </div>
 
-            {/* RIGHT BLOCK: Author Header & Pure Client Portrait Photo Card */}
-            <div
-              className="testimonial-right-photo"
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-end',
-                gap: '10px',
-                flexShrink: 0,
-              }}
-            >
-              <span
-                ref={authorHeaderRef}
-                className="testimonial-photo-author-label"
-                style={{
-                  fontFamily: "'Oswald', sans-serif",
-                  fontSize: '0.95rem',
-                  fontWeight: 600,
-                  color: '#FFFFFF',
-                  letterSpacing: '0.04em',
-                }}
-              >
-                {activeItem.author}
-              </span>
-
-              <div
-                ref={imageCardRef}
-                className="testimonial-portrait-card"
-                style={{
-                  position: 'relative',
-                  width: '240px',
-                  height: '280px',
-                  borderRadius: '14px',
-                  overflow: 'hidden',
-                  boxShadow: '0 20px 45px rgba(0, 0, 0, 0.85)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                }}
-              >
-                <img
-                  src={activeItem.image}
-                  alt={`${activeItem.author} — ${activeItem.role} at ${activeItem.company}, Client of Shree Ram Production`}
-                  title={`${activeItem.author} — ${activeItem.company}`}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    objectPosition: 'center top',
-                  }}
-                />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} size={16} fill="#FF6A2A" color="#FF6A2A" />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -610,7 +586,7 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
               alignItems: 'center',
               justifyContent: 'center',
               gap: '10px',
-              marginTop: '10px',
+              marginTop: '20px',
             }}
           >
             {TESTIMONIALS.map((_, idx) => (
@@ -653,10 +629,6 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
           .testimonial-main-grid {
             gap: 24px !important;
           }
-          .testimonial-portrait-card {
-            width: 200px !important;
-            height: 240px !important;
-          }
           .testimonial-badge-orange {
             width: 70px !important;
             height: 70px !important;
@@ -681,25 +653,6 @@ export const Testimonials: React.FC<TestimonialsProps> = () => {
           }
           .testimonial-left-badges {
             justify-content: center !important;
-          }
-          .testimonial-center-block {
-            padding-right: 0 !important;
-          }
-          .testimonial-right-photo {
-            align-items: center !important;
-          }
-          .testimonial-photo-author-label {
-            display: none !important;
-          }
-          .testimonial-portrait-card {
-            width: 100% !important;
-            max-width: 260px !important;
-            height: 240px !important;
-          }
-          .testimonial-preview-author {
-            right: 8% !important;
-            top: 40px !important;
-            font-size: 0.9rem !important;
           }
         }
 

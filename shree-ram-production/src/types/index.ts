@@ -47,12 +47,14 @@ export interface Testimonial {
   author: string;
   role: string;
   company: string;
-  avatar: string;
+  avatar?: string;
   impactMetric: string;
   metricLabel: string;
   image?: string;
   projectTag?: string;
   location?: string;
+  services?: string[];
+  categoryIcon?: string;
 }
 
 export interface BehindTheScenesItem {
