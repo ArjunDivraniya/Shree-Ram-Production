@@ -288,6 +288,7 @@ export const CinematicProjectStage: React.FC<CinematicProjectStageProps> = ({
                 }}
                 onMouseEnter={() => setHoveredCardId(`${project.id}-${idx}`)}
                 onMouseLeave={() => setHoveredCardId(null)}
+                onClick={() => setHoveredCardId((prev) => prev === `${project.id}-${idx}` ? null : `${project.id}-${idx}`)}
                 aria-label={`${project.title}`}
               >
                 {/* Staggered Portrait Card Media Container touching bottom */}
@@ -303,6 +304,8 @@ export const CinematicProjectStage: React.FC<CinematicProjectStageProps> = ({
                       src={project.videoUrl || project.thumbnail}
                       webmSrc={project.webmUrl}
                       poster={project.posterUrl || (project.thumbnail?.endsWith('.webp') ? project.thumbnail : undefined)}
+                      active={isHovered}
+                      loadOnHover={true}
                       title={`${project.title} — Video Production by Shree Ram Production`}
                       ariaLabel={`${project.title} — Video Production Reel by Shree Ram Production`}
                       className="cinematic-gallery-card-img"

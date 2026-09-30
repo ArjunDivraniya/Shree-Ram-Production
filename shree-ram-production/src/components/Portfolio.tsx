@@ -633,6 +633,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                   if (project.category === 'technology') {
                     setSelectedProject(project);
                     setIsModalOpen(true);
+                  } else if (isReel) {
+                    setHoveredProjectId((prev) => prev === project.id ? null : project.id);
                   }
                 }}
                 style={{
@@ -670,6 +672,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                       src={project.videoUrl || project.thumbnail}
                       webmSrc={project.webmUrl}
                       poster={project.posterUrl || (project.thumbnail?.endsWith('.webp') ? project.thumbnail : undefined)}
+                      active={hoveredProjectId === project.id}
+                      loadOnHover={true}
                       title={`${project.title} — Video Production by Shree Ram Production`}
                       ariaLabel={`${project.title} — Video Production Reel by Shree Ram Production`}
                       videoStyle={{
@@ -802,14 +806,20 @@ const FloatingCinematicCard: React.FC<{
 
   return (
     <div
-      onClick={onClick}
+      onClick={() => {
+        if (onClick) {
+          onClick();
+        } else if (isReel) {
+          setIsHovered((prev) => !prev);
+        }
+      }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={`floating-cinematic-card ${className || ''}`}
       style={{
         width: width,
         flexShrink: 0,
-        cursor: isClickable ? 'pointer' : 'default',
+        cursor: isClickable || isReel ? 'pointer' : 'default',
         display: 'flex',
         flexDirection: 'column',
         gap: '14px',
@@ -871,6 +881,8 @@ const FloatingCinematicCard: React.FC<{
             src={project.videoUrl || project.thumbnail}
             webmSrc={project.webmUrl}
             poster={project.posterUrl || (project.thumbnail?.endsWith('.webp') ? project.thumbnail : undefined)}
+            active={isHovered}
+            loadOnHover={true}
             title={`${project.title} — Video Production Showcase by Shree Ram Production`}
             ariaLabel={`${project.title} — Video Production Showcase by Shree Ram Production`}
             videoStyle={{
