@@ -15,23 +15,22 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
   const containerRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
 
-  // Three background typography line refs
+  // Three background typography line refs (desktop only)
   const bgLine1Ref = useRef<HTMLDivElement>(null);
   const bgLine2Ref = useRef<HTMLDivElement>(null);
   const bgLine3Ref = useRef<HTMLDivElement>(null);
 
-  const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isReducedMotion, setIsReducedMotion] = useState<boolean>(false);
 
   // References to animated elements per pillar
   const titleRefs = useRef<(HTMLDivElement | null)[]>([]);
   const leftListRefs = useRef<(HTMLDivElement | null)[]>([]);
   const rightListRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const mobileListRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     // Check reduced motion
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setIsReducedMotion(motionQuery.matches);
 
     const handleMotionChange = (e: MediaQueryListEvent) => {
       setIsReducedMotion(e.matches);
@@ -47,11 +46,22 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
   useEffect(() => {
     if (isReducedMotion || !containerRef.current || !stickyRef.current) return;
 
-    const ctx = gsap.context(() => {
+    // Prevent mobile address-bar hide/show from thrashing ScrollTrigger calculations
+    ScrollTrigger.config({
+      ignoreMobileResize: true,
+    });
+
+    const mm = gsap.matchMedia();
+
+    // =========================================================================
+    // DESKTOP (> 991px): Editorial 3-column stage with parallax typography lines
+    // =========================================================================
+    mm.add('(min-width: 992px)', () => {
       // Line 1: Moves Left
       gsap.to(bgLine1Ref.current, {
         xPercent: -30,
         ease: 'none',
+        force3D: true,
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
@@ -67,6 +77,7 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
         {
           xPercent: 5,
           ease: 'none',
+          force3D: true,
           scrollTrigger: {
             trigger: containerRef.current,
             start: 'top top',
@@ -80,6 +91,7 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
       gsap.to(bgLine3Ref.current, {
         xPercent: -30,
         ease: 'none',
+        force3D: true,
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
@@ -88,7 +100,7 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
         },
       });
 
-      // Master ScrollTrigger timeline for 4 pillars
+      // Master ScrollTrigger timeline for 4 pillars on Desktop
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
@@ -96,79 +108,105 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
           end: 'bottom bottom',
           pin: stickyRef.current,
           pinSpacing: true,
+          anticipatePin: 1,
           scrub: 0.8,
-          onUpdate: (self) => {
-            const p = self.progress;
-            let idx: number;
-            if (p < 0.28) idx = 0;
-            else if (p < 0.58) idx = 1;
-            else if (p < 0.85) idx = 2;
-            else idx = 3;
-            setActiveIndex(idx);
-          },
         },
       });
 
-      // Set initial states for pillars
+      // Set initial states for desktop pillars
       PILLARS_DATA.forEach((_, i) => {
         if (i === 0) {
-          gsap.set(titleRefs.current[i], { opacity: 1, y: 0, scale: 1 });
-          gsap.set(leftListRefs.current[i], { opacity: 1, y: 0 });
-          gsap.set(rightListRefs.current[i], { opacity: 1, y: 0 });
-          gsap.set(mobileListRefs.current[i], { opacity: 1, y: 0 });
+          gsap.set(titleRefs.current[i], { autoAlpha: 1, y: 0, force3D: true });
+          gsap.set(leftListRefs.current[i], { autoAlpha: 1, y: 0, force3D: true });
+          gsap.set(rightListRefs.current[i], { autoAlpha: 1, y: 0, force3D: true });
         } else {
-          gsap.set(titleRefs.current[i], { opacity: 0, y: 40, scale: 0.94 });
-          gsap.set(leftListRefs.current[i], { opacity: 0, y: 30 });
-          gsap.set(rightListRefs.current[i], { opacity: 0, y: 30 });
-          gsap.set(mobileListRefs.current[i], { opacity: 0, y: 30 });
+          gsap.set(titleRefs.current[i], { autoAlpha: 0, y: 35, force3D: true });
+          gsap.set(leftListRefs.current[i], { autoAlpha: 0, y: 25, force3D: true });
+          gsap.set(rightListRefs.current[i], { autoAlpha: 0, y: 25, force3D: true });
         }
       });
 
-      // Build keyframed transitions between pillars
+      // Desktop transitions
       // Transition 0 -> 1
-      tl.to(titleRefs.current[0], { opacity: 0, y: -35, scale: 0.94, duration: 0.9 }, 1)
-        .to(leftListRefs.current[0], { opacity: 0, y: -25, duration: 0.8 }, 1)
-        .to(rightListRefs.current[0], { opacity: 0, y: -25, duration: 0.8 }, 1)
-        .to(mobileListRefs.current[0], { opacity: 0, y: -25, duration: 0.8 }, 1)
+      tl.to(titleRefs.current[0], { autoAlpha: 0, y: -30, duration: 0.85, force3D: true }, 1)
+        .to(leftListRefs.current[0], { autoAlpha: 0, y: -20, duration: 0.75, force3D: true }, 1)
+        .to(rightListRefs.current[0], { autoAlpha: 0, y: -20, duration: 0.75, force3D: true }, 1)
 
-        .to(titleRefs.current[1], { opacity: 1, y: 0, scale: 1, duration: 0.9 }, 1.2)
-        .to(leftListRefs.current[1], { opacity: 1, y: 0, duration: 0.8 }, 1.2)
-        .to(rightListRefs.current[1], { opacity: 1, y: 0, duration: 0.8 }, 1.2)
-        .to(mobileListRefs.current[1], { opacity: 1, y: 0, duration: 0.8 }, 1.2);
+        .to(titleRefs.current[1], { autoAlpha: 1, y: 0, duration: 0.85, force3D: true }, 1.2)
+        .to(leftListRefs.current[1], { autoAlpha: 1, y: 0, duration: 0.75, force3D: true }, 1.2)
+        .to(rightListRefs.current[1], { autoAlpha: 1, y: 0, duration: 0.75, force3D: true }, 1.2);
 
-      // Hold pillar 1 state
-      tl.to({}, { duration: 1 });
+      tl.to({}, { duration: 0.9 });
 
       // Transition 1 -> 2
-      tl.to(titleRefs.current[1], { opacity: 0, y: -35, scale: 0.94, duration: 0.9 }, 3)
-        .to(leftListRefs.current[1], { opacity: 0, y: -25, duration: 0.8 }, 3)
-        .to(rightListRefs.current[1], { opacity: 0, y: -25, duration: 0.8 }, 3)
-        .to(mobileListRefs.current[1], { opacity: 0, y: -25, duration: 0.8 }, 3)
+      tl.to(titleRefs.current[1], { autoAlpha: 0, y: -30, duration: 0.85, force3D: true }, 3)
+        .to(leftListRefs.current[1], { autoAlpha: 0, y: -20, duration: 0.75, force3D: true }, 3)
+        .to(rightListRefs.current[1], { autoAlpha: 0, y: -20, duration: 0.75, force3D: true }, 3)
 
-        .to(titleRefs.current[2], { opacity: 1, y: 0, scale: 1, duration: 0.9 }, 3.2)
-        .to(leftListRefs.current[2], { opacity: 1, y: 0, duration: 0.8 }, 3.2)
-        .to(rightListRefs.current[2], { opacity: 1, y: 0, duration: 0.8 }, 3.2)
-        .to(mobileListRefs.current[2], { opacity: 1, y: 0, duration: 0.8 }, 3.2);
+        .to(titleRefs.current[2], { autoAlpha: 1, y: 0, duration: 0.85, force3D: true }, 3.2)
+        .to(leftListRefs.current[2], { autoAlpha: 1, y: 0, duration: 0.75, force3D: true }, 3.2)
+        .to(rightListRefs.current[2], { autoAlpha: 1, y: 0, duration: 0.75, force3D: true }, 3.2);
 
-      // Hold pillar 2 state
-      tl.to({}, { duration: 1 });
+      tl.to({}, { duration: 0.9 });
 
       // Transition 2 -> 3
-      tl.to(titleRefs.current[2], { opacity: 0, y: -35, scale: 0.94, duration: 0.9 }, 5)
-        .to(leftListRefs.current[2], { opacity: 0, y: -25, duration: 0.8 }, 5)
-        .to(rightListRefs.current[2], { opacity: 0, y: -25, duration: 0.8 }, 5)
-        .to(mobileListRefs.current[2], { opacity: 0, y: -25, duration: 0.8 }, 5)
+      tl.to(titleRefs.current[2], { autoAlpha: 0, y: -30, duration: 0.85, force3D: true }, 5)
+        .to(leftListRefs.current[2], { autoAlpha: 0, y: -20, duration: 0.75, force3D: true }, 5)
+        .to(rightListRefs.current[2], { autoAlpha: 0, y: -20, duration: 0.75, force3D: true }, 5)
 
-        .to(titleRefs.current[3], { opacity: 1, y: 0, scale: 1, duration: 0.9 }, 5.2)
-        .to(leftListRefs.current[3], { opacity: 1, y: 0, duration: 0.8 }, 5.2)
-        .to(rightListRefs.current[3], { opacity: 1, y: 0, duration: 0.8 }, 5.2)
-        .to(mobileListRefs.current[3], { opacity: 1, y: 0, duration: 0.8 }, 5.2);
+        .to(titleRefs.current[3], { autoAlpha: 1, y: 0, duration: 0.85, force3D: true }, 5.2)
+        .to(leftListRefs.current[3], { autoAlpha: 1, y: 0, duration: 0.75, force3D: true }, 5.2)
+        .to(rightListRefs.current[3], { autoAlpha: 1, y: 0, duration: 0.75, force3D: true }, 5.2);
 
-      // Hold pillar 3 state until unpin
-      tl.to({}, { duration: 1 });
-    }, containerRef);
+      tl.to({}, { duration: 0.9 });
+    });
 
-    return () => ctx.revert();
+    // =========================================================================
+    // MOBILE & TABLET (<= 991px): Ultra-lightweight GPU compositing, snappy scrub
+    // =========================================================================
+    mm.add('(max-width: 991px)', () => {
+      // Set initial states for mobile cards
+      PILLARS_DATA.forEach((_, i) => {
+        if (i === 0) {
+          gsap.set(titleRefs.current[i], { autoAlpha: 1, y: 0, force3D: true });
+        } else {
+          gsap.set(titleRefs.current[i], { autoAlpha: 0, y: 24, force3D: true });
+        }
+      });
+
+      // Mobile timeline with snappy scrub (0.2s) - zero finger drag delay
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top top',
+          end: 'bottom bottom',
+          pin: stickyRef.current,
+          pinSpacing: true,
+          anticipatePin: 1,
+          scrub: 0.2,
+        },
+      });
+
+      // Transition 0 -> 1
+      tl.to(titleRefs.current[0], { autoAlpha: 0, y: -22, duration: 0.7, ease: 'power1.out', force3D: true }, 1)
+        .to(titleRefs.current[1], { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power1.out', force3D: true }, 1.15);
+
+      tl.to({}, { duration: 0.8 });
+
+      // Transition 1 -> 2
+      tl.to(titleRefs.current[1], { autoAlpha: 0, y: -22, duration: 0.7, ease: 'power1.out', force3D: true }, 2.8)
+        .to(titleRefs.current[2], { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power1.out', force3D: true }, 2.95);
+
+      tl.to({}, { duration: 0.8 });
+
+      // Transition 2 -> 3
+      tl.to(titleRefs.current[2], { autoAlpha: 0, y: -22, duration: 0.7, ease: 'power1.out', force3D: true }, 4.6)
+        .to(titleRefs.current[3], { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power1.out', force3D: true }, 4.75);
+
+      tl.to({}, { duration: 0.8 });
+    });
+
+    return () => mm.revert();
   }, [isReducedMotion]);
 
   // Reduced motion fallback view
@@ -192,9 +230,6 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
                   borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
                 }}
               >
-                {/* <span style={{ color: 'var(--accent-orange)', fontWeight: 700, fontSize: '1.1rem' }}>
-                  PILLAR {pillar.number}
-                </span> */}
                 <h3 style={{ fontSize: 'clamp(1.6rem, 3vw, 2.5rem)', margin: '8px 0 12px 0' }}>{pillar.title}</h3>
                 <p style={{ color: 'var(--text-muted)', marginBottom: '24px', maxWidth: '600px', fontSize: '1rem' }}>{pillar.description}</p>
 
@@ -218,38 +253,22 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
     <section
       ref={containerRef}
       id="four-pillars"
-      style={{
-        position: 'relative',
-        height: '380vh',
-        background: 'transparent',
-      }}
+      className="four-pillars-wrapper"
     >
-      {/* Sticky Viewport Container */}
+      {/* Pinned Stage Container */}
       <div
         ref={stickyRef}
-        style={{
-          position: 'sticky',
-          top: 0,
-          height: '100vh',
-          width: '100%',
-          overflow: 'hidden',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          background: 'transparent',
-        }}
+        className="four-pillars-stage"
       >
-        {/* Continuous global canvas — per-section halos removed */}
-
         {/* ====================================================================
-            THREE OVERSIZED LAYERED PARALLAX BACKGROUND TYPOGRAPHY LINES
+            THREE OVERSIZED LAYERED PARALLAX BACKGROUND TYPOGRAPHY LINES (Desktop Only)
             ==================================================================== */}
 
         {/* LINE 1 (TOP) — Moves Left */}
         <div
           ref={bgLine1Ref}
           aria-hidden="true"
+          className="pillar-bg-line pillar-bg-line-1"
           style={{
             position: 'absolute',
             top: '8%',
@@ -275,6 +294,7 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
         <div
           ref={bgLine2Ref}
           aria-hidden="true"
+          className="pillar-bg-line pillar-bg-line-2"
           style={{
             position: 'absolute',
             top: '46%',
@@ -303,6 +323,7 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
         <div
           ref={bgLine3Ref}
           aria-hidden="true"
+          className="pillar-bg-line pillar-bg-line-3"
           style={{
             position: 'absolute',
             bottom: '8%',
@@ -345,13 +366,13 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
               <div
                 key={`left-${pillar.id}`}
                 ref={(el) => { leftListRefs.current[i] = el; }}
+                className="pillar-animated-node"
                 style={{
                   position: 'absolute',
                   left: 0,
                   top: '50%',
                   transform: 'translateY(-50%)',
                   width: '100%',
-                  pointerEvents: activeIndex === i ? 'auto' : 'none',
                 }}
               >
                 <div
@@ -414,6 +435,7 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
               <div
                 key={`title-${pillar.id}`}
                 ref={(el) => { titleRefs.current[i] = el; }}
+                className="pillar-animated-node"
                 style={{
                   position: i === 0 ? 'relative' : 'absolute',
                   inset: 0,
@@ -424,23 +446,10 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
                   alignItems: 'center',
                   justifyContent: 'center',
                   textAlign: 'center',
-                  pointerEvents: activeIndex === i ? 'auto' : 'none',
                 }}
               >
                 {/* Pillar Number Badge */}
-                <div
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    padding: '6px 16px',
-                    borderRadius: 'var(--radius-pill)',
-                    background: 'rgba(255, 106, 42, 0.1)',
-                    border: '1px solid rgba(255, 106, 42, 0.25)',
-                    marginBottom: '16px',
-                    backdropFilter: 'blur(8px)',
-                  }}
-                >
+                <div className="pillar-badge">
                   <span
                     style={{
                       fontFamily: 'var(--font-heading)',
@@ -467,17 +476,7 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
                 </div>
 
                 {/* Main Prominent Pillar Title */}
-                <h2
-                  style={{
-                    fontSize: 'clamp(2.2rem, 4.5vw, 3.8rem)',
-                    fontWeight: 800,
-                    letterSpacing: '-0.03em',
-                    color: '#FFFFFF',
-                    lineHeight: 1.08,
-                    marginBottom: '12px',
-                    textShadow: '0 4px 30px rgba(0,0,0,0.9)',
-                  }}
-                >
+                <h2 className="pillar-title">
                   {pillar.title}
                 </h2>
 
@@ -509,7 +508,6 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
 
                 {/* Combined Services List for Mobile / Tablet View */}
                 <div
-                  ref={(el) => { mobileListRefs.current[i] = el; }}
                   className="pillar-mobile-services"
                   style={{
                     width: '100%',
@@ -561,13 +559,13 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
               <div
                 key={`right-${pillar.id}`}
                 ref={(el) => { rightListRefs.current[i] = el; }}
+                className="pillar-animated-node"
                 style={{
                   position: 'absolute',
                   right: 0,
                   top: '50%',
                   transform: 'translateY(-50%)',
                   width: '100%',
-                  pointerEvents: activeIndex === i ? 'auto' : 'none',
                 }}
               >
                 <div
@@ -652,6 +650,66 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
 
       {/* Comprehensive Responsive Styles for Mobile, Tablet & Desktop */}
       <style>{`
+        /* Container and Pinned Stage */
+        .four-pillars-wrapper {
+          position: relative;
+          height: 380vh;
+          background: transparent;
+        }
+
+        .four-pillars-stage {
+          position: relative;
+          height: 100vh;
+          height: 100dvh;
+          width: 100%;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          background: transparent;
+        }
+
+        /* Badge Styling */
+        .pillar-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          padding: 6px 16px;
+          border-radius: var(--radius-pill);
+          background: rgba(255, 106, 42, 0.1);
+          border: 1px solid rgba(255, 106, 42, 0.25);
+          margin-bottom: 16px;
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+        }
+
+        /* Title Typography */
+        .pillar-title {
+          font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+          font-weight: 800;
+          letter-spacing: -0.03em;
+          color: #FFFFFF;
+          line-height: 1.08;
+          margin-bottom: 12px;
+          text-shadow: 0 4px 30px rgba(0,0,0,0.9);
+        }
+
+        /* Hardware Accelerated Composited Nodes */
+        .pillar-animated-node {
+          will-change: transform, opacity;
+          transform: translateZ(0);
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
+        }
+
+        .pillar-bg-line {
+          will-change: transform;
+          transform: translateZ(0);
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
+        }
+
         /* Desktop Default (> 991px) */
         .pillar-mobile-services {
           display: none !important;
@@ -659,24 +717,51 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
 
         /* Tablet & Mobile (<= 991px) */
         @media (max-width: 991px) {
+          .four-pillars-wrapper {
+            height: 280vh !important;
+          }
+
+          /* Hide heavy background lines on mobile to eliminate massive GPU overdraw */
+          .pillar-bg-line {
+            display: none !important;
+          }
+
+          /* Eliminate expensive backdrop-blur on mobile during scroll */
+          .pillar-badge {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            background: rgba(22, 17, 14, 0.92) !important;
+          }
+
+          /* Eliminate heavy 30px text-shadow blur on mobile */
+          .pillar-title {
+            text-shadow: 0 2px 10px rgba(0,0,0,0.7) !important;
+            font-size: clamp(1.8rem, 5.5vw, 2.7rem) !important;
+          }
+
           .four-pillars-bottom-cta {
             padding: 0 20px !important;
             bottom: 16px !important;
           }
+
           .four-pillars-scroll-prompt {
             display: none !important;
           }
+
           .four-pillars-main-container {
             grid-template-columns: 1fr !important;
-            padding-top: 70px !important;
-            padding-bottom: 70px !important;
+            padding-top: 60px !important;
+            padding-bottom: 60px !important;
           }
+
           .pillar-center-column {
             grid-column: span 1 !important;
           }
+
           .pillar-left-column, .pillar-right-column {
             display: none !important;
           }
+
           .pillar-mobile-services {
             display: block !important;
           }
@@ -688,6 +773,7 @@ export const ScrollDrivenPillars: React.FC<ScrollDrivenPillarsProps> = ({ onNavi
             grid-template-columns: 1fr !important;
             gap: 8px !important;
           }
+
           .four-pillars-bottom-cta {
             justify-content: center !important;
           }
