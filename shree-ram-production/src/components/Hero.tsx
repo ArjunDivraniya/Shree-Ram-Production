@@ -455,6 +455,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate: _onNavigate }) => {
                           poster={project.posterUrl || (project.thumbnail?.endsWith('.webp') ? project.thumbnail : undefined)}
                           active={isActive}
                           prepare={isPreparing}
+                          isHero={true}
                           priority={idx === 0}
                           title={`${project.title} — Reel by Shree Ram Production`}
                           ariaLabel={`${project.title} — Video Production by Shree Ram Production`}

@@ -22,12 +22,17 @@ export interface VideoFacadeProps {
    */
   prepare?: boolean;
   /**
+   * Set to true if this instance belongs to the Hero 3D orbit carousel.
+   * Hero cards are driven by the GSAP focal angle rather than standard scroll viewport.
+   */
+  isHero?: boolean;
+  /**
    * Inactivity cleanup timeout in milliseconds.
    * Defaults to 0 (disabled), preserving buffers for smooth continuous rotation.
    */
   releaseTimeoutMs?: number;
   /**
-   * If true, video loads on first hover (desktop) or tap (mobile).
+   * If true on desktop, video loads on first hover.
    * Pauses on mouse leave.
    * Defaults to true when `active` is not explicitly controlled.
    */
@@ -70,13 +75,14 @@ export interface VideoFacadeProps {
 
 /**
  * VideoFacade implements the Global Mobile-First Media Architecture:
- * 1. Black-Screen-Proof: The WebP poster remains visible underneath until the video has genuinely
+ * 1. Mobile Viewport Autoplay: On mobile, videos entering the viewport automatically play (muted, playsInline)
+ *    without requiring user tap. Exactly 1 video plays at a time on mobile.
+ * 2. Black-Screen-Proof: The WebP poster remains visible underneath until the video has genuinely
  *    painted valid frames (`hasRenderedFrame === true` from `playing` / `timeupdate`).
- * 2. LOADED != PLAYING: Inactive videos simply pause; sources and buffers are preserved.
- * 3. Global Media Registry Integration: Coordinates through `mediaManager` for cross-section/cross-route
+ * 3. LOADED != PLAYING: Inactive videos simply pause; sources and buffers are preserved.
+ * 4. Global Media Registry Integration: Coordinates through `mediaManager` for cross-section/cross-route
  *    reuse, state preservation, and canonical URL deduplication.
- * 4. Zero Unnecessary Initial Downloads: Portfolio and Marquee reels stay poster-only until interacted with.
- * 5. Conservative Mobile Viewport Observer: 150px rootMargin, pauses when far offscreen.
+ * 5. Desktop Behavior Preserved: On desktop, hover-to-play and Hero orbit work as expected.
  */
 export const VideoFacade: React.FC<VideoFacadeProps> = ({
   src,
@@ -86,7 +92,8 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
   poster: customPoster,
   active,
   prepare = false,
-  releaseTimeoutMs = 0,
+  isHero = false,
+  releaseTimeoutMs: _releaseTimeoutMs = 0,
   loadOnHover,
   priority = false,
   title,
@@ -111,6 +118,26 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
 
   const rawMp4 = mp4 || src || '';
   const rawWebm = webm || customWebmSrc;
+
+  // Responsive mobile screen detection
+  const [isMobile, setIsMobile] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth <= 768 || window.matchMedia('(max-width: 768px)').matches;
+  });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mql = window.matchMedia('(max-width: 768px)');
+    const updateMobile = () => {
+      setIsMobile(window.innerWidth <= 768 || mql.matches);
+    };
+    mql.addEventListener('change', updateMobile);
+    window.addEventListener('resize', updateMobile);
+    return () => {
+      mql.removeEventListener('change', updateMobile);
+      window.removeEventListener('resize', updateMobile);
+    };
+  }, []);
 
   // Auto-infer WebM and WebP poster paths if from /reels/
   const { resolvedWebm, resolvedPoster, resolvedMp4 } = useMemo(() => {
@@ -156,11 +183,12 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
     }
   }, [canonicalKey, resolvedPoster, resolvedWebm, resolvedMp4]);
 
-  // When active is not explicitly provided (e.g. marquee cards), default loadOnHover to true
+  // Desktop hover configuration
   const effectiveLoadOnHover = typeof loadOnHover === 'boolean' ? loadOnHover : typeof active !== 'boolean';
 
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [isInView, setIsInView] = useState<boolean>(priority);
+  const [isMobileInView, setIsMobileInView] = useState<boolean>(false);
   const [hasRenderedFrame, setHasRenderedFrame] = useState<boolean>(false);
   const [isStalled, setIsStalled] = useState<boolean>(false);
   const [hasError, setHasError] = useState<boolean>(false);
@@ -175,46 +203,49 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
     return false;
   });
 
-  // Determine whether video should be actively playing right now
-  const shouldActivate = useMemo(() => {
-    if (typeof active === 'boolean') {
-      return active;
+  // MOBILE VIEWPORT INTERSECTION OBSERVER:
+  // For non-hero cards on mobile, automatically detects when the card enters the mobile viewport area
+  useEffect(() => {
+    if (!isMobile || isHero) return;
+    const container = containerRef.current;
+    if (!container || !('IntersectionObserver' in window)) {
+      setIsMobileInView(true);
+      return;
     }
-    if (effectiveLoadOnHover) {
-      return isHovered;
-    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry.isIntersecting) {
+          setIsMobileInView(true);
+        } else {
+          setIsMobileInView(false);
+          if (canonicalKey) {
+            mediaManager.releaseMobilePlayback(canonicalKey);
+          }
+        }
+      },
+      {
+        root: null,
+        // Focuses on the primary screen area on mobile so only the card in focus plays
+        rootMargin: '0px 0px -10% 0px',
+        threshold: 0.25,
+      }
+    );
+
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [isMobile, isHero, canonicalKey]);
+
+  // DESKTOP INTERSECTION OBSERVER (Pauses when far offscreen):
+  useEffect(() => {
+    if (isMobile) return;
+    if (typeof active === 'boolean') return;
     if (priority) {
-      return true;
+      setIsInView(true);
+      return;
     }
-    return isInView;
-  }, [active, effectiveLoadOnHover, isHovered, priority, isInView]);
 
-  // Keep a ref to shouldActivate for async media event callbacks
-  const shouldActivateRef = useRef<boolean>(shouldActivate);
-  useEffect(() => {
-    shouldActivateRef.current = shouldActivate;
-  }, [shouldActivate]);
-
-  // SOURCE ATTACHMENT & PREPARATION:
-  useEffect(() => {
-    if (shouldActivate || prepare) {
-      if (!hasAttached) {
-        setHasAttached(true);
-      }
-      if (canonicalKey) {
-        mediaManager.markActivated(canonicalKey);
-      }
-      // Cancel any pending eviction timer immediately
-      if (cleanupTimerRef.current) {
-        clearTimeout(cleanupTimerRef.current);
-        cleanupTimerRef.current = null;
-      }
-    }
-  }, [shouldActivate, prepare, hasAttached, canonicalKey]);
-
-  // Conservative Viewport Intersection Observer (150px margin for mobile)
-  // Pauses video when scrolled far offscreen to save mobile CPU/GPU
-  useEffect(() => {
     const container = containerRef.current;
     if (!container || !('IntersectionObserver' in window)) {
       setIsInView(true);
@@ -228,7 +259,6 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
           setIsInView(true);
         } else {
           setIsInView(false);
-          // Pause when far out of viewport
           const video = videoRef.current;
           if (video && !video.paused) {
             try {
@@ -250,47 +280,55 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
 
     observer.observe(container);
     return () => observer.disconnect();
-  }, [canonicalKey]);
+  }, [isMobile, active, priority, canonicalKey]);
 
-  // Safe play helper
-  const safePlay = useCallback(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    if (muted) {
-      video.muted = true;
-      video.defaultMuted = true;
+  // DETERMINE WHETHER VIDEO SHOULD ACTIVELY PLAY:
+  const shouldActivate = useMemo(() => {
+    // 1. Hero 3D orbit section: always driven by Hero active prop on both desktop and mobile
+    if (isHero) {
+      return typeof active === 'boolean' ? active : false;
     }
 
-    if (!video.paused) {
-      return;
+    // 2. Mobile screen behavior (non-hero):
+    // Automatically plays when in mobile viewport! (or if manually tapped)
+    if (isMobile) {
+      return isMobileInView || isHovered;
     }
 
-    const playPromise = video.play();
-    if (playPromise !== undefined) {
-      playPromise
-        .then(() => {
-          if (canonicalKey) {
-            mediaManager.markPlaying(canonicalKey, true);
-          }
-          onPlay?.();
-        })
-        .catch((_err) => {
-          // Retry on user interaction if restricted by browser policy
-          const handleUserInteraction = () => {
-            if (videoRef.current && shouldActivateRef.current) {
-              videoRef.current.play().then(() => {
-                if (canonicalKey) mediaManager.markPlaying(canonicalKey, true);
-              }).catch(() => {});
-            }
-            window.removeEventListener('touchstart', handleUserInteraction);
-            window.removeEventListener('click', handleUserInteraction);
-          };
-          window.addEventListener('touchstart', handleUserInteraction, { once: true, passive: true });
-          window.addEventListener('click', handleUserInteraction, { once: true, passive: true });
-        });
+    // 3. Desktop screen behavior:
+    if (typeof active === 'boolean') {
+      return active;
     }
-  }, [muted, onPlay, canonicalKey]);
+    if (effectiveLoadOnHover) {
+      return isHovered;
+    }
+    if (priority) {
+      return true;
+    }
+    return isInView;
+  }, [isHero, isMobile, isMobileInView, isHovered, active, effectiveLoadOnHover, priority, isInView]);
+
+  // Keep a ref to shouldActivate for async callbacks
+  const shouldActivateRef = useRef<boolean>(shouldActivate);
+  useEffect(() => {
+    shouldActivateRef.current = shouldActivate;
+  }, [shouldActivate]);
+
+  // SOURCE ATTACHMENT & PREPARATION:
+  useEffect(() => {
+    if (shouldActivate || prepare) {
+      if (!hasAttached) {
+        setHasAttached(true);
+      }
+      if (canonicalKey) {
+        mediaManager.markActivated(canonicalKey);
+      }
+      if (cleanupTimerRef.current) {
+        clearTimeout(cleanupTimerRef.current);
+        cleanupTimerRef.current = null;
+      }
+    }
+  }, [shouldActivate, prepare, hasAttached, canonicalKey]);
 
   // Safe pause helper (LOADED != PLAYING: pauses video, never flushes src)
   const safePause = useCallback(() => {
@@ -308,6 +346,55 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
       }
     } catch (_err) {}
   }, [canonicalKey]);
+
+  // Safe play helper with mobile single-video coordination
+  const safePlay = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Enforce mobile-safe autoplay attributes
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+
+    // On mobile screens, coordinate with MediaManager so only 1 non-hero video plays at once!
+    if (isMobile && !isHero && canonicalKey) {
+      mediaManager.requestMobilePlayback(canonicalKey, () => {
+        safePause();
+      });
+    }
+
+    if (!video.paused) {
+      return;
+    }
+
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          if (canonicalKey) {
+            mediaManager.markPlaying(canonicalKey, true);
+          }
+          onPlay?.();
+        })
+        .catch((_err) => {
+          // Retry on user interaction if restricted by browser power-saving policy
+          const handleUserInteraction = () => {
+            if (videoRef.current && shouldActivateRef.current) {
+              videoRef.current.play().then(() => {
+                if (canonicalKey) mediaManager.markPlaying(canonicalKey, true);
+              }).catch(() => {});
+            }
+            window.removeEventListener('touchstart', handleUserInteraction);
+            window.removeEventListener('click', handleUserInteraction);
+          };
+          window.addEventListener('touchstart', handleUserInteraction, { once: true, passive: true });
+          window.addEventListener('click', handleUserInteraction, { once: true, passive: true });
+        });
+    }
+  }, [isMobile, isHero, canonicalKey, onPlay, safePause]);
 
   // PLAYBACK SYNCHRONIZATION:
   // Play when shouldActivate; pause when inactive.
@@ -334,41 +421,6 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
       } catch (_e) {}
     }
   }, [hasAttached, canonicalKey]);
-
-  // INACTIVITY CLEANUP (Only if releaseTimeoutMs explicitly configured > 0):
-  useEffect(() => {
-    if (!hasAttached || !releaseTimeoutMs || releaseTimeoutMs <= 0) return;
-
-    if (!shouldActivate && !prepare) {
-      if (cleanupTimerRef.current) {
-        clearTimeout(cleanupTimerRef.current);
-      }
-      cleanupTimerRef.current = setTimeout(() => {
-        setHasAttached(false);
-        setHasRenderedFrame(false);
-        setIsStalled(false);
-        if (videoRef.current) {
-          try {
-            videoRef.current.pause();
-            videoRef.current.removeAttribute('src');
-            videoRef.current.load();
-          } catch (_e) {}
-        }
-      }, releaseTimeoutMs);
-    } else {
-      if (cleanupTimerRef.current) {
-        clearTimeout(cleanupTimerRef.current);
-        cleanupTimerRef.current = null;
-      }
-    }
-
-    return () => {
-      if (cleanupTimerRef.current) {
-        clearTimeout(cleanupTimerRef.current);
-        cleanupTimerRef.current = null;
-      }
-    };
-  }, [shouldActivate, prepare, hasAttached, releaseTimeoutMs]);
 
   // Save playback position on unmount
   useEffect(() => {
@@ -441,16 +493,18 @@ export const VideoFacade: React.FC<VideoFacadeProps> = ({
       ref={containerRef}
       className={`video-facade-container ${className}`}
       onMouseEnter={() => {
-        if (effectiveLoadOnHover) setIsHovered(true);
+        if (!isMobile && effectiveLoadOnHover) setIsHovered(true);
       }}
       onMouseLeave={() => {
-        if (effectiveLoadOnHover) setIsHovered(false);
-      }}
-      onTouchStart={() => {
-        if (effectiveLoadOnHover) setIsHovered((prev) => !prev);
+        if (!isMobile && effectiveLoadOnHover) setIsHovered(false);
       }}
       onClick={() => {
-        if (effectiveLoadOnHover) setIsHovered((prev) => !prev);
+        if (isMobile) {
+          // On mobile, tap can manually toggle pause/play if desired
+          setIsHovered((prev) => !prev);
+        } else if (effectiveLoadOnHover) {
+          setIsHovered(true);
+        }
       }}
       style={{
         position: 'relative',

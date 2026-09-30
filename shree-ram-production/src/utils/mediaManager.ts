@@ -232,6 +232,36 @@ class GlobalMediaManager {
     return Boolean(this.registry.get(key)?.isPlaying);
   }
 
+  private currentMobileVideoKey: string | null = null;
+  private currentMobilePauseFn: (() => void) | null = null;
+
+  /**
+   * Mobile Viewport Coordinator:
+   * Strictly guarantees that at most 1 video plays at a time on mobile screens.
+   * Pauses the previous playing video when a new one enters the mobile viewport.
+   */
+  public requestMobilePlayback(key: string, pauseFn: () => void): void {
+    if (this.currentMobileVideoKey && this.currentMobileVideoKey !== key) {
+      if (this.currentMobilePauseFn) {
+        try {
+          this.currentMobilePauseFn();
+        } catch (_e) {}
+      }
+    }
+    this.currentMobileVideoKey = key;
+    this.currentMobilePauseFn = pauseFn;
+  }
+
+  /**
+   * Releases mobile playback slot if the leaving video held it.
+   */
+  public releaseMobilePlayback(key: string): void {
+    if (this.currentMobileVideoKey === key) {
+      this.currentMobileVideoKey = null;
+      this.currentMobilePauseFn = null;
+    }
+  }
+
   /**
    * Mobile Decoder Management: Pauses all playing non-hero videos when a new one starts.
    */
