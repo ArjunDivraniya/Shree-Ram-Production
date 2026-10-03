@@ -14,6 +14,13 @@ export const SERVICES_PILLARS: PillarWithServices[] = [
         name: 'Photography',
         description:
           'High-end commercial, product, and editorial photography with precision lighting, composition, and post-production — crafted for campaigns, e-commerce, and brand storytelling.',
+        projectIds: [
+          'choksi-shamalji-vallabhji-diamond-solitaires',
+          'choksi-shamalji-vallabhji-artisan-bangles',
+          'choksi-shamalji-vallabhji-signature-rings',
+          'choksi-shamalji-vallabhji-polki-masterpiece',
+          'titan-watch-world-store',
+        ],
       },
       {
         id: 'videography',
@@ -21,6 +28,15 @@ export const SERVICES_PILLARS: PillarWithServices[] = [
         name: 'Videography',
         description:
           'Cinematic video production from concept to final delivery — commercial films, brand documentaries, and narrative content shot on cinema-grade equipment.',
+        projectIds: [
+          'choksi-shamalji-vallabhji-bridal-heritage',
+          'rajkamal-event-celebration',
+          'grand-wedding-cinematic-event',
+          'royal-enfield-commercial',
+          'phillips-event-coverage',
+          'kaya-kalp-brand-story',
+          'titan-watch-world-store',
+        ],
       },
       {
         id: 'reels',
@@ -28,6 +44,22 @@ export const SERVICES_PILLARS: PillarWithServices[] = [
         name: 'Reels',
         description:
           'High-velocity short-form content optimized for Instagram, TikTok, and YouTube Shorts — hook-driven edits designed for maximum reach and engagement.',
+        projectIds: [
+          'choksi-shamalji-vallabhji-bridal-heritage',
+          'choksi-shamalji-vallabhji-diamond-solitaires',
+          'choksi-shamalji-vallabhji-polki-masterpiece',
+          'choksi-shamalji-vallabhji-festive-radiance',
+          'choksi-shamalji-vallabhji-artisan-bangles',
+          'choksi-shamalji-vallabhji-signature-rings',
+          'choksi-shamalji-vallabhji-luxury-showroom',
+          'rajkamal-event-celebration',
+          'grand-wedding-cinematic-event',
+          'royal-enfield-commercial',
+          'titan-watch-world-store',
+          'jockey-exclusive-store',
+          'fastrack-store-showcase',
+          'pogo-clothing-store',
+        ],
       },
       {
         id: 'product-shoots',
@@ -35,6 +67,14 @@ export const SERVICES_PILLARS: PillarWithServices[] = [
         name: 'Product Shoots',
         description:
           'Studio and on-location product photography and video — macro detail capture, lifestyle contexts, and e-commerce-ready assets that drive conversion.',
+        projectIds: [
+          'choksi-shamalji-vallabhji-diamond-solitaires',
+          'choksi-shamalji-vallabhji-artisan-bangles',
+          'choksi-shamalji-vallabhji-signature-rings',
+          'choksi-shamalji-vallabhji-polki-masterpiece',
+          'titan-watch-world-store',
+          'fastrack-store-showcase',
+        ],
       },
       {
         id: 'promotional-videos',
@@ -42,6 +82,13 @@ export const SERVICES_PILLARS: PillarWithServices[] = [
         name: 'Promotional Videos',
         description:
           'Brand-forward promotional films and campaign videos that communicate value, build desire, and deliver measurable commercial impact across channels.',
+        projectIds: [
+          'choksi-shamalji-vallabhji-bridal-heritage',
+          'choksi-shamalji-vallabhji-festive-radiance',
+          'choksi-shamalji-vallabhji-luxury-showroom',
+          'brand-promotion-commercial',
+          'tunwal-ebike-showroom-morbi',
+        ],
       },
       {
         id: 'video-editing',
@@ -49,6 +96,12 @@ export const SERVICES_PILLARS: PillarWithServices[] = [
         name: 'Video Editing',
         description:
           'Professional post-production including color grading, sound design, pacing, and multi-format delivery — transforming raw footage into polished final assets.',
+        projectIds: [
+          'choksi-shamalji-vallabhji-polki-masterpiece',
+          'rajkamal-event-celebration',
+          'grand-wedding-cinematic-event',
+          'brand-promotion-commercial',
+        ],
       },
       {
         id: 'motion-graphics',
@@ -56,6 +109,10 @@ export const SERVICES_PILLARS: PillarWithServices[] = [
         name: 'Motion Graphics',
         description:
           '3D motion design, animated typography, and visual effects that elevate brand communication — from title sequences to product reveal animations.',
+        projectIds: [
+          'autonomous-car-tech',
+          'brand-promotion-commercial',
+        ],
       },
       {
         id: 'event-coverage',
@@ -63,6 +120,14 @@ export const SERVICES_PILLARS: PillarWithServices[] = [
         name: 'Event Coverage',
         description:
           'Multi-camera event documentation, live content capture, and same-day social deliverables for launches, conferences, and brand activations.',
+        projectIds: [
+          'rajkamal-event-celebration',
+          'grand-wedding-cinematic-event',
+          'phillips-event-coverage',
+          'royal-heritage-wedding',
+          'destination-wedding-highlights',
+          'bespoke-wedding-celebration',
+        ],
       },
     ],
   },

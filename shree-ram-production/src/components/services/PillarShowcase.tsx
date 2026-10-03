@@ -21,8 +21,20 @@ export const PillarShowcase: React.FC<PillarShowcaseProps> = ({
   const { ref, isInView } = useInView<HTMLElement>({ threshold: 0.1 });
   const reducedMotion = useReducedMotion();
 
-  // Resolve projects once for the entire pillar so hovering categories does not change/switch the marquee projects
-  const pillarProjects = useMemo((): PortfolioItem[] => {
+  const [prevPillarId, setPrevPillarId] = useState<string>(pillar.id);
+  const [activeServiceId, setActiveServiceId] = useState<string>(pillar.services[0].id);
+  const [direction, setDirection] = useState<'down' | 'up'>('down');
+
+  if (prevPillarId !== pillar.id) {
+    setPrevPillarId(pillar.id);
+    setActiveServiceId(pillar.services[0].id);
+  }
+
+  const activeService =
+    pillar.services.find((s) => s.id === activeServiceId) ?? pillar.services[0];
+
+  // Resolve projects for the entire pillar, prioritizing active service projects
+  const stageProjects = useMemo((): PortfolioItem[] => {
     const categoryMap: Record<string, string | string[]> = {
       'content-production': 'production',
       'brand-creative': 'graphic-design',
@@ -31,6 +43,11 @@ export const PillarShowcase: React.FC<PillarShowcaseProps> = ({
     };
     const target = categoryMap[pillar.id];
     const targetCategories = Array.isArray(target) ? target : target ? [target] : [];
+
+    // Projects specifically linked to the active service (e.g. reels for Reels)
+    const activeServiceProjects = (activeService?.projectIds ?? [])
+      .map((id) => PORTFOLIO_ITEMS.find((p) => p.id === id))
+      .filter((p): p is PortfolioItem => Boolean(p));
 
     // Collect any projects optionally referenced in this pillar's services
     const referenced = pillar.services
@@ -44,7 +61,7 @@ export const PillarShowcase: React.FC<PillarShowcaseProps> = ({
       : [];
 
     const map = new Map<string, PortfolioItem>();
-    [...categoryProjects, ...referenced].forEach((p) => {
+    [...activeServiceProjects, ...referenced, ...categoryProjects].forEach((p) => {
       if (!map.has(p.id)) map.set(p.id, p);
     });
 
@@ -54,19 +71,7 @@ export const PillarShowcase: React.FC<PillarShowcaseProps> = ({
     // Fallback if fewer than 4 projects
     const remaining = PORTFOLIO_ITEMS.filter((p) => !map.has(p.id));
     return [...list, ...remaining.slice(0, Math.max(0, 5 - list.length))];
-  }, [pillar]);
-
-  const [prevPillarId, setPrevPillarId] = useState<string>(pillar.id);
-  const [activeServiceId, setActiveServiceId] = useState<string>(pillar.services[0].id);
-  const [direction, setDirection] = useState<'down' | 'up'>('down');
-
-  if (prevPillarId !== pillar.id) {
-    setPrevPillarId(pillar.id);
-    setActiveServiceId(pillar.services[0].id);
-  }
-
-  const activeService =
-    pillar.services.find((s) => s.id === activeServiceId) ?? pillar.services[0];
+  }, [pillar, activeService]);
 
   const handleServiceSelect = useCallback(
     (serviceId: string) => {
@@ -77,7 +82,6 @@ export const PillarShowcase: React.FC<PillarShowcaseProps> = ({
 
       setDirection(nextIdx > currIdx ? 'down' : 'up');
       setActiveServiceId(serviceId);
-      // Projects remain constant for the pillar; only activeService (title + description) updates!
     },
     [activeServiceId, pillar.services],
   );
@@ -105,7 +109,7 @@ export const PillarShowcase: React.FC<PillarShowcaseProps> = ({
       {/* GSAP Cinematic Stage */}
       <CinematicProjectStage
         service={activeService}
-        projects={pillarProjects}
+        projects={stageProjects}
         direction={direction}
         isReversed={isReversed}
       />

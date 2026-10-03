@@ -284,7 +284,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
   // Filter logic for standalone WorkPage view
   const categories = [
     { id: 'all', label: 'All Projects' },
-    { id: 'production', label: 'Production' },
+    { id: 'production', label: 'Content & Production' },
+    { id: 'reels', label: 'Reels' },
     { id: 'graphic-design', label: 'Graphic Design' },
     { id: 'branding', label: 'Brand & Creative' },
     { id: 'marketing', label: 'Marketing' },
@@ -293,9 +294,13 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
 
   let filteredProjects = activeCategory === 'all'
     ? PORTFOLIO_ITEMS
-    : activeCategory === 'graphic-design'
-      ? PORTFOLIO_ITEMS.filter((item) => item.category === 'graphic-design' || item.categoryLabel?.toLowerCase().includes('graphic'))
-      : PORTFOLIO_ITEMS.filter((item) => item.category === activeCategory);
+    : activeCategory === 'reels'
+      ? PORTFOLIO_ITEMS.filter((item) => isVideoUrl(item.videoUrl || item.thumbnail) || item.category === 'production' || item.categoryLabel?.toLowerCase().includes('reel'))
+      : (activeCategory === 'production' || activeCategory === 'content-production')
+        ? PORTFOLIO_ITEMS.filter((item) => item.category === 'production')
+        : activeCategory === 'graphic-design'
+          ? PORTFOLIO_ITEMS.filter((item) => item.category === 'graphic-design' || item.categoryLabel?.toLowerCase().includes('graphic'))
+          : PORTFOLIO_ITEMS.filter((item) => item.category === activeCategory);
 
   if (serviceMatch?.service.projectIds && serviceMatch.service.projectIds.length > 0) {
     const serviceProjectIds = new Set(serviceMatch.service.projectIds);

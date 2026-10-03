@@ -2,6 +2,8 @@ import React, { useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ArjunImg from '../../assets/out team/Arjun-2.webp';
+import VivekImg from '../../assets/out team/Vivek Bhat.webp';
+import VasuImg from '../../assets/out team/Vasu Viroja.webp';
 import SectionMarker from '../ui/SectionMarker';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -32,7 +34,7 @@ const TEAM_MEMBERS: TeamMember[] = [
     surname: 'Bhut',
     pillar: 'CONTENT & PRODUCTION',
     role: 'Content & Production',
-    image: ArjunImg,
+    image: VivekImg,
     objectPosition: 'center top',
   },
   {
@@ -41,7 +43,7 @@ const TEAM_MEMBERS: TeamMember[] = [
     surname: 'Viroja',
     pillar: 'BRAND & CREATIVE',
     role: 'Brand & Creative',
-    image: ArjunImg,
+    image: VasuImg,
     objectPosition: 'center top',
   },
   {

@@ -17,24 +17,25 @@ const tempMp4Dir = path.join(reelsDir, 'temp_mp4');
   }
 });
 
-const files = fs.readdirSync(reelsDir).filter((f) => f.endsWith('.mp4'));
-console.log(`Found ${files.length} MP4 files in ${reelsDir}`);
+const files = fs.readdirSync(reelsDir).filter((f) => /\.(mp4|mov)$/i.test(f));
+console.log(`Found ${files.length} video files in ${reelsDir}`);
 
 for (const file of files) {
-  const baseName = path.basename(file, '.mp4');
+  const ext = path.extname(file);
+  const baseName = path.basename(file, ext);
   const sourcePath = path.join(reelsDir, file);
   const backupPath = path.join(backupDir, file);
   const posterPath = path.join(postersDir, `${baseName}.webp`);
   const webmPath = path.join(webmDir, `${baseName}.webm`);
   const tempMp4Path = path.join(tempMp4Dir, `${baseName}.mp4`);
-  const finalMp4Path = path.join(reelsDir, file);
+  const finalMp4Path = path.join(reelsDir, `${baseName}.mp4`);
 
   const initialStat = fs.statSync(sourcePath);
   console.log(`\n--------------------------------------------------`);
   console.log(`Checking: ${file} (Size: ${(initialStat.size / (1024 * 1024)).toFixed(2)} MB)`);
 
-  // Skip if already optimized (both poster and webm exist and backup exists)
-  if (fs.existsSync(posterPath) && fs.existsSync(webmPath) && fs.existsSync(backupPath)) {
+  // Skip if already optimized (both poster and webm exist, backup exists, and final mp4 exists)
+  if (fs.existsSync(posterPath) && fs.existsSync(webmPath) && fs.existsSync(backupPath) && fs.existsSync(finalMp4Path)) {
     console.log(`⏩ Skipping ${file} — already optimized!`);
     continue;
   }
@@ -83,6 +84,12 @@ for (const file of files) {
 
     // Replace final public reel with the optimized MP4
     fs.copyFileSync(tempMp4Path, finalMp4Path);
+
+    // If source was .mov and final .mp4 is in place, remove the .mov from public/reels/
+    if (ext.toLowerCase() === '.mov' && fs.existsSync(finalMp4Path) && sourcePath !== finalMp4Path) {
+      fs.unlinkSync(sourcePath);
+      console.log(`Removed uncompressed .mov from public/reels/ (original safely preserved in backup)`);
+    }
   } catch (err) {
     console.error(`MP4 encoding failed for ${file}:`, err.message);
   }
@@ -94,4 +101,4 @@ try {
 } catch (e) {}
 
 console.log(`\n==================================================`);
-console.log(`All 9 videos successfully optimized!`);
+console.log(`All video processing finished!`);
