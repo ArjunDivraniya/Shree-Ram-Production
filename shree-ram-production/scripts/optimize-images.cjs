@@ -5,7 +5,8 @@ const ffmpeg = require('ffmpeg-static');
 
 const targetDirs = [
   path.join(__dirname, '../public/images/graphic_designing'),
-  path.join(__dirname, '../public/images/development_project')
+  path.join(__dirname, '../public/images/development_project'),
+  path.join(__dirname, '../public/images/marketing_project')
 ];
 
 for (const imgDir of targetDirs) {

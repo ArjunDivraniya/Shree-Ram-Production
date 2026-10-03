@@ -69,13 +69,17 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
       .filter(Boolean) as typeof PORTFOLIO_ITEMS;
   }, []);
 
-  // ROW 3: DEVELOPMENT PROJECTS (REAL DEV PROJECTS WITH MULTI-PHOTO SLIDESHOW)
+  // ROW 3: DEVELOPMENT & MARKETING PROJECTS (REAL PROJECTS WITH MULTI-PHOTO SLIDESHOW & INTERACTIVE CASE STUDIES)
   const row3Projects = useMemo(() => {
     const row3ProjectIds = [
       'cafe-pos-system',
+      'handy-think-oil-machine-lead-generation',
       'car-rental-system',
+      'red-root-villa-google-ads',
       'jairamji-enterprise',
+      'nagman-calibration-technical-seo',
       'library-management-system',
+      'pepy-technologies-social-branding',
       'shivay-studio',
     ];
     return row3ProjectIds
@@ -282,7 +286,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
   };
 
   // Filter logic for standalone WorkPage view
-  const categories = [
+  const allCategories = [
     { id: 'all', label: 'All Projects' },
     { id: 'production', label: 'Content & Production' },
     { id: 'reels', label: 'Reels' },
@@ -291,6 +295,11 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
     { id: 'marketing', label: 'Marketing' },
     { id: 'technology', label: 'Technology' },
   ];
+
+  const categories = allCategories.filter((cat) => {
+    if (cat.id === 'all' || cat.id === 'reels') return true;
+    return PORTFOLIO_ITEMS.some((item) => item.category === cat.id);
+  });
 
   let filteredProjects = activeCategory === 'all'
     ? PORTFOLIO_ITEMS
@@ -613,29 +622,40 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
         </div>
 
         {/* Portfolio Showcase Grid */}
-        <div
-          className="work-showcase-grid"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: isMobile && activeCategory === 'production'
-              ? 'repeat(auto-fill, minmax(280px, 1fr))'
-              : isMobile
-                ? '1fr'
-                : 'repeat(auto-fill, minmax(320px, 1fr))',
-            gap: isMobile ? '24px' : '32px',
-          }}
-        >
-          {filteredProjects.map((project) => {
+        {filteredProjects.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '64px 20px', color: 'var(--text-secondary)' }}>
+            <p style={{ fontSize: '1.05rem', marginBottom: '16px' }}>No projects found under this category.</p>
+            <button
+              onClick={() => setActiveCategory('all')}
+              className="srp-btn srp-btn--secondary srp-btn--sm"
+            >
+              View All Projects
+            </button>
+          </div>
+        ) : (
+          <div
+            className="work-showcase-grid"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: isMobile && activeCategory === 'production'
+                ? 'repeat(auto-fill, minmax(280px, 1fr))'
+                : isMobile
+                  ? '1fr'
+                  : 'repeat(auto-fill, minmax(320px, 1fr))',
+              gap: isMobile ? '24px' : '32px',
+            }}
+          >
+            {filteredProjects.map((project) => {
             const isReel = isVideoUrl(project.videoUrl || project.thumbnail) || project.category === 'production';
             const hasMultiImages = Boolean(project.images && project.images.length > 1);
-            const isDev = project.category === 'technology';
+            const isInteractiveModal = project.category === 'technology' || project.category === 'marketing';
 
             return (
               <div
                 key={project.id}
                 className={`work-showcase-card ${isReel ? 'work-showcase-card--reel' : ''}`}
                 onClick={() => {
-                  if (project.category === 'technology') {
+                  if (isInteractiveModal) {
                     setSelectedProject(project);
                     setIsModalOpen(true);
                   } else if (isReel) {
@@ -649,10 +669,10 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                   borderRadius: 'var(--radius-media)',
                   overflow: 'hidden',
                   backgroundColor: 'var(--surface-dark)',
-                  border: isDev && hoveredProjectId === project.id
+                  border: isInteractiveModal && hoveredProjectId === project.id
                     ? '1px solid rgba(255, 106, 42, 0.45)'
                     : '1px solid var(--glass-border)',
-                  cursor: isDev ? 'pointer' : 'default',
+                  cursor: isInteractiveModal ? 'pointer' : (isReel ? 'pointer' : 'default'),
                   transition: 'var(--transition-smooth)',
                   width: '100%',
                   maxWidth: isMobile && isReel ? '310px' : undefined,
@@ -755,7 +775,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                     style={{
                       fontSize: isReel ? (isMobile ? '1.1rem' : '1.15rem') : '1.25rem',
                       fontWeight: 700,
-                      marginBottom: (isDev || hasMultiImages) ? '10px' : 0,
+                      marginBottom: (isInteractiveModal || hasMultiImages) ? '10px' : 0,
                       color: '#FFFFFF',
                       lineHeight: 1.35,
                     }}
@@ -763,8 +783,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                     {project.title}
                   </h3>
 
-                  {/* Description shown for Development & Multi-image Design Projects */}
-                  {(isDev || hasMultiImages) && project.summary && (
+                  {/* Description shown for Development & Marketing Projects */}
+                  {(isInteractiveModal || hasMultiImages) && project.summary && (
                     <p
                       style={{
                         fontSize: '0.9rem',
@@ -780,11 +800,44 @@ export const Portfolio: React.FC<PortfolioProps> = ({ isHomepage = true }) => {
                       {project.summary}
                     </p>
                   )}
+
+                  {/* Interactive Case Study Trigger Action */}
+                  {isInteractiveModal && (
+                    <div
+                      style={{
+                        marginTop: 'auto',
+                        paddingTop: '12px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontSize: '0.78rem',
+                          fontWeight: 600,
+                          color: 'var(--accent-orange)',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                        }}
+                      >
+                        View Case Study <ArrowUpRight size={14} />
+                      </span>
+                      {project.metrics && (
+                        <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#E2E8F0' }}>
+                          {project.metrics.value}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             );
           })}
-        </div>
+          </div>
+        )}
 
         {/* Project Details Modal */}
         <ProjectDetailModal

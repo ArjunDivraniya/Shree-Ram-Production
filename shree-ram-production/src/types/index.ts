@@ -30,6 +30,10 @@ export interface PortfolioItem {
   deliverables?: string[];
   challenge?: string;
   solution?: string;
+  strategy?: string;
+  resultsMetrics?: Array<{ label: string; value: string }>;
+  toolsUsed?: string[];
+  businessImpact?: string;
 }
 
 export interface ProcessStep {

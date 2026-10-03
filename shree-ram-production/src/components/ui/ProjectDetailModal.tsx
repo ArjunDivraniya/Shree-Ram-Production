@@ -307,7 +307,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                   marginBottom: '5px',
                 }}
               >
-                Project Architecture & Overview
+                {project.category === 'marketing' ? 'Campaign & Project Overview' : 'Project Architecture & Overview'}
               </h3>
               <p
                 style={{
@@ -322,7 +322,140 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
             </div>
           )}
 
-          {/* Deliverables / Capabilities (Strictly NO Metrics, NO Challenge, NO Solution) */}
+          {/* Results & Key Metrics (High Impact Stats Cards) */}
+          {project.resultsMetrics && project.resultsMetrics.length > 0 && (
+            <div>
+              <h3
+                style={{
+                  fontSize: '0.74rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  color: 'var(--accent-orange)',
+                  marginBottom: '10px',
+                }}
+              >
+                Results & Key Performance Metrics
+              </h3>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
+                  gap: '10px',
+                }}
+              >
+                {project.resultsMetrics.map((metric, idx) => (
+                  <div
+                    key={`metric-${idx}`}
+                    style={{
+                      padding: '12px 14px',
+                      borderRadius: '10px',
+                      background: 'linear-gradient(135deg, rgba(255, 106, 42, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)',
+                      border: '1px solid rgba(255, 106, 42, 0.22)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: 'clamp(1.15rem, 2vw, 1.4rem)',
+                        fontWeight: 800,
+                        color: '#FFFFFF',
+                        letterSpacing: '-0.02em',
+                        fontFamily: 'var(--font-heading)',
+                      }}
+                    >
+                      {metric.value}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: '0.72rem',
+                        color: 'var(--text-muted)',
+                        marginTop: '4px',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                      }}
+                    >
+                      {metric.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Challenge & Objective */}
+          {project.challenge && (
+            <div
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.02)',
+                borderRadius: '12px',
+                padding: '14px 18px',
+                border: '1px solid rgba(255, 255, 255, 0.06)',
+              }}
+            >
+              <h3
+                style={{
+                  fontSize: '0.74rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  color: 'var(--text-muted)',
+                  marginBottom: '6px',
+                }}
+              >
+                Challenge & Objective
+              </h3>
+              <p
+                style={{
+                  fontSize: '0.90rem',
+                  lineHeight: 1.55,
+                  color: '#CBD5E1',
+                  margin: 0,
+                }}
+              >
+                {project.challenge}
+              </p>
+            </div>
+          )}
+
+          {/* Strategy & Thinking */}
+          {project.strategy && (
+            <div
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.02)',
+                borderRadius: '12px',
+                padding: '14px 18px',
+                border: '1px solid rgba(255, 255, 255, 0.06)',
+              }}
+            >
+              <h3
+                style={{
+                  fontSize: '0.74rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  color: 'var(--accent-orange)',
+                  marginBottom: '6px',
+                }}
+              >
+                Strategy & Thinking
+              </h3>
+              <p
+                style={{
+                  fontSize: '0.90rem',
+                  lineHeight: 1.55,
+                  color: '#CBD5E1',
+                  margin: 0,
+                }}
+              >
+                {project.strategy}
+              </p>
+            </div>
+          )}
+
+          {/* Deliverables / Execution Contribution */}
           {project.deliverables && project.deliverables.length > 0 && (
             <div>
               <h3
@@ -335,7 +468,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                   marginBottom: '8px',
                 }}
               >
-                Key Modules & Functional Deliverables
+                {project.category === 'marketing' ? 'Key Execution & Contribution' : 'Key Modules & Functional Deliverables'}
               </h3>
               <div
                 style={{
@@ -367,6 +500,77 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
             </div>
           )}
 
+          {/* Tools & Platforms Used */}
+          {project.toolsUsed && project.toolsUsed.length > 0 && (
+            <div>
+              <h3
+                style={{
+                  fontSize: '0.74rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  color: 'var(--text-muted)',
+                  marginBottom: '8px',
+                }}
+              >
+                Tools & Platforms Used
+              </h3>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '7px' }}>
+                {project.toolsUsed.map((tool, idx) => (
+                  <span
+                    key={`tool-${idx}`}
+                    style={{
+                      padding: '5px 12px',
+                      borderRadius: '999px',
+                      backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      fontSize: '0.78rem',
+                      color: '#E2E8F0',
+                      fontWeight: 500,
+                    }}
+                  >
+                    {tool}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Business Impact */}
+          {project.businessImpact && (
+            <div
+              style={{
+                backgroundColor: 'rgba(255, 106, 42, 0.04)',
+                borderRadius: '12px',
+                padding: '14px 18px',
+                border: '1px solid rgba(255, 106, 42, 0.22)',
+              }}
+            >
+              <h3
+                style={{
+                  fontSize: '0.74rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  color: 'var(--accent-orange)',
+                  marginBottom: '6px',
+                }}
+              >
+                Business Impact & Results
+              </h3>
+              <p
+                style={{
+                  fontSize: '0.90rem',
+                  lineHeight: 1.55,
+                  color: '#F1F5F9',
+                  margin: 0,
+                }}
+              >
+                {project.businessImpact}
+              </p>
+            </div>
+          )}
+
           {/* Expansive High-Resolution Photo Grid */}
           <div>
             <div
@@ -389,10 +593,10 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                   margin: 0,
                 }}
               >
-                System Interfaces & Screenshots ({totalImages})
+                {project.category === 'marketing' ? 'Screenshots & Creatives' : 'System Interfaces & Screenshots'} ({totalImages})
               </h3>
               <span style={{ fontSize: '0.74rem', color: 'var(--text-dim)' }}>
-                Click any screenshot to expand full resolution
+                Click to expand full resolution
               </span>
             </div>
 

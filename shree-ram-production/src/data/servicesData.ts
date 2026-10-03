@@ -195,6 +195,7 @@ export const SERVICES_PILLARS: PillarWithServices[] = [
         name: 'Social Media Marketing',
         description:
           'Organic social strategy, content calendars, community management, and platform growth — building engaged audiences that convert.',
+        projectIds: ['pepy-technologies-social-branding'],
       },
       {
         id: 'seo',
@@ -202,6 +203,7 @@ export const SERVICES_PILLARS: PillarWithServices[] = [
         name: 'SEO',
         description:
           'Technical SEO audits, keyword strategy, on-page optimization, and content architecture — driving sustainable organic traffic growth.',
+        projectIds: ['nagman-calibration-technical-seo'],
       },
       {
         id: 'meta-ads',
@@ -209,6 +211,7 @@ export const SERVICES_PILLARS: PillarWithServices[] = [
         name: 'Meta Ads',
         description:
           'Facebook and Instagram paid acquisition — creative testing, audience targeting, retargeting funnels, and ROAS-optimized campaign scaling.',
+        projectIds: ['handy-think-oil-machine-lead-generation'],
       },
       {
         id: 'google-ads',
@@ -216,6 +219,7 @@ export const SERVICES_PILLARS: PillarWithServices[] = [
         name: 'Google Ads',
         description:
           'Search, display, and YouTube advertising — keyword strategy, bid optimization, and landing page alignment for qualified lead generation.',
+        projectIds: ['red-root-villa-google-ads'],
       },
       {
         id: 'content-marketing',
@@ -223,6 +227,7 @@ export const SERVICES_PILLARS: PillarWithServices[] = [
         name: 'Content Marketing',
         description:
           'Strategic content production and distribution — blogs, video series, and thought leadership that builds authority and nurtures prospects.',
+        projectIds: ['nagman-calibration-technical-seo', 'pepy-technologies-social-branding'],
       },
       {
         id: 'lead-generation',
@@ -230,6 +235,7 @@ export const SERVICES_PILLARS: PillarWithServices[] = [
         name: 'Lead Generation',
         description:
           'Full-funnel lead capture systems — high-converting landing pages, form optimization, and nurture sequences that fill your pipeline.',
+        projectIds: ['handy-think-oil-machine-lead-generation', 'red-root-villa-google-ads'],
       },
       {
         id: 'influencer-marketing',
@@ -244,6 +250,7 @@ export const SERVICES_PILLARS: PillarWithServices[] = [
         name: 'Conversion Optimization',
         description:
           'CRO audits, A/B testing, and funnel optimization — data-backed iterations that reduce acquisition cost and increase conversion rates.',
+        projectIds: ['red-root-villa-google-ads', 'handy-think-oil-machine-lead-generation'],
       },
     ],
   },
