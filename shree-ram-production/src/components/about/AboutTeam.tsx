@@ -4,6 +4,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ArjunImg from '../../assets/out team/Arjun-2.webp';
 import VivekImg from '../../assets/out team/Vivek Bhat.webp';
 import VasuImg from '../../assets/out team/Vasu Viroja.webp';
+import GautamImg from '../../assets/out team/Gautam.webp';
+
 import SectionMarker from '../ui/SectionMarker';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -52,7 +54,7 @@ const TEAM_MEMBERS: TeamMember[] = [
     surname: 'Thaker',
     pillar: 'MARKETING & GROWTH',
     role: 'Marketing & Growth',
-    image: ArjunImg,
+    image: GautamImg,
     objectPosition: 'center top',
   },
 ];
